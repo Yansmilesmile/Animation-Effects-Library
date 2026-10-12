@@ -60,6 +60,9 @@ def meta(path):
 
 
 def usable(path):
+    # 影片端（copy-assets / Sprite）只支援 PNG，其他格式（例如 .BMP）不列出
+    if not path.lower().endswith(".png"):
+        return False
     r = INV.get(path)
     return r is None or (r.get("keep") != "0" and r.get("kind") != "sheet")
 
@@ -196,9 +199,17 @@ class Handler(BaseHTTPRequestHandler):
         return self.send(404, {"error": "not found"})
 
 
+class Server(ThreadingHTTPServer):
+    # Windows 上 SO_REUSEADDR 會讓兩個程序同時綁同一個埠（舊的那個繼續回應）；關掉它，重複開啟時直接報錯
+    allow_reuse_address = False
+
+
 if __name__ == "__main__":
+    try:
+        srv = Server(("127.0.0.1", PORT), Handler)
+    except OSError:
+        sys.exit(f"埠 {PORT} 已被佔用：舞台編輯器可能已經開著（直接打開 http://localhost:{PORT}），或先關掉舊的再重開。")
     threading.Thread(target=load_clip, daemon=True).start()
-    srv = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
     print(f"舞台編輯器：http://localhost:{PORT}  （Ctrl+C 結束）")
     try:
         srv.serve_forever()

@@ -74,7 +74,7 @@ export const Root: React.FC = () => (
     <Composition
       id="StagePreview"
       component={StagePreview}
-      defaultProps={{ stage: "home", pose: "full_point_happy", hostX: 160 }}
+      defaultProps={{ stage: "home", pose: "", hostX: 160 }}
       durationInFrames={90}
       fps={VIDEO.fps}
       width={VIDEO.width}

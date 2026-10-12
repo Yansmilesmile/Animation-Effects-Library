@@ -96,7 +96,9 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   const hud = ok.filter((r) => layerOf(r) === "hud");
 
   const StageC = stage?.component;
-  const host = scene.host ? <Host pose={scene.host.pose} x={scene.host.x ?? 160} y={scene.host.y ?? WORLD.groundY} flipX={scene.host.flipX} /> : null;
+  // scene 沒寫 host（undefined）時用舞台存的預設站位；寫 null 表示不出現
+  const h = scene.host !== undefined ? scene.host : stage?.defaultHost ?? null;
+  const host = h ? <Host pose={h.pose} x={h.x ?? 160} y={h.y ?? WORLD.groundY} flipX={h.flipX} scale={h.scale ?? 1} /> : null;
   const worldContent = (
     <>
       {scene.ambience?.length ? <Ambience layers={scene.ambience} /> : null}

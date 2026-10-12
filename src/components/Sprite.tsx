@@ -11,7 +11,7 @@ import { ErrorBox } from "./ErrorBox";
  *
  * - 放在 PixelStage 的像素層（480×270）裡，x / y 是像素層座標，會取整數。
  * - 以原生尺寸繪製，整個像素層一起放大 4 倍，所以所有素材的「一個像素」一樣大。
- *   scale 只能是整數（主角級物件可用 2、3）。
+ *   scale 建議整數（主角級物件可用 2、3）；也接受 0.5 的倍數（仍是整數螢幕像素，但像素粗細和其他素材不同）。
  * - 動畫條：整張圖保留、用位移切格（不先切成單幀），8–12fps 逐格播放、不補間。
  *   rows > 1 時用 row 選列。格子資訊來自 inventory.csv（copy-assets 產生的 asset-meta.json）。
  * - tint：把素材染色（"red" = 壞掉、"gray" = 未解鎖，或任意 #hex）；glow：發光外框。
@@ -23,7 +23,7 @@ export type SpriteProps = {
   y?: number;
   /** 定位點：bottom = x 置中、y 是底部（適合放在地上）；center；top-left */
   anchor?: "bottom" | "center" | "top-left";
-  /** 整數倍放大，預設 1 */
+  /** 放大倍數，預設 1；整數最一致，也接受 0.5 的倍數 */
   scale?: number;
   flipX?: boolean;
   /** "red" | "gray" | "gold" | "#rrggbb" */
@@ -107,8 +107,9 @@ export const Sprite: React.FC<SpriteProps> = ({
       />
     );
   }
-  if (!Number.isInteger(scale) || scale < 1) {
-    return <ErrorBox pixel x={px(x)} y={px(y)} message={`Sprite：scale 必須是正整數，收到 ${scale}`} />;
+  // 倍數必須是 0.5 的倍數：像素層 ×4、預設取景 ×6 時，每個來源像素仍落在整數螢幕像素上
+  if (!Number.isInteger(scale * 2) || scale <= 0) {
+    return <ErrorBox pixel x={px(x)} y={px(y)} message={`Sprite：scale 必須是 0.5 的倍數（建議整數），收到 ${scale}`} />;
   }
 
   const isAnim = meta.kind === "anim" && meta.cols && meta.frameW && meta.frameH;

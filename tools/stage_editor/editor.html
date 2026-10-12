@@ -90,9 +90,9 @@
       <div class="grid" id="results"></div>
     </div>
     <div id="paneHost" style="display:none">
-      <div class="hint">主持人姿勢只用來預覽構圖（不會存進舞台；影片裡的主持人由時間軸的 host 決定）。</div>
-      <div class="row"><label><input type="checkbox" id="showHost" checked> 顯示主持人預覽</label></div>
-      <div class="row"><span>站位 x</span><input type="number" id="hostX" value="160"></div>
+      <div class="hint">主持人是畫布上的物件：可以拖曳、方向鍵移動、翻轉、改倍數、刪除。點下面的姿勢換造型。<br>
+        位置會存進舞台，成為這個舞台的預設站位；時間軸的 scene 另外寫了 host 時，以時間軸為準。</div>
+      <div class="row"><button id="addHost">＋ 加入主持人</button></div>
       <div class="grid" id="poses"></div>
     </div>
   </aside>
@@ -121,7 +121,7 @@
     <div class="layers" id="layers"></div>
 
     <h3>快捷鍵</h3>
-    <div class="kbd">方向鍵：移動 1 像素（Shift = 10）<br>Delete：刪除　Ctrl+D：複製<br>[ / ]：往後 / 往前一層<br>F：水平翻轉　1–4：倍數<br>Ctrl+Z：復原　Ctrl+S：存檔</div>
+    <div class="kbd">方向鍵：移動 1 像素（Shift = 10）<br>Delete：刪除　Ctrl+D：複製<br>[ / ]：往後 / 往前一層<br>F：水平翻轉　1–8：倍數（0.5 倍數在右側選）<br>Ctrl+Z：復原　Ctrl+S：存檔</div>
   </aside>
 </div>
 
@@ -138,14 +138,25 @@ let uid = 1;
 const newId = () => "i" + (Date.now().toString(36)) + (uid++);
 
 let stage = blankStage();
-let sel = null; // { kind: 'item'|'light', id }
+let sel = null; // { kind: 'item'|'light'|'host', id }
 let history = [];
 let poses = [];
-let hostPose = "full_front";
 const metaCache = {};
 
+// 倍數：整數倍像素最一致；0.5 的倍數在影片裡仍是整數螢幕像素，但像素粗細會和其他素材不同
+const SCALES = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8];
+const scaleLabel = (n) => (Number.isInteger(n) ? `${n}` : `${n}（像素粗細不同）`);
+function defaultHost() { return { pose: "full_front", x: 160, y: GROUND, scale: 1, flipX: false }; }
+
 function blankStage() {
-  return { name: "home", wall: { color: "#141c3c" }, floor: { y: 146, color: "#24170f", planks: true }, items: [], lights: [] };
+  return { name: "home", wall: { color: "#141c3c" }, floor: { y: 146, color: "#24170f", planks: true }, items: [], lights: [], host: defaultHost() };
+}
+
+// 目前選取的物件（素材 / 燈光 / 主持人）
+function getObj(s = sel) {
+  if (!s) return null;
+  if (s.kind === "host") return stage.host || null;
+  return (s.kind === "item" ? stage.items : stage.lights).find((x) => x.id === s.id) || null;
 }
 
 function snapshot() { history.push(JSON.stringify(stage)); if (history.length > 80) history.shift(); }
@@ -229,12 +240,22 @@ function drawItem(w, it) {
   w.appendChild(el);
 }
 
+// 主持人：和素材一樣可以拖曳、選取（底部中心定位），畫在主體素材與前景素材之間
 function drawHost(w) {
-  if (!$("showHost").checked) return;
-  const p = poses.find((x) => x.name === hostPose);
+  const h = stage.host;
+  if (!h) return;
+  const p = poses.find((x) => x.name === h.pose);
   if (!p) return;
-  const x = +$("hostX").value || 160;
-  w.insertAdjacentHTML("beforeend", `<img class="host" src="${lib(p.path)}" style="left:${Math.round(x - p.w / 2)}px;top:${GROUND - p.h}px;width:${p.w}px;height:${p.h}px">`);
+  const sc = h.scale || 1;
+  const el = document.createElement("div");
+  el.className = "item" + (sel && sel.kind === "host" ? " sel" : "");
+  el.title = "主持人（" + h.pose + "）";
+  el.style.left = Math.round(h.x - (p.w * sc) / 2) + "px";
+  el.style.top = Math.round(h.y - p.h * sc) + "px";
+  el.style.transform = h.flipX ? "scaleX(-1)" : "";
+  el.innerHTML = `<div class="clip" style="width:${p.w * sc}px;height:${p.h * sc}px"><img src="${lib(p.path)}" style="width:${p.w * sc}px;height:${p.h * sc}px"></div>`;
+  el.addEventListener("mousedown", (e) => startDrag(e, "host", "host"));
+  w.appendChild(el);
 }
 
 function drawLight(w, l) {
@@ -260,15 +281,26 @@ function drawGuides(w) {
 
 function renderInspector() {
   const box = $("inspector");
-  if (!sel) { box.className = "hint"; box.textContent = "點選畫布上的素材或燈光"; return; }
+  if (!sel) { box.className = "hint"; box.textContent = "點選畫布上的素材、主持人或燈光"; return; }
   box.className = "";
-  if (sel.kind === "item") {
+  const scaleSel = (v) => `<select data-k="scale">${SCALES.map((n) => `<option value="${n}" ${v == n ? "selected" : ""}>${scaleLabel(n)}</option>`).join("")}</select>`;
+  if (sel.kind === "host") {
+    const h = stage.host;
+    if (!h) return;
+    box.innerHTML = `
+      <div class="hint">主持人（舞台的預設站位）</div>
+      <div class="row"><span>姿勢</span><select data-k="pose" style="flex:1">${poses.map((p) => `<option ${p.name === h.pose ? "selected" : ""}>${p.name}</option>`).join("")}</select></div>
+      <div class="row"><span>x / y</span><input type="number" data-k="x" value="${h.x}"><input type="number" data-k="y" value="${h.y}"></div>
+      <div class="row"><span>倍數</span>${scaleSel(h.scale || 1)}
+        <label><input type="checkbox" data-k="flipX" ${h.flipX ? "checked" : ""}> 翻轉</label></div>
+      <div class="row"><button id="groundBtn">腳底對齊地面線</button><button id="delBtn">刪除</button></div>`;
+  } else if (sel.kind === "item") {
     const it = stage.items.find((x) => x.id === sel.id);
     if (!it) return;
     box.innerHTML = `
       <div class="path">${it.asset}</div>
       <div class="row"><span>x / y</span><input type="number" data-k="x" value="${it.x}"><input type="number" data-k="y" value="${it.y}"></div>
-      <div class="row"><span>倍數</span><select data-k="scale">${[1, 2, 3, 4].map((n) => `<option ${it.scale == n ? "selected" : ""}>${n}</option>`).join("")}</select>
+      <div class="row"><span>倍數</span>${scaleSel(it.scale || 1)}
         <label><input type="checkbox" data-k="flipX" ${it.flipX ? "checked" : ""}> 翻轉</label></div>
       <div class="row"><span>深度</span><select data-k="depth">
         <option value="back" ${it.depth === "back" ? "selected" : ""}>背景（模糊壓暗）</option>
@@ -289,12 +321,13 @@ function renderInspector() {
   }
   box.querySelectorAll("[data-k]").forEach((inp) => inp.addEventListener("change", () => {
     snapshot();
-    const obj = sel.kind === "item" ? stage.items.find((x) => x.id === sel.id) : stage.lights.find((x) => x.id === sel.id);
+    const obj = getObj();
     const k = inp.dataset.k;
-    obj[k] = inp.type === "checkbox" ? inp.checked : inp.type === "number" || k === "scale" ? Math.round(+inp.value) : inp.value;
+    obj[k] = inp.type === "checkbox" ? inp.checked : k === "scale" ? +inp.value : inp.type === "number" ? Math.round(+inp.value) : inp.value;
     renderAll();
   }));
   const del = $("delBtn"); if (del) del.onclick = removeSel;
+  const gb = $("groundBtn"); if (gb) gb.onclick = () => { snapshot(); stage.host.y = GROUND; renderAll(); };
   const dup = $("dupBtn"); if (dup) dup.onclick = duplicateSel;
 }
 
@@ -302,8 +335,13 @@ function renderLayers() {
   const box = $("layers");
   const order = { back: 0, main: 1, front: 2 };
   const list = [...stage.items].map((it, i) => ({ it, i })).sort((a, b) => order[b.it.depth] - order[a.it.depth] || b.i - a.i);
-  box.innerHTML = list.map(({ it }) => `<div data-id="${it.id}" class="${sel && sel.id === it.id ? "on" : ""}">[${{ back: "背", main: "主", front: "前" }[it.depth]}] ${it.asset.split("/").pop()}</div>`).join("") || `<span class="hint">還沒有素材</span>`;
+  const row = ({ it }) => `<div data-id="${it.id}" class="${sel && sel.id === it.id ? "on" : ""}">[${{ back: "背", main: "主", front: "前" }[it.depth]}] ${it.asset.split("/").pop()}</div>`;
+  const front = list.filter(({ it }) => it.depth === "front").map(row).join("");
+  const rest = list.filter(({ it }) => it.depth !== "front").map(row).join("");
+  const host = stage.host ? `<div data-host="1" class="${sel && sel.kind === "host" ? "on" : ""}">[人] 主持人 ${stage.host.pose}</div>` : "";
+  box.innerHTML = front + host + rest || `<span class="hint">還沒有素材</span>`;
   box.querySelectorAll("[data-id]").forEach((d) => (d.onclick = () => { sel = { kind: "item", id: d.dataset.id }; renderAll(); }));
+  box.querySelectorAll("[data-host]").forEach((d) => (d.onclick = () => { sel = { kind: "host", id: "host" }; renderAll(); }));
 }
 
 function renderStageInputs() {
@@ -321,7 +359,7 @@ function renderAll() { renderWorld(); renderInspector(); renderLayers(); }
 function startDrag(e, kind, id) {
   e.preventDefault(); e.stopPropagation();
   sel = { kind, id };
-  const obj = kind === "item" ? stage.items.find((x) => x.id === id) : stage.lights.find((x) => x.id === id);
+  const obj = getObj(sel);
   const p0 = toWorld(e.clientX, e.clientY), o0 = { x: obj.x, y: obj.y };
   let moved = false;
   const move = (ev) => {
@@ -360,7 +398,8 @@ $("frame").addEventListener("drop", (e) => {
 function removeSel() {
   if (!sel) return;
   snapshot();
-  if (sel.kind === "item") stage.items = stage.items.filter((x) => x.id !== sel.id);
+  if (sel.kind === "host") stage.host = null;
+  else if (sel.kind === "item") stage.items = stage.items.filter((x) => x.id !== sel.id);
   else stage.lights = stage.lights.filter((x) => x.id !== sel.id);
   sel = null; renderAll();
 }
@@ -387,7 +426,7 @@ window.addEventListener("keydown", (e) => {
   if (e.ctrlKey && e.key === "s") { e.preventDefault(); save(); return; }
   if (e.ctrlKey && e.key === "d") { e.preventDefault(); duplicateSel(); return; }
   if (!sel) return;
-  const obj = sel.kind === "item" ? stage.items.find((x) => x.id === sel.id) : stage.lights.find((x) => x.id === sel.id);
+  const obj = getObj();
   if (!obj) return;
   const step = e.shiftKey ? 10 : 1;
   const mv = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
@@ -395,8 +434,9 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "Delete" || e.key === "Backspace") { e.preventDefault(); removeSel(); return; }
   if (e.key === "[") reorder(-1);
   if (e.key === "]") reorder(1);
-  if (sel.kind === "item" && (e.key === "f" || e.key === "F")) { snapshot(); obj.flipX = !obj.flipX; renderAll(); }
-  if (sel.kind === "item" && "1234".includes(e.key)) { snapshot(); obj.scale = +e.key; renderAll(); }
+  const scalable = sel.kind === "item" || sel.kind === "host";
+  if (scalable && (e.key === "f" || e.key === "F")) { snapshot(); obj.flipX = !obj.flipX; renderAll(); }
+  if (scalable && /^[1-8]$/.test(e.key)) { snapshot(); obj.scale = +e.key; renderAll(); }
 });
 
 // ── 搜尋 ─────────────────────────────────────────
@@ -432,19 +472,27 @@ async function doSearch() {
 $("goBtn").onclick = doSearch;
 $("q").addEventListener("keydown", (e) => { if (e.key === "Enter") doSearch(); });
 
-// ── 主持人預覽 ───────────────────────────────────
+// ── 主持人 ───────────────────────────────────────
 async function loadPoses() {
   poses = await fetch("/api/host-poses").then((r) => r.json());
   $("poses").innerHTML = poses.filter((p) => p.name.startsWith("full_") || p.name.startsWith("half_")).map((p) => tileHtml({ ...p, name: p.name, via: "desc", score: 0 })).join("");
   $("poses").querySelectorAll(".tile").forEach((t, i) => {
     const list = poses.filter((p) => p.name.startsWith("full_") || p.name.startsWith("half_"));
     t.querySelector(".via").textContent = "";
-    t.onclick = () => { hostPose = list[i].name; renderWorld(); };
+    // 點姿勢：換造型（沒有主持人時加入一個）
+    t.onclick = () => {
+      snapshot();
+      if (!stage.host) stage.host = defaultHost();
+      stage.host.pose = list[i].name;
+      sel = { kind: "host", id: "host" };
+      renderAll();
+    };
   });
 }
 $("tabSearch").onclick = () => { $("paneSearch").style.display = "flex"; $("paneHost").style.display = "none"; $("tabSearch").classList.add("on"); $("tabHost").classList.remove("on"); };
 $("tabHost").onclick = () => { $("paneSearch").style.display = "none"; $("paneHost").style.display = "block"; $("tabHost").classList.add("on"); $("tabSearch").classList.remove("on"); };
-["showHost", "hostX", "viewShot", "showGuides", "showLights"].forEach((id) => $(id).addEventListener("change", renderWorld));
+$("addHost").onclick = () => { if (stage.host) { sel = { kind: "host", id: "host" }; renderAll(); return; } snapshot(); stage.host = defaultHost(); sel = { kind: "host", id: "host" }; renderAll(); };
+["viewShot", "showGuides", "showLights"].forEach((id) => $(id).addEventListener("change", renderWorld));
 window.addEventListener("resize", renderWorld);
 
 // ── 舞台設定 ─────────────────────────────────────
@@ -470,6 +518,7 @@ async function loadStage(name) {
   stage.items = stage.items || []; stage.lights = stage.lights || [];
   stage.items.forEach((it) => (it.id = it.id || newId()));
   stage.lights.forEach((l) => (l.id = l.id || newId()));
+  if (stage.host === undefined) stage.host = defaultHost(); // 舊舞台檔沒有主持人欄位
   await Promise.all(stage.items.map((it) => getMeta(it.asset)));
   history = []; sel = null;
   renderStageInputs(); renderAll();

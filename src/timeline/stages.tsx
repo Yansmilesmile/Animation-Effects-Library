@@ -1,7 +1,7 @@
 import React from "react";
 import { Ambience } from "../components/Ambience";
 import editorStages from "../generated/stages.json";
-import { LayoutStage, StageSpec } from "../scenes/LayoutStage";
+import { LayoutStage, StageHost, StageSpec } from "../scenes/LayoutStage";
 import { StudyRoom } from "../scenes/StudyRoom";
 import { WORLD } from "../theme";
 
@@ -30,7 +30,9 @@ const Void: React.FC<StageProps> = ({ children, host }) => (
   </>
 );
 
-const BUILTIN: Record<string, { component: React.FC<StageProps>; background?: string }> = {
+export type StageEntry = { component: React.FC<StageProps>; background?: string; defaultHost?: StageHost | null };
+
+const BUILTIN: Record<string, StageEntry> = {
   "study-room": { component: StudyRoom },
   "night-snow": { component: NightSnow, background: "linear-gradient(#060a1e, #1b2a5c 70%, #2c3f78)" },
   void: { component: Void, background: "#05060c" },
@@ -40,8 +42,8 @@ const BUILTIN: Record<string, { component: React.FC<StageProps>; background?: st
 const FROM_EDITOR = Object.fromEntries(
   Object.entries(editorStages as Record<string, StageSpec>).map(([name, spec]) => [
     name,
-    { component: ((p: StageProps) => <LayoutStage spec={spec} {...p} />) as React.FC<StageProps> },
+    { component: ((p: StageProps) => <LayoutStage spec={spec} {...p} />) as React.FC<StageProps>, defaultHost: spec.host ?? null } as StageEntry,
   ]),
 );
 
-export const STAGES: Record<string, { component: React.FC<StageProps>; background?: string }> = { ...BUILTIN, ...FROM_EDITOR };
+export const STAGES: Record<string, StageEntry> = { ...BUILTIN, ...FROM_EDITOR };

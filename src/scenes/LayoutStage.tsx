@@ -10,6 +10,7 @@ import { PIXEL } from "../theme";
  * - wall / floor：牆面（顏色或 CSS 漸層）與地板（高度、顏色、木紋）。
  * - items：素材，(x, y) 是底部中心；depth = back（模糊壓暗的背景）/ main（人物後面）/ front（人物前面）。
  * - lights：檯燈光（明暗呼吸，可帶光錐）。
+ * - host：預設主持人站位；scene 有寫 host 時以 scene 為準。
  */
 export type StageItem = {
   asset: string;
@@ -27,7 +28,10 @@ export type StageSpec = {
   floor: { y: number; color: string; planks?: boolean };
   items: StageItem[];
   lights?: StageLight[];
+  /** 舞台的預設主持人站位（時間軸 scene 沒寫 host 時使用）；null = 預設不出現 */
+  host?: StageHost | null;
 };
+export type StageHost = { pose: string; x: number; y: number; scale?: number; flipX?: boolean };
 
 const ItemSprite: React.FC<{ it: StageItem }> = ({ it }) => (
   <Sprite asset={it.asset} x={it.x} y={it.y} scale={it.scale ?? 1} flipX={it.flipX} bloom={!it.noBloom} />
