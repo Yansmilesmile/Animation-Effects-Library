@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, CalculateMetadataFunction, Sequence } from "remotion";
 import { Ambience } from "../components/Ambience";
-import { Camera, CAMERA_HOME, CameraState } from "../components/Camera";
+import { Camera, CAMERA_HOME, CameraState, worldToScreen } from "../components/Camera";
 import { Host } from "../components/Host";
 import { PixelStage } from "../components/PixelStage";
 import { Subtitles } from "../components/Subtitle";
@@ -10,6 +10,10 @@ import { Watermark } from "../components/Watermark";
 import { FONT_PIXEL, WORLD } from "../theme";
 import { REGISTRY, validateEvent } from "./registry";
 import { STAGES } from "./stages";
+import { FxTarget, PropFxContext, PropFxEntry } from "./propfx";
+import type { StageSpec } from "../scenes/LayoutStage";
+import assetMeta from "../generated/asset-meta.json";
+import character from "../generated/character.json";
 import type { Scene, Timeline, TimelineEvent } from "./types";
 
 /**
@@ -17,7 +21,29 @@ import type { Scene, Timeline, TimelineEvent } from "./types";
  * 名稱、參數、"@詞"、舞台寫錯時：該事件不渲染，並在畫面左上角列出紅色錯誤清單（不靜默略過）。
  */
 
-type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[] };
+type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown> };
+
+// ── target：用名稱指名舞台上的物件 ─────────────────
+type TargetBox = { x: number; bottom: number; h: number };
+const META = assetMeta as Record<string, { w: number; h: number; frameW?: number; frameH?: number }>;
+const POSES = (character as { poses: { name: string; width: number; height: number }[] }).poses;
+
+/** 舞台上有名字的物件（素材、燈光）+ 主持人 → 世界座標的位置與高度 */
+const buildTargets = (spec: StageSpec | undefined, host: { pose: string; x?: number; y?: number; scale?: number } | null) => {
+  const map = new Map<string, TargetBox>();
+  for (const it of spec?.items ?? []) {
+    if (!it.name) continue;
+    const m = META[it.asset];
+    const h = (m ? m.frameH ?? m.h : 0) * (it.scale ?? 1);
+    map.set(it.name, { x: it.x, bottom: it.y, h });
+  }
+  for (const l of spec?.lights ?? []) if (l.name) map.set(l.name, { x: l.x, bottom: l.y, h: 0 });
+  if (host) {
+    const p = POSES.find((q) => q.name === host.pose);
+    map.set("主持人", { x: host.x ?? 160, bottom: host.y ?? WORLD.groundY, h: (p?.height ?? 51) * (host.scale ?? 1) });
+  }
+  return map;
+};
 
 /** "@詞" / "@詞+5" / "@詞-3" → 幀 */
 const resolveStart = (start: number | string, scene: Scene): { frame?: number; error?: string } => {
@@ -66,7 +92,7 @@ const ErrorPanel: React.FC<{ errors: string[] }> = ({ errors }) =>
 
 const EventView: React.FC<{ r: Resolved; scene: Scene; camera: CameraState }> = ({ r, scene, camera }) => {
   const entry = REGISTRY[r.ev.component];
-  const raw = r.ev.props ?? {};
+  const raw = r.props;
   const props = entry.prepare ? entry.prepare(raw as Record<string, any>, { camera }) : raw;
   const C = entry.component;
   const dur = r.ev.duration ?? Math.max(1, scene.duration - r.start);
@@ -83,22 +109,52 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   if (!stage) errors.push(`[${scene.id}] 舞台「${scene.stage}」不存在，可用：${Object.keys(STAGES).join("、")}`);
   const camera: CameraState = { ...CAMERA_HOME, ...scene.cameraInitial };
 
+  // scene 沒寫 host（undefined）時用舞台存的預設站位；寫 null 表示不出現
+  const h = scene.host !== undefined ? scene.host : stage?.defaultHost ?? null;
+  const targets = buildTargets(stage?.spec, h);
+
   const resolved: Resolved[] = (scene.events ?? []).map((ev, i) => {
-    const errs = validateEvent(ev.component, ev.props);
+    const errs: string[] = [];
     const s = resolveStart(ev.start, scene);
     if (s.error) errs.push(s.error);
-    return { ev, i, start: s.frame ?? 0, errors: errs };
+    const props: Record<string, unknown> = { ...ev.props };
+    if (ev.component === "PropFx" && !ev.target) errs.push("PropFx 需要 target（要動的物件名稱）");
+    if (ev.target) {
+      const t = targets.get(ev.target);
+      if (!t) {
+        errs.push(`找不到物件「${ev.target}」。這個舞台可指名的物件：${[...targets.keys()].join("、") || "（沒有，請在舞台編輯器裡為物件命名）"}`);
+      } else if (ev.component !== "PropFx" && REGISTRY[ev.component]) {
+        // 自動帶入座標：center = 物件中心、top = 頭頂、bottom = 底部；hud 圖層換算成畫面座標
+        const y0 = ev.anchor === "top" ? t.bottom - t.h : ev.anchor === "bottom" ? t.bottom : t.bottom - t.h / 2;
+        let x = t.x + (ev.offset?.x ?? 0);
+        let y = y0 + (ev.offset?.y ?? 0);
+        const spec = REGISTRY[ev.component].props;
+        if ((ev.layer ?? REGISTRY[ev.component].layer) === "hud") ({ x, y } = worldToScreen(camera, x, y));
+        if (spec.x && props.x === undefined) props.x = Math.round(x);
+        if (spec.y && props.y === undefined) props.y = Math.round(y);
+        if (spec.groundY && props.groundY === undefined) props.groundY = Math.round(t.bottom);
+      }
+    }
+    // 先用 target 帶入座標，再檢查參數（否則會被誤判成缺少 x / y）
+    errs.unshift(...validateEvent(ev.component, props));
+    return { ev, i, start: s.frame ?? 0, errors: errs, props };
   });
   for (const r of resolved) for (const e of r.errors) errors.push(`[${scene.id}] 事件 #${r.i + 1} ${r.ev.component}：${e}`);
-  const ok = resolved.filter((r) => r.errors.length === 0);
+  const ok = resolved.filter((r) => r.errors.length === 0 && r.ev.component !== "PropFx");
+  // PropFx：交給舞台物件自己套用（晃動、發光、消失…）
+  const fx: PropFxEntry[] = resolved
+    .filter((r) => r.errors.length === 0 && r.ev.component === "PropFx")
+    .map((r) => ({ ...(r.props as object), target: r.ev.target!, start: r.start, duration: r.ev.duration } as PropFxEntry));
   const layerOf = (r: Resolved) => r.ev.layer ?? REGISTRY[r.ev.component].layer;
   const world = ok.filter((r) => layerOf(r) === "world");
   const hud = ok.filter((r) => layerOf(r) === "hud");
 
   const StageC = stage?.component;
-  // scene 沒寫 host（undefined）時用舞台存的預設站位；寫 null 表示不出現
-  const h = scene.host !== undefined ? scene.host : stage?.defaultHost ?? null;
-  const host = h ? <Host pose={h.pose} x={h.x ?? 160} y={h.y ?? WORLD.groundY} flipX={h.flipX} scale={h.scale ?? 1} /> : null;
+  const hx = h?.x ?? 160;
+  const hy = h?.y ?? WORLD.groundY;
+  const host = h ? (
+    <FxTarget name="主持人" x={hx} y={hy} render={(f) => <Host pose={h.pose} x={hx} y={hy} flipX={h.flipX} scale={h.scale ?? 1} glow={f.glow} tint={f.tint} />} />
+  ) : null;
   const worldContent = (
     <>
       {scene.ambience?.length ? <Ambience layers={scene.ambience} /> : null}
@@ -126,14 +182,16 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
       }
     >
       <Camera initial={scene.cameraInitial} moves={scene.camera}>
-        {StageC ? (
-          <StageC host={host}>{worldContent}</StageC>
-        ) : (
-          <>
-            {host}
-            {worldContent}
-          </>
-        )}
+        <PropFxContext.Provider value={fx}>
+          {StageC ? (
+            <StageC host={host}>{worldContent}</StageC>
+          ) : (
+            <>
+              {host}
+              {worldContent}
+            </>
+          )}
+        </PropFxContext.Provider>
       </Camera>
     </PixelStage>
   );

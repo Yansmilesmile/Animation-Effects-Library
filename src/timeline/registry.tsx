@@ -8,6 +8,7 @@ import { Host } from "../components/Host";
 import { Sprite } from "../components/Sprite";
 import { Counter, CrowdGrid, LevelTitleCard, LevelTransition, Spotlight } from "../components/structure";
 import { LAYOUT, WORLD } from "../theme";
+import { PROP_FX_EFFECTS } from "./propfx";
 
 /**
  * 組件註冊表：時間軸 JSON 的 component 名稱 → React 組件 + 參數規格。
@@ -139,6 +140,16 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     },
   },
   NextTeaser: { component: NextTeaser, layer: "hud", code: "C32", props: { ...POS, label: "string" } },
+
+  // ── 讓舞台物件本身動起來（不畫東西，交給舞台套用；必須有 event 的 target）──
+  PropFx: {
+    component: () => null,
+    layer: "world",
+    code: "道具動畫",
+    props: { effect: "string", amount: "number", height: "number", times: "number", period: "number", color: "string", dx: "number", dy: "number" },
+    required: ["effect"],
+    check: (p) => (PROP_FX_EFFECTS.includes(p.effect) ? [] : [`effect「${p.effect}」不存在，可用：${PROP_FX_EFFECTS.join("、")}`]),
+  },
 
   // ── 對話 ──
   DialogBox: { component: DialogBox, layer: "hud", code: "對話框", props: { speaker: "string", lines: "array", text: "string", typeStart: "number", typeEvery: "number", ...POS, w: "number", h: "number" } },

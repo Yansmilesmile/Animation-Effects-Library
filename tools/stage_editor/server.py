@@ -7,9 +7,11 @@
 - 搜尋直接用素材庫 asset_tools/search.py 的 text_search；CLIP 模型在背景載入一次，之後每次搜尋都很快。
 - /lib/<path> 從素材庫讀圖（只讀，不修改素材庫）。
 - 舞台存成專案的 stages/<name>.json，Remotion 透過 npm run assets 讀取。
+- 3D 場景：scenes3d/ 裡的 HTML 用無頭瀏覽器截圖成 public/bg3d/*.png，當舞台背景。
 """
 import csv
 import json
+import subprocess
 import mimetypes
 import re
 import sys
@@ -17,11 +19,17 @@ import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, unquote, urlparse
+from urllib.parse import parse_qs, quote, unquote, urlparse
+
+# Windows 登錄檔有時把 .js 對應成 text/plain，ES 模組會被瀏覽器拒絕；3D 場景常用的格式在這裡補齊
+for _ext, _type in {".js": "text/javascript", ".mjs": "text/javascript", ".json": "application/json", ".glb": "model/gltf-binary", ".gltf": "model/gltf+json", ".wasm": "application/wasm", ".hdr": "application/octet-stream"}.items():
+    mimetypes.add_type(_type, _ext)
 
 HERE = Path(__file__).resolve().parent
 PROJECT = HERE.parent.parent
 STAGES_DIR = PROJECT / "stages"
+SCENES3D = PROJECT / "scenes3d"
+BG3D = PROJECT / "public" / "bg3d"
 ASSET_TOOLS = Path("D:/桌面/PixelSRPG-Forge-main/asset_tools")
 PORT = 8765
 # 可用 --port 指定其他埠，例如 python server.py --port 8766
@@ -170,6 +178,70 @@ def browse(folder, limit=5000):
     paths = sorted(p for p in INV if p.startswith(folder) and usable(p))[:limit]
     return [enrich({"path": p, "via": "browse", "score": 0}) for p in paths]
 
+# ── 3D 場景截圖 ─────────────────────────────────────
+def chrome_exe():
+    """用 Remotion 下載的 chrome-headless-shell 截圖（npm install 後就有）"""
+    hits = list((PROJECT / "node_modules" / ".remotion").glob("chrome-headless-shell/**/chrome-headless-shell.exe"))
+    return hits[0] if hits else None
+
+
+def scene_list():
+    SCENES3D.mkdir(exist_ok=True)
+    out = []
+    for f in sorted(SCENES3D.rglob("*.html")):
+        rel = f.relative_to(SCENES3D).as_posix()
+        shots = sorted(p.name for p in BG3D.glob(f"{f.stem}-*.png")) if BG3D.exists() else []
+        out.append({"file": rel, "name": f.stem, "shots": [f"bg3d/{s}" for s in shots]})
+    return out
+
+
+def snapshot(rel, w, h, wait, port, canvas_only=True):
+    """把 scenes3d/<rel> 截成 w×h 的 PNG。wait = 等動畫 / 模型載入的虛擬時間（毫秒）"""
+    exe = chrome_exe()
+    if not exe:
+        raise RuntimeError("找不到 chrome-headless-shell，請先在專案執行 npm install 並渲染過一次")
+    src = (SCENES3D / rel).resolve()
+    if SCENES3D.resolve() not in src.parents or not src.exists():
+        raise RuntimeError(f"找不到 scenes3d/{rel}")
+    BG3D.mkdir(parents=True, exist_ok=True)
+    out = BG3D / f"{src.stem}-{w}x{h}.png"
+    url = f"http://127.0.0.1:{port}/scenes3d/" + "/".join(quote(x) for x in rel.split("/")) + ("?snap=1" if canvas_only else "")
+    args = [
+        str(exe), "--headless", "--hide-scrollbars", "--mute-audio",
+        f"--window-size={w},{h}", f"--virtual-time-budget={wait}",
+        "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist",
+        f"--screenshot={out}", url,
+    ]
+    r = subprocess.run(args, capture_output=True, timeout=120)
+    if not out.exists():
+        raise RuntimeError("截圖失敗：" + r.stderr.decode("utf-8", "ignore")[-400:])
+    return f"bg3d/{out.name}"
+
+
+# 截圖時注入的樣式：只保留 3D 畫布（隱藏控制列等介面），畫布填滿視窗。不修改原始 HTML。
+SNAP_STYLE = (
+    "<style id=\"__stage_snap\">"
+    "body *{visibility:hidden!important}"
+    "canvas{visibility:visible!important;position:fixed!important;left:0!important;top:0!important;"
+    "width:100vw!important;height:100vh!important;max-width:none!important;z-index:2147483647!important}"
+    "</style>"
+)
+
+
+def inject_snap(html: bytes) -> bytes:
+    s = html.decode("utf-8", "ignore")
+    m = re.search(r"<head[^>]*>", s, re.I)
+    s = s[: m.end()] + SNAP_STYLE + s[m.end():] if m else SNAP_STYLE + s
+    return s.encode("utf-8")
+
+
+def serve_under(base: Path, rel: str):
+    """回傳 base 底下的檔案（禁止跳出 base）"""
+    f = (base / rel).resolve()
+    if base.resolve() not in f.parents or not f.is_file():
+        return None
+    return f
+
 # ── HTTP ────────────────────────────────────────────
 NAME_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{0,40}$")
 
@@ -206,6 +278,17 @@ class Handler(BaseHTTPRequestHandler):
             t0 = time.time()
             res = do_search(q, folder, use_clip, clip_n)
             return self.send(200, {"query": q, "results": res, "ms": int((time.time() - t0) * 1000), "clip": CLIP["status"]})
+        if p == "/api/scenes3d":
+            return self.send(200, scene_list())
+        if p.startswith("/scenes3d/") or p.startswith("/bg3d/"):
+            base = SCENES3D if p.startswith("/scenes3d/") else BG3D
+            f = serve_under(base, p.split("/", 2)[2])
+            if not f:
+                return self.send(404, {"error": "not found"})
+            data = f.read_bytes()
+            if f.suffix.lower() == ".html" and (qs.get("snap") or ["0"])[0] == "1":
+                data = inject_snap(data)
+            return self.send(200, data, mimetypes.guess_type(str(f))[0] or "application/octet-stream")
         if p == "/api/folders":
             return self.send(200, FOLDERS)
         if p == "/api/browse":
@@ -244,6 +327,16 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         u = urlparse(self.path)
         qs = parse_qs(u.query)
+        if unquote(u.path) == "/api/snapshot3d":
+            rel = (qs.get("file") or [""])[0]
+            w = max(64, min(3840, int((qs.get("w") or ["480"])[0])))
+            h = max(36, min(2160, int((qs.get("h") or ["270"])[0])))
+            wait = max(0, min(30000, int((qs.get("wait") or ["3000"])[0])))
+            canvas_only = (qs.get("canvasOnly") or ["1"])[0] == "1"
+            try:
+                return self.send(200, {"ok": True, "image": snapshot(rel, w, h, wait, PORT, canvas_only)})
+            except Exception as e:
+                return self.send(500, {"error": str(e)})
         if unquote(u.path) == "/api/stage":
             name = (qs.get("name") or [""])[0]
             if not NAME_RE.match(name):

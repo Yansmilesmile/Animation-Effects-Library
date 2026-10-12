@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>範例 3D 房間</title>
+<style>html, body { margin: 0; height: 100%; overflow: hidden; background: #0a0e1c; } canvas { display: block; }</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }</script>
+</head>
+<body>
+<!-- 範例：舞台編輯器的「3D 場景」會把這個頁面截圖成背景。你的 3D 場景 HTML 放在同一個資料夾即可。 -->
+<script type="module">
+import * as THREE from "three";
+
+const renderer = new THREE.WebGLRenderer({ antialias: false });
+renderer.setPixelRatio(1);
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color("#0a0e1c");
+scene.fog = new THREE.Fog("#0a0e1c", 10, 26);
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 100);
+camera.position.set(0, 3.2, 9);
+camera.lookAt(0, 1.6, 0);
+
+const flat = (c) => new THREE.MeshLambertMaterial({ color: c, flatShading: true });
+// 地板（棋盤格）
+for (let i = -6; i < 6; i++) for (let j = -6; j < 3; j++) {
+  const t = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), flat((i + j) & 1 ? "#2a2238" : "#1f1a2c"));
+  t.rotation.x = -Math.PI / 2; t.position.set(i + 0.5, 0, j + 0.5); scene.add(t);
+}
+// 牆
+const back = new THREE.Mesh(new THREE.BoxGeometry(12, 6, 0.2), flat("#1b2547")); back.position.set(0, 3, -6); scene.add(back);
+const left = new THREE.Mesh(new THREE.BoxGeometry(0.2, 6, 9), flat("#18203f")); left.position.set(-6, 3, -1.5); scene.add(left);
+// 窗戶發光
+const win = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.6), new THREE.MeshBasicMaterial({ color: "#3d5aa8" })); win.position.set(-2.5, 3.4, -5.89); scene.add(win);
+// 書架
+const shelf = new THREE.Mesh(new THREE.BoxGeometry(2.2, 3.2, 0.6), flat("#5a3a22")); shelf.position.set(2.8, 1.6, -5.5); scene.add(shelf);
+for (let k = 0; k < 4; k++) { const b = new THREE.Mesh(new THREE.BoxGeometry(2, 0.5, 0.4), flat(["#b04a3a", "#3a7ab0", "#c9a23a", "#4a9a5a"][k])); b.position.set(2.8, 0.5 + k * 0.75, -5.35); scene.add(b); }
+// 桌子 + 金色發光物
+const desk = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.15, 1.2), flat("#6b4a2a")); desk.position.set(-1.5, 1.1, -2.5); scene.add(desk);
+const gem = new THREE.Mesh(new THREE.OctahedronGeometry(0.3), new THREE.MeshStandardMaterial({ color: "#E8B04A", emissive: "#E8B04A", emissiveIntensity: 0.8, flatShading: true }));
+gem.position.set(-1.5, 1.6, -2.5); scene.add(gem);
+
+scene.add(new THREE.AmbientLight("#8090c0", 0.7));
+const lamp = new THREE.PointLight("#FFD978", 25, 10); lamp.position.set(-1.5, 3, -2); scene.add(lamp);
+
+function loop(t) { gem.rotation.y = t / 800; renderer.render(scene, camera); requestAnimationFrame(loop); }
+requestAnimationFrame(loop);
+addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
+</script>
+</body>
+</html>

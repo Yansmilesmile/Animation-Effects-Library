@@ -52,5 +52,11 @@ export type TimelineEvent = {
   duration?: number;
   /** 覆寫預設圖層："world"（跟鏡頭走）| "hud"（固定在畫面） */
   layer?: "world" | "hud";
+  /** 指名舞台上的物件（舞台編輯器裡的名稱，或「主持人」）：自動帶入 x / y；PropFx 必填 */
+  target?: string;
+  /** target 的定位點：物件的 center（預設）/ top（頭頂）/ bottom（底部） */
+  anchor?: "center" | "top" | "bottom";
+  /** 在定位點上再偏移（像素） */
+  offset?: { x?: number; y?: number };
   props?: Record<string, unknown>;
 };

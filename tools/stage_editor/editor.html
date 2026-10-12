@@ -61,6 +61,12 @@
   .kbd { font-size: 11px; color: var(--muted); line-height: 1.7; }
   .layers div { padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .layers div.on { background: #23305e; color: #fff; }
+  .scene-card { border: 1px solid var(--line); border-radius: 4px; padding: 6px; background: #0b0e1c; }
+  .scene-card .shot { width: 100%; aspect-ratio: 16 / 9; background: #05060c; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; overflow: hidden; }
+  .scene-card .shot img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+  .scene-card .title { font-size: 13px; margin: 4px 0; }
+  .scene-card .btns { display: flex; gap: 4px; }
+  .scene-card.dragging { opacity: 0.5; }
 </style>
 </head>
 <body>
@@ -75,7 +81,7 @@
   </header>
 
   <aside class="left">
-    <div class="tabs"><button id="tabSearch" class="on">素材搜尋</button><button id="tabHost">主持人</button></div>
+    <div class="tabs"><button id="tabSearch" class="on">素材搜尋</button><button id="tabHost">主持人</button><button id="tab3d">3D 場景</button></div>
     <div id="paneSearch" style="display:flex;flex-direction:column;gap:8px;min-height:0;flex:1">
       <div class="tabs"><button id="modeSearch" class="on">關鍵詞搜尋</button><button id="modeBrowse">瀏覽資料夾</button></div>
       <div id="searchBox" style="display:flex;flex-direction:column;gap:6px">
@@ -101,6 +107,14 @@
         <div id="sentinel" class="hint" style="text-align:center;padding:8px"></div>
       </div>
     </div>
+    <div id="pane3d" style="display:none;flex-direction:column;gap:8px;min-height:0;flex:1">
+      <div class="hint">把 3D 場景的 HTML 放進專案的 <b>scenes3d/</b> 資料夾，這裡就會列出來。先「截圖」，再拖到畫布（或按「設為背景」）就成為舞台背景；AI 之後在這個背景上加動畫。</div>
+      <div class="row"><span>解析度</span><select id="snapRes" style="flex:1"><option value="480x270" selected>480×270（和像素層一致）</option><option value="960x540">960×540</option><option value="1920x1080">1920×1080（原始）</option></select></div>
+      <div class="row"><span>等待</span><input type="number" id="snapWait" value="4000" style="width:72px"> 毫秒（等模型、動畫載入）</div>
+      <div class="row"><label><input type="checkbox" id="snapCanvas" checked> 只截 3D 畫布（隱藏頁面上的按鈕、控制列）</label></div>
+      <div class="row"><button id="reload3d">重新整理清單</button></div>
+      <div id="scenes3d" style="display:flex;flex-direction:column;gap:8px;overflow-y:auto;min-height:0"></div>
+    </div>
     <div id="paneHost" style="display:none">
       <div class="hint">主持人是畫布上的物件：可以拖曳、方向鍵移動、翻轉、改倍數、刪除。點下面的姿勢換造型。<br>
         位置會存進舞台，成為這個舞台的預設站位；時間軸的 scene 另外寫了 host 時，以時間軸為準。</div>
@@ -124,6 +138,7 @@
     <div class="row"><span>牆面</span><input type="color" id="wallColor"><input id="wallCss" style="flex:1" placeholder="或 CSS 漸層"></div>
     <div class="row"><span>地板</span><input type="color" id="floorColor"></div>
     <div class="row"><span>地板高度</span><input type="number" id="floorY"> <label><input type="checkbox" id="planks"> 木紋</label></div>
+    <div id="bg3dInfo"></div>
     <div class="row"><button id="addLight">＋ 檯燈光</button></div>
 
     <h3>選取</h3>
@@ -163,6 +178,19 @@ function defaultHost() { return { pose: "full_front", x: 160, y: GROUND, scale: 
 function blankStage() {
   return { name: "home", wall: { color: "#141c3c" }, floor: { y: 146, color: "#24170f", planks: true }, items: [], lights: [], host: defaultHost() };
 }
+
+// 物件名稱：AI 加動畫時用名稱指名物件（例如「書架發光」），所以每個物件都有唯一的名字
+function allNames(except) {
+  const n = [...stage.items, ...stage.lights].filter((o) => o !== except).map((o) => o.name);
+  return new Set([...n, "主持人"]);
+}
+function uniqueName(base, except) {
+  base = (base || "物件").trim() || "物件";
+  const used = allNames(except);
+  if (!used.has(base)) return base;
+  for (let i = 2; ; i++) if (!used.has(`${base} ${i}`)) return `${base} ${i}`;
+}
+const fileBase = (p) => p.split("/").pop().replace(/\.[^.]+$/, "");
 
 // 目前選取的物件（素材 / 燈光 / 主持人）
 function getObj(s = sel) {
@@ -216,10 +244,12 @@ function toWorld(clientX, clientY) {
 function renderWorld() {
   const w = $("world");
   w.innerHTML = "";
+  if (stage.bg3d) w.insertAdjacentHTML("beforeend", `<img src="/${stage.bg3d.image}${bust()}" style="position:absolute;left:0;top:0;width:${W}px;height:${H}px;image-rendering:pixelated">`);
+  const showWF = !stage.bg3d || stage.bg3d.keepWallFloor;
   const wallBg = stage.wall.css || stage.wall.color;
-  w.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:0;top:0;width:${W}px;height:${stage.floor.y}px;background:${wallBg}"></div>`);
-  w.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:0;top:${stage.floor.y}px;width:${W}px;height:${H - stage.floor.y}px;background:${stage.floor.color}"></div>`);
-  if (stage.floor.planks) {
+  if (showWF) w.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:0;top:0;width:${W}px;height:${stage.floor.y}px;background:${wallBg}"></div>`);
+  if (showWF) w.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:0;top:${stage.floor.y}px;width:${W}px;height:${H - stage.floor.y}px;background:${stage.floor.color}"></div>`);
+  if (showWF && stage.floor.planks) {
     let s = "";
     for (let y = stage.floor.y + 8; y < H; y += 16) s += `<div style="position:absolute;left:0;top:${y}px;width:${W}px;height:1px;background:rgba(0,0,0,0.45)"></div>`;
     w.insertAdjacentHTML("beforeend", s);
@@ -312,7 +342,7 @@ function renderInspector() {
     const h = stage.host;
     if (!h) return;
     box.innerHTML = `
-      <div class="hint">主持人（舞台的預設站位）</div>
+      <div class="hint">主持人（舞台的預設站位）；AI 用「主持人」指名</div>
       <div class="row"><span>姿勢</span><select data-k="pose" style="flex:1">${poses.map((p) => `<option ${p.name === h.pose ? "selected" : ""}>${p.name}</option>`).join("")}</select></div>
       <div class="row"><span>x / y</span><input type="number" data-k="x" value="${h.x}"><input type="number" data-k="y" value="${h.y}"></div>
       <div class="row"><span>倍數</span>${scaleSel(h.scale || 1)}
@@ -322,6 +352,7 @@ function renderInspector() {
     const it = stage.items.find((x) => x.id === sel.id);
     if (!it) return;
     box.innerHTML = `
+      <div class="row"><span>名稱</span><input type="text" data-k="name" value="${it.name || ""}" style="flex:1" title="AI 用這個名字指名物件"></div>
       <div class="path">${it.asset}</div>
       <div class="row"><span>x / y</span><input type="number" data-k="x" value="${it.x}"><input type="number" data-k="y" value="${it.y}"></div>
       <div class="row"><span>倍數</span>${scaleSel(it.scale || 1)}
@@ -339,6 +370,7 @@ function renderInspector() {
     const l = stage.lights.find((x) => x.id === sel.id);
     if (!l) return;
     box.innerHTML = `
+      <div class="row"><span>名稱</span><input type="text" data-k="name" value="${l.name || ""}" style="flex:1"></div>
       <div class="hint">檯燈光（影片裡會明暗呼吸）</div>
       <div class="row"><span>x / y</span><input type="number" data-k="x" value="${l.x}"><input type="number" data-k="y" value="${l.y}"></div>
       <div class="row"><span>半徑</span><input type="number" data-k="radius" value="${l.radius || 50}"></div>
@@ -350,7 +382,7 @@ function renderInspector() {
     snapshot();
     const obj = getObj();
     const k = inp.dataset.k;
-    obj[k] = inp.type === "checkbox" ? inp.checked : k === "scale" ? +inp.value : k === "rotate" ? normAngle(+inp.value) : inp.type === "number" ? Math.round(+inp.value) : inp.value;
+    obj[k] = inp.type === "checkbox" ? inp.checked : k === "scale" ? +inp.value : k === "rotate" ? normAngle(+inp.value) : k === "name" ? uniqueName(inp.value, obj) : inp.type === "number" ? Math.round(+inp.value) : inp.value;
     renderAll();
   }));
   box.querySelectorAll("[data-rot]").forEach((b) => (b.onclick = () => {
@@ -369,7 +401,7 @@ function renderLayers() {
   const box = $("layers");
   const order = { back: 0, main: 1, front: 2 };
   const list = [...stage.items].map((it, i) => ({ it, i })).sort((a, b) => order[b.it.depth] - order[a.it.depth] || b.i - a.i);
-  const row = ({ it }) => `<div data-id="${it.id}" class="${sel && sel.id === it.id ? "on" : ""}">[${{ back: "背", main: "主", front: "前" }[it.depth]}] ${it.asset.split("/").pop()}</div>`;
+  const row = ({ it }) => `<div data-id="${it.id}" class="${sel && sel.id === it.id ? "on" : ""}" title="${it.asset}">[${{ back: "背", main: "主", front: "前" }[it.depth]}] ${it.name || fileBase(it.asset)}</div>`;
   const front = list.filter(({ it }) => it.depth === "front").map(row).join("");
   const rest = list.filter(({ it }) => it.depth !== "front").map(row).join("");
   const host = stage.host ? `<div data-host="1" class="${sel && sel.kind === "host" ? "on" : ""}">[人] 主持人 ${stage.host.pose}</div>` : "";
@@ -385,6 +417,13 @@ function renderStageInputs() {
   $("floorY").value = stage.floor.y;
   $("planks").checked = !!stage.floor.planks;
   $("stageName").value = stage.name || "home";
+  const bi = $("bg3dInfo");
+  if (stage.bg3d) {
+    bi.innerHTML = `<div class="row"><span>3D 背景</span><span style="flex:1;font-size:12px">${stage.bg3d.html.split("/").pop()}</span><button id="rmBg3d">移除</button></div>
+      <div class="row"><label><input type="checkbox" id="keepWF" ${stage.bg3d.keepWallFloor ? "checked" : ""}> 仍顯示牆面與地板</label></div>`;
+    $("rmBg3d").onclick = () => { snapshot(); delete stage.bg3d; renderStageInputs(); renderAll(); };
+    $("keepWF").onchange = () => { snapshot(); stage.bg3d.keepWallFloor = $("keepWF").checked; renderAll(); };
+  } else bi.innerHTML = "";
 }
 
 function renderAll() { renderWorld(); renderInspector(); renderLayers(); }
@@ -434,7 +473,7 @@ function startRotate(e, it, el) {
 async function addItem(path, x, y, hint) {
   await getMeta(path, hint);
   snapshot();
-  const it = { id: newId(), asset: path, x: Math.round(x), y: Math.round(y), scale: 1, flipX: false, depth: "main" };
+  const it = { id: newId(), name: uniqueName((hint && hint.name) || fileBase(path)), asset: path, x: Math.round(x), y: Math.round(y), scale: 1, flipX: false, depth: "main" };
   stage.items.push(it);
   sel = { kind: "item", id: it.id };
   renderAll();
@@ -445,6 +484,7 @@ $("frame").addEventListener("drop", (e) => {
   const data = e.dataTransfer.getData("application/json");
   if (!data) return;
   const d = JSON.parse(data);
+  if (d.bg3d) { const s = scenes3d.find((x) => x.file === d.bg3d); if (s) useBg3d(s); return; }
   const p = toWorld(e.clientX, e.clientY);
   const f = frameSize(d.w ? d : { w: 16, h: 16 });
   addItem(d.path, p.x, p.y + f.h / 2, d);
@@ -463,6 +503,7 @@ function duplicateSel() {
   const it = stage.items.find((x) => x.id === sel.id);
   snapshot();
   const c = { ...it, id: newId(), x: it.x + 8 };
+  c.name = uniqueName(it.name, c);
   stage.items.push(c); sel = { kind: "item", id: c.id }; renderAll();
 }
 function reorder(dir) {
@@ -619,8 +660,63 @@ async function loadPoses() {
     };
   });
 }
-$("tabSearch").onclick = () => { $("paneSearch").style.display = "flex"; $("paneHost").style.display = "none"; $("tabSearch").classList.add("on"); $("tabHost").classList.remove("on"); };
-$("tabHost").onclick = () => { $("paneSearch").style.display = "none"; $("paneHost").style.display = "block"; $("tabHost").classList.add("on"); $("tabSearch").classList.remove("on"); };
+const PANES = { tabSearch: ["paneSearch", "flex"], tabHost: ["paneHost", "block"], tab3d: ["pane3d", "flex"] };
+Object.keys(PANES).forEach((tab) => ($(tab).onclick = () => {
+  for (const [t, [pane, disp]] of Object.entries(PANES)) {
+    $(pane).style.display = t === tab ? disp : "none";
+    $(t).classList.toggle("on", t === tab);
+  }
+  if (tab === "tab3d") loadScenes3d();
+}));
+
+// ── 3D 場景背景 ─────────────────────────────────
+// scenes3d/*.html 用無頭瀏覽器截圖成 public/bg3d/*.png，設為舞台背景（影片裡用的是這張圖，不會跑 3D）
+let scenes3d = [];
+const bust = () => "?t=" + Date.now();
+async function loadScenes3d() {
+  scenes3d = await fetch("/api/scenes3d").then((r) => r.json());
+  const box = $("scenes3d");
+  if (!scenes3d.length) { box.innerHTML = `<div class="hint">scenes3d/ 資料夾裡還沒有 HTML</div>`; return; }
+  box.innerHTML = scenes3d.map((s, i) => {
+    const shot = pickShot(s);
+    return `<div class="scene-card" draggable="${shot ? "true" : "false"}" data-i="${i}">
+      <div class="shot">${shot ? `<img src="/${shot}${bust()}">` : "尚未截圖"}</div>
+      <div class="title">${s.name}</div>
+      <div class="btns"><button data-act="snap">截圖</button><button data-act="use" ${shot ? "" : "disabled"}>設為背景</button></div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll(".scene-card").forEach((card) => {
+    const s = scenes3d[+card.dataset.i];
+    card.querySelector('[data-act="snap"]').onclick = (e) => snap3d(s, e.target);
+    card.querySelector('[data-act="use"]').onclick = () => useBg3d(s);
+    card.addEventListener("dragstart", (e) => e.dataTransfer.setData("application/json", JSON.stringify({ bg3d: s.file })));
+  });
+}
+// 優先用目前選的解析度那張，沒有就用任一張
+function pickShot(s) {
+  const want = `${s.name}-${$("snapRes").value}.png`;
+  return s.shots.find((x) => x.endsWith("/" + want)) || s.shots[0] || null;
+}
+async function snap3d(s, btn) {
+  const [w, h] = $("snapRes").value.split("x");
+  btn.disabled = true; btn.textContent = "截圖中…";
+  const url = `/api/snapshot3d?file=${encodeURIComponent(s.file)}&w=${w}&h=${h}&wait=${+$("snapWait").value || 0}&canvasOnly=${$("snapCanvas").checked ? 1 : 0}`;
+  const r = await fetch(url, { method: "POST" }).then((x) => x.json());
+  if (r.error) alert("截圖失敗：" + r.error);
+  await loadScenes3d();
+  // 目前舞台用的就是這個場景時，順便更新畫布
+  if (stage.bg3d && stage.bg3d.html === "scenes3d/" + s.file && r.image) { stage.bg3d.image = r.image; renderAll(); }
+}
+function useBg3d(s) {
+  const shot = pickShot(s);
+  if (!shot) { alert("請先截圖"); return; }
+  snapshot();
+  const [w, h] = (shot.match(/-(\d+)x(\d+)\.png$/) || [0, 480, 270]).slice(1).map(Number);
+  stage.bg3d = { html: "scenes3d/" + s.file, image: shot, w, h, keepWallFloor: false };
+  renderStageInputs(); renderAll();
+}
+$("reload3d").onclick = loadScenes3d;
+$("snapRes").addEventListener("change", loadScenes3d);
 $("addHost").onclick = () => { if (stage.host) { sel = { kind: "host", id: "host" }; renderAll(); return; } snapshot(); stage.host = defaultHost(); sel = { kind: "host", id: "host" }; renderAll(); };
 ["viewShot", "showGuides", "showLights"].forEach((id) => $(id).addEventListener("change", renderWorld));
 window.addEventListener("resize", renderWorld);
@@ -631,7 +727,7 @@ $("wallCss").addEventListener("change", () => { snapshot(); stage.wall.css = $("
 $("floorColor").addEventListener("change", () => { snapshot(); stage.floor.color = $("floorColor").value; renderWorld(); });
 $("floorY").addEventListener("change", () => { snapshot(); stage.floor.y = Math.round(+$("floorY").value); renderWorld(); });
 $("planks").addEventListener("change", () => { snapshot(); stage.floor.planks = $("planks").checked; renderWorld(); });
-$("addLight").onclick = () => { snapshot(); const l = { id: newId(), type: "lamp", x: 300, y: 120, radius: 50, cone: 40, color: "#FFD978" }; stage.lights.push(l); sel = { kind: "light", id: l.id }; renderAll(); };
+$("addLight").onclick = () => { snapshot(); const l = { id: newId(), name: uniqueName("檯燈光"), type: "lamp", x: 300, y: 120, radius: 50, cone: 40, color: "#FFD978" }; stage.lights.push(l); sel = { kind: "light", id: l.id }; renderAll(); };
 
 // ── 存讀檔 ───────────────────────────────────────
 async function save() {
@@ -649,6 +745,9 @@ async function loadStage(name) {
   stage.items.forEach((it) => (it.id = it.id || newId()));
   stage.lights.forEach((l) => (l.id = l.id || newId()));
   if (stage.host === undefined) stage.host = defaultHost(); // 舊舞台檔沒有主持人欄位
+  // 舊舞台檔沒有名稱：補上
+  stage.items.forEach((it) => { if (!it.name) it.name = uniqueName(fileBase(it.asset), it); });
+  stage.lights.forEach((l) => { if (!l.name) l.name = uniqueName("檯燈光", l); });
   await Promise.all(stage.items.map((it) => getMeta(it.asset)));
   history = []; sel = null;
   renderStageInputs(); renderAll();

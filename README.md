@@ -171,6 +171,10 @@ npm run stage-editor          # = python tools/stage_editor/server.py，然後�
   位置會存進舞台，成為預設站位；時間軸 scene 沒寫 `host` 時用舞台的，寫了以時間軸為準，寫 `null` 則不出現。
 - 搜尋結果只列 PNG（影片端只支援 PNG）。重複開啟伺服器時會提示埠已被佔用。
 - 牆面、地板、木紋、檯燈光在右側設定。按「存檔」寫進 `stages/<名稱>.json`。
+- **物件名稱**：加入時自動帶入素材名稱，可在右側改（例如「主角的床」）。AI 加動畫時用名稱指名物件。
+- **3D 場景背景**：把 3D 場景的 HTML 放進 `scenes3d/`，在「3D 場景」分頁按「截圖」，再拖到畫布或按「設為背景」。
+  截圖存在 `public/bg3d/`（預設 480×270、只截 3D 畫布、等 4 秒讓模型載入）；影片裡用這張圖，不跑 3D。
+- **給 AI**：AI 讀 `stages/*.json`，用時間軸的 `target` 和 `PropFx` 在場景上加動畫，說明在 `docs/stage-for-ai.md`。
 - 存檔後執行 `npm run assets`（會複製舞台用到的素材，並把舞台註冊進 Remotion），
   在 Studio 的 `StagePreview` 填舞台名稱預覽，時間軸寫 `"stage": "<名稱>"` 就能用。
 - 伺服器只在本機（127.0.0.1）監聽；素材庫只讀，不會被修改。8765 被佔用時可用 `python tools/stage_editor/server.py --port 8766`。

@@ -30,7 +30,7 @@ const Void: React.FC<StageProps> = ({ children, host }) => (
   </>
 );
 
-export type StageEntry = { component: React.FC<StageProps>; background?: string; defaultHost?: StageHost | null };
+export type StageEntry = { component: React.FC<StageProps>; background?: string; defaultHost?: StageHost | null; spec?: StageSpec };
 
 const BUILTIN: Record<string, StageEntry> = {
   "study-room": { component: StudyRoom },
@@ -42,7 +42,7 @@ const BUILTIN: Record<string, StageEntry> = {
 const FROM_EDITOR = Object.fromEntries(
   Object.entries(editorStages as Record<string, StageSpec>).map(([name, spec]) => [
     name,
-    { component: ((p: StageProps) => <LayoutStage spec={spec} {...p} />) as React.FC<StageProps>, defaultHost: spec.host ?? null } as StageEntry,
+    { component: ((p: StageProps) => <LayoutStage spec={spec} {...p} />) as React.FC<StageProps>, defaultHost: spec.host ?? null, spec } as StageEntry,
   ]),
 );
 
