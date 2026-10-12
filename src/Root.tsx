@@ -5,6 +5,7 @@ import { Showcase1, SHOWCASE1_DURATION } from "./showcase/Showcase1";
 import { Showcase2, SHOWCASE2_DURATION } from "./showcase/Showcase2";
 import { Showcase3, SHOWCASE3_DURATION } from "./showcase/Showcase3";
 import { Showcase4, SHOWCASE4_DURATION } from "./showcase/Showcase4";
+import { StagePreview } from "./showcase/StagePreview";
 import { Test3D, TEST3D_DURATION } from "./showcase/Test3D";
 import { VIDEO } from "./theme";
 import { calculateTimelineMetadata, TimelineComposition } from "./timeline/TimelineComposition";
@@ -65,6 +66,16 @@ export const Root: React.FC = () => (
       defaultProps={{ timeline: errorsTimeline as Timeline }}
       calculateMetadata={calculateTimelineMetadata}
       durationInFrames={1}
+      fps={VIDEO.fps}
+      width={VIDEO.width}
+      height={VIDEO.height}
+    />
+    {/* 舞台編輯器存的舞台預覽：改 stage 名稱即可 */}
+    <Composition
+      id="StagePreview"
+      component={StagePreview}
+      defaultProps={{ stage: "home", pose: "full_point_happy", hostX: 160 }}
+      durationInFrames={90}
       fps={VIDEO.fps}
       width={VIDEO.width}
       height={VIDEO.height}

@@ -61,8 +61,13 @@ function collect(file) {
   return out;
 }
 
+const listJson = (dir) => (fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".json")).map((f) => path.join(dir, f)) : []);
+const STAGE_FILES = listJson(path.join(PROJECT, "stages"));
 const inputs = process.argv.slice(2);
-if (!inputs.length) inputs.push(path.join(PROJECT, "assets.list.json"));
+if (!inputs.length) {
+  // 預設：素材清單 + 舞台編輯器存的舞台 + 時間軸，用到的素材都複製
+  inputs.push(path.join(PROJECT, "assets.list.json"), ...STAGE_FILES, ...listJson(path.join(PROJECT, "timelines")));
+}
 const wanted = new Set();
 for (const f of inputs) collect(f).forEach((p) => wanted.add(p));
 
@@ -107,5 +112,13 @@ for (const rel of wanted) {
 mkdirp(GENERATED);
 fs.writeFileSync(path.join(GENERATED, "asset-meta.json"), JSON.stringify(meta, null, 1));
 fs.writeFileSync(path.join(GENERATED, "character.json"), JSON.stringify(character, null, 1));
+// 舞台編輯器存的舞台彙整成一份，讓 Remotion 直接 import
+const stages = {};
+for (const f of STAGE_FILES) {
+  const spec = JSON.parse(fs.readFileSync(f, "utf8"));
+  stages[spec.name || path.basename(f, ".json")] = spec;
+}
+fs.writeFileSync(path.join(GENERATED, "stages.json"), JSON.stringify(stages, null, 1));
+if (STAGE_FILES.length) console.log(`舞台：${Object.keys(stages).join("、")}`);
 console.log(`已複製 ${Object.keys(meta).length} 張素材到 public/lib/，meta 寫入 src/generated/asset-meta.json`);
 if (errors.length) { console.error(errors.join("\n")); process.exit(1); }

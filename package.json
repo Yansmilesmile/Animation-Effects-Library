@@ -5,6 +5,7 @@
   "description": "超級人機 像素動效組件（Remotion）",
   "scripts": {
     "assets": "node scripts/copy-assets.mjs",
+    "stage-editor": "python tools/stage_editor/server.py",
     "studio": "npm run assets && remotion studio",
     "render:showcase": "remotion render Showcase1 out/showcase1.mp4",
     "still": "remotion still",

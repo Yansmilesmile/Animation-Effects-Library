@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>舞台編輯器 · 超級人機</title>
+<style>
+  :root {
+    --bg: #0d1020; --panel: #151a30; --line: #2a3256; --text: #e6e9f5; --muted: #8a91ad;
+    --gold: #E8B04A; --red: #D9443A; --navy: #1E2F5C;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 14px/1.4 "Microsoft JhengHei", "PingFang TC", sans-serif; }
+  button, input, select { font: inherit; color: var(--text); background: #1d2340; border: 1px solid var(--line); border-radius: 4px; padding: 4px 8px; }
+  button { cursor: pointer; } button:hover { border-color: var(--gold); }
+  button.primary { background: var(--gold); color: #1a1205; border-color: var(--gold); font-weight: bold; }
+  input[type=number] { width: 64px; }
+  .app { display: grid; grid-template-columns: 340px 1fr 280px; grid-template-rows: 48px 1fr; height: 100%; }
+  header { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  header h1 { font-size: 15px; margin: 0 12px 0 0; color: var(--gold); }
+  header .status { margin-left: auto; color: var(--muted); font-size: 12px; }
+  .left, .right { background: var(--panel); overflow: auto; padding: 10px; }
+  .left { border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; overflow-x: hidden; }
+  .right { border-left: 1px solid var(--line); }
+  .tabs { display: flex; gap: 4px; } .tabs button.on { border-color: var(--gold); color: var(--gold); }
+  .search { display: flex; gap: 4px; } .search input { flex: 1; }
+  .hint { color: var(--muted); font-size: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .tile { background: #0b0e1c; border: 1px solid var(--line); border-radius: 4px; padding: 4px; cursor: grab; text-align: center; }
+  .tile:hover { border-color: var(--gold); }
+  .tile .thumb { height: 72px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .tile .thumb .px { image-rendering: pixelated; background-repeat: no-repeat; background-position: 0 0; }
+  .tile .name { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile .sub { font-size: 10px; color: var(--muted); }
+  .tile .via { font-size: 10px; color: var(--gold); }
+  .center { position: relative; overflow: hidden; display: flex; flex-direction: column; }
+  .toolbar { display: flex; gap: 10px; align-items: center; padding: 6px 12px; border-bottom: 1px solid var(--line); font-size: 13px; flex-wrap: wrap; }
+  .toolbar label { display: flex; align-items: center; gap: 4px; }
+  .viewport { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #070812; }
+  .frame { position: relative; box-shadow: 0 0 0 1px #333a5c; }
+  .world { position: absolute; left: 0; top: 0; width: 480px; height: 270px; transform-origin: 0 0; overflow: hidden; image-rendering: pixelated; }
+  .item { position: absolute; cursor: move; }
+  .item .clip { overflow: hidden; position: relative; }
+  .item img { position: absolute; left: 0; top: 0; image-rendering: pixelated; pointer-events: none; }
+  .item.sel { outline: 0.5px solid #4fd1ff; }
+  .light { position: absolute; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; }
+  .light-handle { position: absolute; width: 6px; height: 6px; margin: -3px 0 0 -3px; border: 0.5px solid #ffe08a; border-radius: 50%; cursor: move; background: rgba(255,224,138,0.3); }
+  .light-handle.sel { border-color: #4fd1ff; background: rgba(79,209,255,0.4); }
+  .guide { position: absolute; pointer-events: none; }
+  .host { position: absolute; pointer-events: none; opacity: 0.85; }
+  .row { display: flex; align-items: center; gap: 6px; margin: 6px 0; }
+  .row > span:first-child { width: 64px; color: var(--muted); font-size: 12px; }
+  h3 { font-size: 13px; color: var(--gold); margin: 14px 0 6px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .path { font-size: 11px; color: var(--muted); word-break: break-all; }
+  .kbd { font-size: 11px; color: var(--muted); line-height: 1.7; }
+  .layers div { padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .layers div.on { background: #23305e; color: #fff; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>舞台編輯器</h1>
+    <span>舞台名稱</span><input id="stageName" value="home" style="width:120px">
+    <select id="stageList"><option value="">載入舊舞台…</option></select>
+    <button class="primary" id="saveBtn">存檔 (Ctrl+S)</button>
+    <button id="newBtn">新舞台</button>
+    <span class="status" id="status">連線中…</span>
+  </header>
+
+  <aside class="left">
+    <div class="tabs"><button id="tabSearch" class="on">素材搜尋</button><button id="tabHost">主持人</button></div>
+    <div id="paneSearch" style="display:flex;flex-direction:column;gap:8px;min-height:0">
+      <div class="search"><input id="q" placeholder="輸入關鍵詞，例如：桌子、書架 木"><button id="goBtn">搜尋</button></div>
+      <div class="row" style="margin:0"><label><input type="checkbox" id="useClip" checked> 以文搜圖（CLIP）</label></div>
+      <div style="display:flex;flex-direction:column;gap:4px"><span class="hint">限定資料夾（同一個素材包的風格比較一致）</span>
+        <select id="folder" style="width:100%;min-width:0">
+          <option value="">全部</option>
+          <option>_自動拆分/Interior_Decoration_室内装饰</option>
+          <option>Interior_Decoration_室内装饰</option>
+          <option>Asset_Packs_素材套图/FarmLife</option>
+          <option>Asset_Packs_素材套图/CleanCity</option>
+          <option>Asset_Packs_素材套图/2D Pixel Dungeon Asset Pack</option>
+          <option>_自動拆分</option>
+          <option>other_其他素材3万多张</option>
+          <option>UI_Elements_界面元素</option>
+        </select>
+      </div>
+      <div class="hint">把素材拖到畫布上，或點一下加到畫面中央。關鍵詞用空白分開的短詞。</div>
+      <div class="hint" id="searchInfo"></div>
+      <div class="grid" id="results"></div>
+    </div>
+    <div id="paneHost" style="display:none">
+      <div class="hint">主持人姿勢只用來預覽構圖（不會存進舞台；影片裡的主持人由時間軸的 host 決定）。</div>
+      <div class="row"><label><input type="checkbox" id="showHost" checked> 顯示主持人預覽</label></div>
+      <div class="row"><span>站位 x</span><input type="number" id="hostX" value="160"></div>
+      <div class="grid" id="poses"></div>
+    </div>
+  </aside>
+
+  <main class="center">
+    <div class="toolbar">
+      <label><input type="checkbox" id="viewShot" checked> 影片取景（1.5 倍）</label>
+      <label><input type="checkbox" id="showGuides" checked> 參考線</label>
+      <label><input type="checkbox" id="showLights" checked> 燈光</label>
+      <span class="hint">紫框 = 影片看得到的範圍；金線 = 地面線（人物腳底）；紅區 = 字幕區</span>
+    </div>
+    <div class="viewport" id="viewport"><div class="frame" id="frame"><div class="world" id="world"></div></div></div>
+  </main>
+
+  <aside class="right">
+    <h3>舞台</h3>
+    <div class="row"><span>牆面</span><input type="color" id="wallColor"><input id="wallCss" style="flex:1" placeholder="或 CSS 漸層"></div>
+    <div class="row"><span>地板</span><input type="color" id="floorColor"></div>
+    <div class="row"><span>地板高度</span><input type="number" id="floorY"> <label><input type="checkbox" id="planks"> 木紋</label></div>
+    <div class="row"><button id="addLight">＋ 檯燈光</button></div>
+
+    <h3>選取</h3>
+    <div id="inspector" class="hint">點選畫布上的素材或燈光</div>
+
+    <h3>圖層（上面 = 前面）</h3>
+    <div class="layers" id="layers"></div>
+
+    <h3>快捷鍵</h3>
+    <div class="kbd">方向鍵：移動 1 像素（Shift = 10）<br>Delete：刪除　Ctrl+D：複製<br>[ / ]：往後 / 往前一層<br>F：水平翻轉　1–4：倍數<br>Ctrl+Z：復原　Ctrl+S：存檔</div>
+  </aside>
+</div>
+
+<script>
+const W = 480, H = 270, GROUND = 160;
+// 影片預設取景：放大 1.5 倍、地面線 y=160 落在畫面 80%
+const SHOT = { x: 240, y: 106, zoom: 1.5 };
+const SHOT_RECT = { x: SHOT.x - W / 2 / SHOT.zoom, y: SHOT.y - H / 2 / SHOT.zoom, w: W / SHOT.zoom, h: H / SHOT.zoom };
+const SUB_Y = SHOT.y + (229 - H / 2) / SHOT.zoom; // 字幕區上緣（世界座標）
+
+const $ = (id) => document.getElementById(id);
+const lib = (p) => "/lib/" + p.split("/").map(encodeURIComponent).join("/");
+let uid = 1;
+const newId = () => "i" + (Date.now().toString(36)) + (uid++);
+
+let stage = blankStage();
+let sel = null; // { kind: 'item'|'light', id }
+let history = [];
+let poses = [];
+let hostPose = "full_front";
+const metaCache = {};
+
+function blankStage() {
+  return { name: "home", wall: { color: "#141c3c" }, floor: { y: 146, color: "#24170f", planks: true }, items: [], lights: [] };
+}
+
+function snapshot() { history.push(JSON.stringify(stage)); if (history.length > 80) history.shift(); }
+function undo() { if (!history.length) return; stage = JSON.parse(history.pop()); sel = null; renderAll(); }
+
+// ── 尺寸 / 動畫資訊 ───────────────────────────────
+async function getMeta(path, hint) {
+  if (hint && hint.w) { metaCache[path] = { w: hint.w, h: hint.h, anim: hint.anim || null }; }
+  if (metaCache[path]) return metaCache[path];
+  const r = await fetch("/api/meta?path=" + encodeURIComponent(path)).then((r) => r.json());
+  if (!r.w) {
+    // inventory 沒有時，直接讀圖片尺寸
+    const img = await new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.src = lib(path); });
+    r.w = img.naturalWidth; r.h = img.naturalHeight;
+  }
+  metaCache[path] = { w: r.w, h: r.h, anim: r.anim || null };
+  return metaCache[path];
+}
+const frameSize = (m) => (m.anim ? { w: m.anim.frameW, h: m.anim.frameH } : { w: m.w, h: m.h });
+
+// ── 畫布縮放 ──────────────────────────────────────
+function viewScale() {
+  const vp = $("viewport").getBoundingClientRect();
+  const shot = $("viewShot").checked;
+  const vw = shot ? SHOT_RECT.w : W, vh = shot ? SHOT_RECT.h : H;
+  const s = Math.max(1, Math.floor(Math.min((vp.width - 24) / vw, (vp.height - 24) / vh) * 2) / 2);
+  return { s, shot, vw, vh };
+}
+function layout() {
+  const { s, shot, vw, vh } = viewScale();
+  $("frame").style.width = vw * s + "px";
+  $("frame").style.height = vh * s + "px";
+  $("frame").style.overflow = "hidden";
+  const ox = shot ? -SHOT_RECT.x * s : 0, oy = shot ? -SHOT_RECT.y * s : 0;
+  $("world").style.transform = `translate(${ox}px, ${oy}px) scale(${s})`;
+  return { s, ox, oy };
+}
+function toWorld(clientX, clientY) {
+  const r = $("frame").getBoundingClientRect();
+  const { s, ox, oy } = layout();
+  return { x: (clientX - r.left - ox) / s, y: (clientY - r.top - oy) / s };
+}
+
+// ── 繪製 ─────────────────────────────────────────
+function renderWorld() {
+  const w = $("world");
+  w.innerHTML = "";
+  const wallBg = stage.wall.css || stage.wall.color;
+  w.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:0;top:0;width:${W}px;height:${stage.floor.y}px;background:${wallBg}"></div>`);
+  w.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:0;top:${stage.floor.y}px;width:${W}px;height:${H - stage.floor.y}px;background:${stage.floor.color}"></div>`);
+  if (stage.floor.planks) {
+    let s = "";
+    for (let y = stage.floor.y + 8; y < H; y += 16) s += `<div style="position:absolute;left:0;top:${y}px;width:${W}px;height:1px;background:rgba(0,0,0,0.45)"></div>`;
+    w.insertAdjacentHTML("beforeend", s);
+  }
+  const order = { back: 0, main: 1, front: 2 };
+  const items = [...stage.items].map((it, i) => ({ it, i })).sort((a, b) => order[a.it.depth] - order[b.it.depth] || a.i - b.i);
+  let hostDrawn = false;
+  for (const { it } of items) {
+    if (it.depth === "front" && !hostDrawn) { drawHost(w); hostDrawn = true; }
+    drawItem(w, it);
+  }
+  if (!hostDrawn) drawHost(w);
+  if ($("showLights").checked) for (const l of stage.lights) drawLight(w, l);
+  if ($("showGuides").checked) drawGuides(w);
+  layout();
+}
+
+function drawItem(w, it) {
+  const m = metaCache[it.asset];
+  if (!m) { getMeta(it.asset).then(renderWorld); return; }
+  const f = frameSize(m), sc = it.scale || 1;
+  const el = document.createElement("div");
+  el.className = "item" + (sel && sel.kind === "item" && sel.id === it.id ? " sel" : "");
+  el.style.left = Math.round(it.x - (f.w * sc) / 2) + "px";
+  el.style.top = Math.round(it.y - f.h * sc) + "px";
+  el.style.transform = it.flipX ? "scaleX(-1)" : "";
+  if (it.depth === "back") el.style.filter = "blur(0.35px) brightness(0.6)";
+  el.innerHTML = `<div class="clip" style="width:${f.w * sc}px;height:${f.h * sc}px"><img src="${lib(it.asset)}" style="width:${m.w * sc}px;height:${m.h * sc}px"></div>`;
+  el.addEventListener("mousedown", (e) => startDrag(e, "item", it.id));
+  w.appendChild(el);
+}
+
+function drawHost(w) {
+  if (!$("showHost").checked) return;
+  const p = poses.find((x) => x.name === hostPose);
+  if (!p) return;
+  const x = +$("hostX").value || 160;
+  w.insertAdjacentHTML("beforeend", `<img class="host" src="${lib(p.path)}" style="left:${Math.round(x - p.w / 2)}px;top:${GROUND - p.h}px;width:${p.w}px;height:${p.h}px">`);
+}
+
+function drawLight(w, l) {
+  const r = l.radius || 50;
+  w.insertAdjacentHTML("beforeend", `<div class="light" style="left:${l.x - r}px;top:${l.y - r}px;width:${r * 2}px;height:${r * 2}px;background:radial-gradient(circle, ${l.color || "#FFD978"} 0%, rgba(0,0,0,0) 70%);opacity:0.45"></div>`);
+  if (l.cone) {
+    w.insertAdjacentHTML("beforeend", `<div class="light" style="border-radius:0;left:${l.x - l.cone}px;top:${l.y}px;width:${l.cone * 2}px;height:${l.cone * 1.6}px;clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);background:linear-gradient(${l.color || "#FFD978"}, rgba(0,0,0,0));opacity:0.25"></div>`);
+  }
+  const h = document.createElement("div");
+  h.className = "light-handle" + (sel && sel.kind === "light" && sel.id === l.id ? " sel" : "");
+  h.style.left = l.x + "px"; h.style.top = l.y + "px";
+  h.addEventListener("mousedown", (e) => startDrag(e, "light", l.id));
+  w.appendChild(h);
+}
+
+function drawGuides(w) {
+  const r = SHOT_RECT;
+  w.insertAdjacentHTML("beforeend", `
+    <div class="guide" style="left:${r.x}px;top:${r.y}px;width:${r.w}px;height:${r.h}px;outline:0.5px dashed #b48cff"></div>
+    <div class="guide" style="left:0;top:${GROUND}px;width:${W}px;height:0;border-top:0.5px solid #E8B04A"></div>
+    <div class="guide" style="left:${r.x}px;top:${SUB_Y}px;width:${r.w}px;height:${r.y + r.h - SUB_Y}px;background:rgba(217,68,58,0.22)"></div>`);
+}
+
+function renderInspector() {
+  const box = $("inspector");
+  if (!sel) { box.className = "hint"; box.textContent = "點選畫布上的素材或燈光"; return; }
+  box.className = "";
+  if (sel.kind === "item") {
+    const it = stage.items.find((x) => x.id === sel.id);
+    if (!it) return;
+    box.innerHTML = `
+      <div class="path">${it.asset}</div>
+      <div class="row"><span>x / y</span><input type="number" data-k="x" value="${it.x}"><input type="number" data-k="y" value="${it.y}"></div>
+      <div class="row"><span>倍數</span><select data-k="scale">${[1, 2, 3, 4].map((n) => `<option ${it.scale == n ? "selected" : ""}>${n}</option>`).join("")}</select>
+        <label><input type="checkbox" data-k="flipX" ${it.flipX ? "checked" : ""}> 翻轉</label></div>
+      <div class="row"><span>深度</span><select data-k="depth">
+        <option value="back" ${it.depth === "back" ? "selected" : ""}>背景（模糊壓暗）</option>
+        <option value="main" ${it.depth === "main" ? "selected" : ""}>主體（人物後面）</option>
+        <option value="front" ${it.depth === "front" ? "selected" : ""}>前景（人物前面）</option></select></div>
+      <div class="row"><label><input type="checkbox" data-k="noBloom" ${it.noBloom ? "checked" : ""}> 不發光（淺色地毯等）</label></div>
+      <div class="row"><button id="dupBtn">複製</button><button id="delBtn">刪除</button></div>`;
+  } else {
+    const l = stage.lights.find((x) => x.id === sel.id);
+    if (!l) return;
+    box.innerHTML = `
+      <div class="hint">檯燈光（影片裡會明暗呼吸）</div>
+      <div class="row"><span>x / y</span><input type="number" data-k="x" value="${l.x}"><input type="number" data-k="y" value="${l.y}"></div>
+      <div class="row"><span>半徑</span><input type="number" data-k="radius" value="${l.radius || 50}"></div>
+      <div class="row"><span>光錐</span><input type="number" data-k="cone" value="${l.cone || 0}"></div>
+      <div class="row"><span>顏色</span><input type="color" data-k="color" value="${l.color || "#FFD978"}"></div>
+      <div class="row"><button id="delBtn">刪除</button></div>`;
+  }
+  box.querySelectorAll("[data-k]").forEach((inp) => inp.addEventListener("change", () => {
+    snapshot();
+    const obj = sel.kind === "item" ? stage.items.find((x) => x.id === sel.id) : stage.lights.find((x) => x.id === sel.id);
+    const k = inp.dataset.k;
+    obj[k] = inp.type === "checkbox" ? inp.checked : inp.type === "number" || k === "scale" ? Math.round(+inp.value) : inp.value;
+    renderAll();
+  }));
+  const del = $("delBtn"); if (del) del.onclick = removeSel;
+  const dup = $("dupBtn"); if (dup) dup.onclick = duplicateSel;
+}
+
+function renderLayers() {
+  const box = $("layers");
+  const order = { back: 0, main: 1, front: 2 };
+  const list = [...stage.items].map((it, i) => ({ it, i })).sort((a, b) => order[b.it.depth] - order[a.it.depth] || b.i - a.i);
+  box.innerHTML = list.map(({ it }) => `<div data-id="${it.id}" class="${sel && sel.id === it.id ? "on" : ""}">[${{ back: "背", main: "主", front: "前" }[it.depth]}] ${it.asset.split("/").pop()}</div>`).join("") || `<span class="hint">還沒有素材</span>`;
+  box.querySelectorAll("[data-id]").forEach((d) => (d.onclick = () => { sel = { kind: "item", id: d.dataset.id }; renderAll(); }));
+}
+
+function renderStageInputs() {
+  $("wallColor").value = /^#/.test(stage.wall.color) ? stage.wall.color : "#141c3c";
+  $("wallCss").value = stage.wall.css || "";
+  $("floorColor").value = stage.floor.color;
+  $("floorY").value = stage.floor.y;
+  $("planks").checked = !!stage.floor.planks;
+  $("stageName").value = stage.name || "home";
+}
+
+function renderAll() { renderWorld(); renderInspector(); renderLayers(); }
+
+// ── 拖曳 ─────────────────────────────────────────
+function startDrag(e, kind, id) {
+  e.preventDefault(); e.stopPropagation();
+  sel = { kind, id };
+  const obj = kind === "item" ? stage.items.find((x) => x.id === id) : stage.lights.find((x) => x.id === id);
+  const p0 = toWorld(e.clientX, e.clientY), o0 = { x: obj.x, y: obj.y };
+  let moved = false;
+  const move = (ev) => {
+    const p = toWorld(ev.clientX, ev.clientY);
+    if (!moved) { snapshot(); moved = true; }
+    obj.x = Math.round(o0.x + p.x - p0.x);
+    obj.y = Math.round(o0.y + p.y - p0.y);
+    renderWorld();
+  };
+  const up = () => { window.removeEventListener("mousemove", move); window.removeEventListener("mouseup", up); renderAll(); };
+  window.addEventListener("mousemove", move);
+  window.addEventListener("mouseup", up);
+  renderAll();
+}
+$("viewport").addEventListener("mousedown", () => { sel = null; renderAll(); });
+
+async function addItem(path, x, y, hint) {
+  await getMeta(path, hint);
+  snapshot();
+  const it = { id: newId(), asset: path, x: Math.round(x), y: Math.round(y), scale: 1, flipX: false, depth: "main" };
+  stage.items.push(it);
+  sel = { kind: "item", id: it.id };
+  renderAll();
+}
+$("frame").addEventListener("dragover", (e) => e.preventDefault());
+$("frame").addEventListener("drop", (e) => {
+  e.preventDefault();
+  const data = e.dataTransfer.getData("application/json");
+  if (!data) return;
+  const d = JSON.parse(data);
+  const p = toWorld(e.clientX, e.clientY);
+  const f = frameSize(d.w ? d : { w: 16, h: 16 });
+  addItem(d.path, p.x, p.y + f.h / 2, d);
+});
+
+function removeSel() {
+  if (!sel) return;
+  snapshot();
+  if (sel.kind === "item") stage.items = stage.items.filter((x) => x.id !== sel.id);
+  else stage.lights = stage.lights.filter((x) => x.id !== sel.id);
+  sel = null; renderAll();
+}
+function duplicateSel() {
+  if (!sel || sel.kind !== "item") return;
+  const it = stage.items.find((x) => x.id === sel.id);
+  snapshot();
+  const c = { ...it, id: newId(), x: it.x + 8 };
+  stage.items.push(c); sel = { kind: "item", id: c.id }; renderAll();
+}
+function reorder(dir) {
+  if (!sel || sel.kind !== "item") return;
+  const i = stage.items.findIndex((x) => x.id === sel.id);
+  const j = i + dir;
+  if (j < 0 || j >= stage.items.length) return;
+  snapshot();
+  [stage.items[i], stage.items[j]] = [stage.items[j], stage.items[i]];
+  renderAll();
+}
+
+window.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") { if (e.ctrlKey && e.key === "s") { e.preventDefault(); save(); } return; }
+  if (e.ctrlKey && e.key === "z") { e.preventDefault(); undo(); return; }
+  if (e.ctrlKey && e.key === "s") { e.preventDefault(); save(); return; }
+  if (e.ctrlKey && e.key === "d") { e.preventDefault(); duplicateSel(); return; }
+  if (!sel) return;
+  const obj = sel.kind === "item" ? stage.items.find((x) => x.id === sel.id) : stage.lights.find((x) => x.id === sel.id);
+  if (!obj) return;
+  const step = e.shiftKey ? 10 : 1;
+  const mv = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
+  if (mv) { e.preventDefault(); snapshot(); obj.x += mv[0]; obj.y += mv[1]; renderAll(); return; }
+  if (e.key === "Delete" || e.key === "Backspace") { e.preventDefault(); removeSel(); return; }
+  if (e.key === "[") reorder(-1);
+  if (e.key === "]") reorder(1);
+  if (sel.kind === "item" && (e.key === "f" || e.key === "F")) { snapshot(); obj.flipX = !obj.flipX; renderAll(); }
+  if (sel.kind === "item" && "1234".includes(e.key)) { snapshot(); obj.scale = +e.key; renderAll(); }
+});
+
+// ── 搜尋 ─────────────────────────────────────────
+function tileHtml(r) {
+  const f = frameSize(r.w ? r : { w: 32, h: 32 });
+  // 縮圖：小圖整數倍放大（像素清晰），大圖縮小塞進格子；動畫條只顯示第一格
+  let d = Math.min(84 / f.w, 72 / f.h);
+  if (d >= 1) d = Math.min(4, Math.floor(d));
+  const inner = `<div class="px" style="width:${Math.round(f.w * d)}px;height:${Math.round(f.h * d)}px;background-image:url('${lib(r.path)}');background-size:${(r.w || f.w) * d}px ${(r.h || f.h) * d}px"></div>`;
+  return `<div class="tile" draggable="true" data-path="${encodeURIComponent(r.path)}">
+    <div class="thumb"><div>${inner}</div></div>
+    <div class="name" title="${r.path}">${r.name || r.path.split("/").pop()}</div>
+    <div class="sub">${r.w || "?"}×${r.h || "?"}${r.anim ? " · 動畫" : ""}</div>
+    <div class="via">${r.via === "clip" ? "相似 " + r.score.toFixed(2) : "關鍵詞 " + r.score}</div></div>`;
+}
+function bindTiles(container, list) {
+  container.querySelectorAll(".tile").forEach((t, i) => {
+    const r = list[i];
+    t.addEventListener("dragstart", (e) => e.dataTransfer.setData("application/json", JSON.stringify(r)));
+    t.addEventListener("click", () => addItem(r.path, 240, GROUND, r));
+  });
+}
+async function doSearch() {
+  const q = $("q").value.trim();
+  if (!q) return;
+  $("searchInfo").textContent = "搜尋中…";
+  const url = `/api/search?q=${encodeURIComponent(q)}&k=30&clip=${$("useClip").checked ? 1 : 0}&folder=${encodeURIComponent($("folder").value)}`;
+  const r = await fetch(url).then((r) => r.json());
+  $("searchInfo").textContent = `${r.results.length} 筆 · ${r.ms} ms${r.clip !== "ready" && $("useClip").checked ? " · CLIP " + (r.clip === "loading" ? "載入中，暫時只有關鍵詞結果" : "無法使用") : ""}`;
+  $("results").innerHTML = r.results.map(tileHtml).join("");
+  bindTiles($("results"), r.results);
+}
+$("goBtn").onclick = doSearch;
+$("q").addEventListener("keydown", (e) => { if (e.key === "Enter") doSearch(); });
+
+// ── 主持人預覽 ───────────────────────────────────
+async function loadPoses() {
+  poses = await fetch("/api/host-poses").then((r) => r.json());
+  $("poses").innerHTML = poses.filter((p) => p.name.startsWith("full_") || p.name.startsWith("half_")).map((p) => tileHtml({ ...p, name: p.name, via: "desc", score: 0 })).join("");
+  $("poses").querySelectorAll(".tile").forEach((t, i) => {
+    const list = poses.filter((p) => p.name.startsWith("full_") || p.name.startsWith("half_"));
+    t.querySelector(".via").textContent = "";
+    t.onclick = () => { hostPose = list[i].name; renderWorld(); };
+  });
+}
+$("tabSearch").onclick = () => { $("paneSearch").style.display = "flex"; $("paneHost").style.display = "none"; $("tabSearch").classList.add("on"); $("tabHost").classList.remove("on"); };
+$("tabHost").onclick = () => { $("paneSearch").style.display = "none"; $("paneHost").style.display = "block"; $("tabHost").classList.add("on"); $("tabSearch").classList.remove("on"); };
+["showHost", "hostX", "viewShot", "showGuides", "showLights"].forEach((id) => $(id).addEventListener("change", renderWorld));
+window.addEventListener("resize", renderWorld);
+
+// ── 舞台設定 ─────────────────────────────────────
+$("wallColor").addEventListener("change", () => { snapshot(); stage.wall.color = $("wallColor").value; stage.wall.css = ""; $("wallCss").value = ""; renderWorld(); });
+$("wallCss").addEventListener("change", () => { snapshot(); stage.wall.css = $("wallCss").value.trim(); renderWorld(); });
+$("floorColor").addEventListener("change", () => { snapshot(); stage.floor.color = $("floorColor").value; renderWorld(); });
+$("floorY").addEventListener("change", () => { snapshot(); stage.floor.y = Math.round(+$("floorY").value); renderWorld(); });
+$("planks").addEventListener("change", () => { snapshot(); stage.floor.planks = $("planks").checked; renderWorld(); });
+$("addLight").onclick = () => { snapshot(); const l = { id: newId(), type: "lamp", x: 300, y: 120, radius: 50, cone: 40, color: "#FFD978" }; stage.lights.push(l); sel = { kind: "light", id: l.id }; renderAll(); };
+
+// ── 存讀檔 ───────────────────────────────────────
+async function save() {
+  const name = $("stageName").value.trim();
+  stage.name = name;
+  const r = await fetch("/api/stage?name=" + encodeURIComponent(name), { method: "POST", body: JSON.stringify(stage) }).then((r) => r.json());
+  $("status").textContent = r.ok ? `已存檔 ${r.file}（${new Date().toLocaleTimeString()}）` : "存檔失敗：" + r.error;
+  loadStageList();
+}
+async function loadStage(name) {
+  const r = await fetch("/api/stage?name=" + encodeURIComponent(name));
+  if (!r.ok) { $("status").textContent = "讀取失敗"; return; }
+  stage = await r.json();
+  stage.items = stage.items || []; stage.lights = stage.lights || [];
+  stage.items.forEach((it) => (it.id = it.id || newId()));
+  stage.lights.forEach((l) => (l.id = l.id || newId()));
+  await Promise.all(stage.items.map((it) => getMeta(it.asset)));
+  history = []; sel = null;
+  renderStageInputs(); renderAll();
+  $("status").textContent = `已載入 stages/${name}.json`;
+}
+async function loadStageList() {
+  const list = await fetch("/api/stages").then((r) => r.json());
+  $("stageList").innerHTML = `<option value="">載入舊舞台…</option>` + list.map((n) => `<option>${n}</option>`).join("");
+}
+$("saveBtn").onclick = save;
+$("stageList").onchange = () => { if ($("stageList").value) loadStage($("stageList").value); };
+$("newBtn").onclick = () => { if (confirm("清空畫布，開一個新舞台？")) { snapshot(); stage = blankStage(); sel = null; renderStageInputs(); renderAll(); } };
+
+async function pollStatus() {
+  try {
+    const s = await fetch("/api/status").then((r) => r.json());
+    $("status").textContent = s.clip === "ready" ? "已連線 · CLIP 可用" : s.clip === "loading" ? "已連線 · CLIP 載入中（約 10–20 秒）" : "已連線 · 只有關鍵詞搜尋";
+    if (s.clip === "loading") setTimeout(pollStatus, 3000);
+  } catch { $("status").textContent = "連不上伺服器，請先執行 python tools/stage_editor/server.py"; }
+}
+
+renderStageInputs();
+loadPoses().then(renderAll);
+// 網址帶 ?q=關鍵詞 時直接搜尋（方便分享查詢）
+const q0 = new URLSearchParams(location.search).get("q");
+if (q0) { $("q").value = q0; doSearch(); }
+loadStageList();
+pollStatus();
+</script>
+</body>
+</html>

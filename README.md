@@ -33,6 +33,7 @@ node scripts/stills.mjs Showcase4 50 440 700   # 一次打包，輸出指定幀�
 | `Showcase4` | 第四批片尾模板，照詞典「片尾模板」的順序演一遍 |
 | `Test3D` | 3D 試驗：Three.js 長廊當背景，2D 組件疊在上面 |
 | `Timeline` | **JSON 驅動的總合成**：讀 `timelines/demo.json`（約 33 秒示範片段） |
+| `StagePreview` | 預覽舞台編輯器存的舞台（props：stage、pose、hostX） |
 | `TimelineErrors` | 故意寫錯的時間軸（`timelines/errors-demo.json`），示範紅框報錯 |
 
 ---
@@ -150,6 +151,21 @@ npx remotion render Timeline out/timeline.mp4
 
 ---
 
+## 舞台編輯器（選素材、擺場景）
+
+```powershell
+npm run stage-editor          # = python tools/stage_editor/server.py，然後用瀏覽器打開 http://localhost:8765
+```
+
+- 左邊搜尋素材（直接用素材庫的 search.py：關鍵詞比對 + CLIP 以文搜圖；CLIP 啟動時載入一次，之後每次搜尋約 0.1–0.6 秒）。
+  可以限定資料夾（同一個素材包風格比較一致）。
+- 把素材拖到中間的畫布（或點一下加到中央）。畫布就是影片的世界座標：
+  勾「影片取景」看到的就是影片畫面（1.5 倍）；金線 = 地面線（人物腳底）、紅區 = 字幕區；可以預覽主持人站位。
+- 選中素材後：拖曳 / 方向鍵移動、1–4 改倍數（只能整數倍）、F 翻轉、[ ] 調前後、深度（背景模糊 / 主體 / 前景）、Ctrl+Z 復原。
+- 牆面、地板、木紋、檯燈光在右側設定。按「存檔」寫進 `stages/<名稱>.json`。
+- 存檔後執行 `npm run assets`（會複製舞台用到的素材，並把舞台註冊進 Remotion），
+  在 Studio 的 `StagePreview` 填舞台名稱預覽，時間軸寫 `"stage": "<名稱>"` 就能用。
+- 伺服器只在本機（127.0.0.1）監聽；素材庫只讀，不會被修改。
 ## 素材
 
 - 素材庫 `D:/桌面/PixelSRPG-Forge-main`、索引 `D:/桌面/asset_index` **只讀**，不修改。
@@ -199,7 +215,7 @@ scripts/
 ## 待辦
 
 - `assetQuery` 自動解析（呼叫 search.py 的邏輯）與鎖定版 `*.lock.json`（目前寫了會報錯提醒）。
-- 正式的舞台預設組件（「家」舞台可切換燈光與道具），取代試驗用書房。
+- 用舞台編輯器擺出正式的「家」舞台，取代試驗用書房；之後加燈光預設切換（亮 / 暗 / 檯燈）。
 
 ## 已知限制
 
