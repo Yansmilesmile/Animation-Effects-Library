@@ -32,6 +32,8 @@ node scripts/stills.mjs Showcase4 50 440 700   # 一次打包，輸出指定幀�
 | `Showcase3` | 第三批結構類：標題卡、進關轉場、計數器、群像網格、聚光燈 |
 | `Showcase4` | 第四批片尾模板，照詞典「片尾模板」的順序演一遍 |
 | `Test3D` | 3D 試驗：Three.js 長廊當背景，2D 組件疊在上面 |
+| `Timeline` | **JSON 驅動的總合成**：讀 `timelines/demo.json`（約 33 秒示範片段） |
+| `TimelineErrors` | 故意寫錯的時間軸（`timelines/errors-demo.json`），示範紅框報錯 |
 
 ---
 
@@ -91,6 +93,32 @@ node scripts/stills.mjs Showcase4 50 440 700   # 一次打包，輸出指定幀�
 | `SkillSummary`（C59） | 三張卡飛回扇形展開「已習得 N/N」 |
 | `GamePopup`（C29 / C30 / B9） | `follow` 關注邀請、`input` 留言框、`achievement` 成就解鎖、`ending` 解鎖結局小牌 |
 | `NextTeaser`（C32） | 右上角 ??? 下集預告框 |
+
+### 對話（`src/components/dialog/`，移植自 `docs/pixel_choice_box.html`）
+
+| 組件 | 用途 |
+|---|---|
+| `DialogBox` | 像素對話框：深藍框 + 米色底 + 金線 + 四角紅寶石，說話人 + 逐字打出，打完右下角紅箭頭跳動 |
+| `ChoiceMenu`（C6 / C16） | 選項框：`picks [{at, index}]` 決定游標停在哪一項，選中項偏移 + 陰影 + 放大 + 閃爍游標；`confirmAt` 閃一下 |
+| `ChoiceDialog` | 兩者連動：確認後對話框逐字打出選中項的 `reply` |
+
+原稿是滑鼠 / 鍵盤互動，影片版改成時間表；字體改用專案的 Fusion Pixel（原稿的 DotGothic16 是日文字體，缺部分繁中字）。
+
+---
+
+## JSON 驅動的總合成
+
+分鏡 AI 輸出時間軸 JSON → `Timeline` Composition 渲染。
+
+- 格式說明：[`docs/timeline.md`](docs/timeline.md)；給分鏡 AI 的組件清單：[`docs/components.md`](docs/components.md)
+- 型別：`src/timeline/types.ts`；組件註冊表與參數檢查：`src/timeline/registry.tsx`；舞台預設：`src/timeline/stages.tsx`
+- event 的 `start` 可寫 `"@高亮詞"` / `"@高亮詞+5"`，對準字幕高亮詞的 `at`
+- 寫錯（未知組件、未知參數、缺必填、型別錯、`@詞` 找不到、舞台不存在…）時，該 event 不渲染，畫面左上角紅框列出錯誤
+- 換一份時間軸：改 `src/Root.tsx` 的 import，或在 Studio 右側直接編輯 `timeline` props
+
+```powershell
+npx remotion render Timeline out/timeline.mp4
+```
 
 ---
 
@@ -153,12 +181,16 @@ src/
   components/          第零、一批 + 共用（Sprite、Host、PixelStage、Camera、Ambience…）
     emphasis/          第二批強調類
     structure/         第三批結構類
-    ending/            第四批片尾模板
+    ending/            第四批片尾模板（含技能卡示範動畫 demos.tsx）
+    dialog/            對話框、選項框
+  timeline/            JSON 驅動的總合成（型別、註冊表、舞台、Composition）
   scenes/StudyRoom.tsx 試驗用的書房場景（用素材拼的臨時場景，不是正式舞台組件）
   showcase/            展示 Composition
   three/               3D 試驗場景
   generated/           npm run assets 產生的素材資訊
   theme.ts             色彩 tokens、像素層、構圖常數
+timelines/             時間軸 JSON（demo.json、errors-demo.json）
+docs/                  時間軸格式、組件清單、對話框原稿 HTML
 scripts/
   copy-assets.mjs      素材複製
   stills.mjs           批次截圖
@@ -166,9 +198,7 @@ scripts/
 
 ## 待辦
 
-- 讀 JSON 的總合成：時間軸型別、`"@詞"` 對準字幕高亮詞觸發、組件名稱或參數錯誤時顯示紅框。
-- `assetQuery` 自動解析（呼叫 search.py 的邏輯）與鎖定版 `*.lock.json`。
-- 給分鏡 AI 看的組件清單 markdown，以及 20–30 秒的 JSON 驅動示範片段。
+- `assetQuery` 自動解析（呼叫 search.py 的邏輯）與鎖定版 `*.lock.json`（目前寫了會報錯提醒）。
 - 正式的舞台預設組件（「家」舞台可切換燈光與道具），取代試驗用書房。
 
 ## 已知限制

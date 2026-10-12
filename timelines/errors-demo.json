@@ -1,0 +1,22 @@
+{
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "broken",
+      "duration": 60,
+      "stage": "study-rooom",
+      "host": { "pose": "full_front", "x": 200 },
+      "subtitles": [{ "start": 0, "end": 60, "text": "故意寫錯的時間軸", "highlight": ["寫錯"] }],
+      "events": [
+        { "component": "RingPluse", "start": 10, "props": { "x": 200, "y": 120 } },
+        { "component": "Tag", "start": 10, "props": { "text": "少了座標" } },
+        { "component": "Stamp", "start": 10, "props": { "x": "200", "y": 120, "colour": "red" } },
+        { "component": "RingPulse", "start": "@不存在的詞", "props": { "x": 200, "y": 120 } },
+        { "component": "RingPulse", "start": "@寫錯", "props": { "x": 200, "y": 120 } },
+        { "component": "Sprite", "start": 0, "props": { "assetQuery": "寶箱 金色", "x": 260, "y": 160 } },
+        { "component": "SkillCard", "start": 0, "props": { "index": 1, "title": "x", "demo": "weekly" } },
+        { "component": "Tag", "start": 20, "props": { "text": "這個沒寫錯，會正常出現", "x": 240, "y": 100 } }
+      ]
+    }
+  ]
+}

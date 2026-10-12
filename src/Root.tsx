@@ -7,6 +7,10 @@ import { Showcase3, SHOWCASE3_DURATION } from "./showcase/Showcase3";
 import { Showcase4, SHOWCASE4_DURATION } from "./showcase/Showcase4";
 import { Test3D, TEST3D_DURATION } from "./showcase/Test3D";
 import { VIDEO } from "./theme";
+import { calculateTimelineMetadata, TimelineComposition } from "./timeline/TimelineComposition";
+import type { Timeline } from "./timeline/types";
+import demoTimeline from "../timelines/demo.json";
+import errorsTimeline from "../timelines/errors-demo.json";
 
 ensureFonts();
 
@@ -40,6 +44,27 @@ export const Root: React.FC = () => (
       id="Showcase4"
       component={Showcase4}
       durationInFrames={SHOWCASE4_DURATION}
+      fps={VIDEO.fps}
+      width={VIDEO.width}
+      height={VIDEO.height}
+    />
+    {/* JSON 驅動的總合成：timelines/demo.json；props 可在 Studio 右側直接改 */}
+    <Composition
+      id="Timeline"
+      component={TimelineComposition}
+      defaultProps={{ timeline: demoTimeline as Timeline }}
+      calculateMetadata={calculateTimelineMetadata}
+      durationInFrames={1}
+      fps={VIDEO.fps}
+      width={VIDEO.width}
+      height={VIDEO.height}
+    />
+    <Composition
+      id="TimelineErrors"
+      component={TimelineComposition}
+      defaultProps={{ timeline: errorsTimeline as Timeline }}
+      calculateMetadata={calculateTimelineMetadata}
+      durationInFrames={1}
       fps={VIDEO.fps}
       width={VIDEO.width}
       height={VIDEO.height}

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>像素選項框</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap">
+<style>
+  html, body { margin: 0; background: transparent; }
+
+  .px { font-family: 'DotGothic16', monospace; -webkit-font-smoothing: none; }
+
+  /* 外層：讓四角的寶石可以超出框外 */
+  .px-wrap { position: relative; padding: 10px; }
+
+  /* 框：深藍外框 + 米色間隔 + 金色內線 */
+  .px-frame {
+    position: relative; height: 100%; box-sizing: border-box;
+    background: #F8F4E3; color: #1B2A4A;
+    border: 4px solid #1B2A4A;
+    box-shadow: inset 0 0 0 4px #F8F4E3, inset 0 0 0 8px #E8B830;
+  }
+
+  /* 四角紅寶石 */
+  .gem { position: absolute; width: 28px; height: 28px; z-index: 2; }
+  .gem.tl { left: -2px; top: -2px; }
+  .gem.tr { right: -2px; top: -2px; }
+  .gem.bl { left: -2px; bottom: -2px; }
+  .gem.br { right: -2px; bottom: -2px; }
+  .gem svg { display: block; width: 28px; height: 28px; shape-rendering: crispEdges; }
+
+  /* 選項 */
+  .px-opt {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; min-height: 48px; padding: 0 14px; box-sizing: border-box;
+    border: 4px solid #CFC5A4; background: #FFFDF4; color: #1B2A4A;
+    font: inherit; font-size: 19px; letter-spacing: 2px; text-align: left;
+    cursor: pointer; outline: none;
+    transition: transform .18s ease-out, box-shadow .18s ease-out,
+                background-color .18s, border-color .18s, color .18s;
+  }
+  .px-opt .lbl { display: inline-block; transform-origin: left center; transition: transform .18s ease-out; }
+  .px-opt .cur {
+    width: 12px; height: 16px; flex: none; opacity: 0;
+    background: #E8B830; clip-path: polygon(0 0, 0 100%, 100% 50%);
+    transition: opacity .12s;
+  }
+
+  /* 選中（懸停 / 鍵盤）：偏移 + 陰影 + 文字放大 */
+  .px-opt.sel {
+    transform: translate(10px, -4px);
+    background: #1B2A4A; border-color: #1B2A4A; color: #FFE9A8;
+    box-shadow: inset 0 0 0 2px #E8B830, -6px 6px 0 rgba(27, 42, 74, 0.35);
+  }
+  .px-opt.sel .lbl { transform: scale(1.15); }
+  .px-opt.sel .cur { opacity: 1; animation: blink .8s steps(1) infinite; }
+
+  /* 對話框右下角的「繼續」箭頭 */
+  .px-more {
+    position: absolute; right: 24px; bottom: 18px; width: 12px; height: 8px;
+    background: #C8382E; clip-path: polygon(0 0, 100% 0, 50% 100%);
+    animation: bob .8s steps(2) infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes bob { 50% { transform: translateY(4px); } }
+</style>
+</head>
+<body>
+<div class="px" style="display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; padding:16px; max-width:720px;">
+
+  <!-- 對話框 -->
+  <div class="px-wrap" style="flex:1 1 300px;">
+    <div class="px-frame" style="min-height:150px; padding:22px 26px;">
+      <div style="font-size:14px; color:#8A6A10; letter-spacing:2px; margin-bottom:6px;">超級人機</div>
+      <div id="pxText" style="font-size:20px; line-height:1.7; letter-spacing:2px; min-height:68px;"></div>
+      <div class="px-more" aria-hidden="true"></div>
+    </div>
+    <span class="gem tl" aria-hidden="true"></span><span class="gem tr" aria-hidden="true"></span>
+    <span class="gem bl" aria-hidden="true"></span><span class="gem br" aria-hidden="true"></span>
+  </div>
+
+  <!-- 選項框 -->
+  <div class="px-wrap" style="flex:0 1 250px;">
+    <div id="pxMenu" class="px-frame" role="listbox" aria-label="選擇行動" tabindex="0"
+         style="padding:20px 30px 20px 18px; display:flex; flex-direction:column; gap:10px; outline:none;">
+      <button class="px-opt" role="option" aria-selected="false" data-t="好！那我們翻開第一關。"><span class="cur" aria-hidden="true"></span><span class="lbl">翻開書</span></button>
+      <button class="px-opt" role="option" aria-selected="false" data-t="道具欄打開了，看看這關拿到什麼。"><span class="cur" aria-hidden="true"></span><span class="lbl">道具欄</span></button>
+      <button class="px-opt" role="option" aria-selected="false" data-t="先把這本書放進收藏，晚點再讀。"><span class="cur" aria-hidden="true"></span><span class="lbl">先收藏</span></button>
+      <button class="px-opt" role="option" aria-selected="false" data-t="……真的要離開嗎？下一期見。"><span class="cur" aria-hidden="true"></span><span class="lbl">離開</span></button>
+    </div>
+    <span class="gem tl" aria-hidden="true"></span><span class="gem tr" aria-hidden="true"></span>
+    <span class="gem bl" aria-hidden="true"></span><span class="gem br" aria-hidden="true"></span>
+  </div>
+</div>
+
+<script>
+  // 7×7 像素紅寶石：G 金框暗部、g 金框亮部、d 深紅、r 紅、l 亮紅、h 高光
+  const P = { g:'#E8B830', G:'#8A6A10', d:'#6E1016', r:'#C8282E', l:'#F05A5A', h:'#FFE0E0' };
+  const map = ['...G...', '..GgG..', '.Glhrg.', 'GglrrdG', '.grrdG.', '..GdG..', '...G...'];
+  let svg = '<svg viewBox="0 0 7 7" xmlns="http://www.w3.org/2000/svg">';
+  map.forEach((row, y) => [...row].forEach((c, x) => {
+    if (P[c]) svg += `<rect x="${x}" y="${y}" width="1" height="1" fill="${P[c]}"/>`;
+  }));
+  svg += '</svg>';
+  document.querySelectorAll('.gem').forEach(g => g.innerHTML = svg);
+
+  const menu = document.getElementById('pxMenu');
+  const txt  = document.getElementById('pxText');
+  const opts = [...menu.querySelectorAll('.px-opt')];
+  let i = -1, timer = null;
+
+  // 逐字打出對話
+  function type(t) {
+    clearInterval(timer);
+    let n = 0; txt.textContent = '';
+    timer = setInterval(() => {
+      txt.textContent = t.slice(0, ++n);
+      if (n >= t.length) clearInterval(timer);
+    }, 55);
+  }
+
+  // 選中第 k 項；-1 代表都不選
+  function pick(k) {
+    i = k;
+    opts.forEach((o, j) => {
+      o.classList.toggle('sel', j === i);
+      o.setAttribute('aria-selected', j === i);
+    });
+  }
+
+  opts.forEach((o, k) => {
+    o.addEventListener('mouseenter', () => pick(k));
+    o.addEventListener('mouseleave', () => pick(-1));
+    o.addEventListener('click', () => { pick(k); type(o.dataset.t); });
+  });
+  menu.addEventListener('mouseleave', () => pick(-1));
+  menu.addEventListener('keydown', e => {
+    const n = opts.length;
+    if (e.key === 'ArrowDown') { e.preventDefault(); pick(i < 0 ? 0 : (i + 1) % n); }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); pick(i < 0 ? n - 1 : (i - 1 + n) % n); }
+    if (e.key === 'Enter' && i >= 0) { e.preventDefault(); type(opts[i].dataset.t); }
+  });
+  menu.addEventListener('blur', e => { if (!menu.contains(e.relatedTarget)) pick(-1); });
+
+  type('這本書有四關。你想先做什麼？');
+</script>
+</body>
+</html>

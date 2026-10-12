@@ -1,0 +1,139 @@
+{
+  "fps": 30,
+  "nav": { "chapters": ["序章", "第一關｜二十個孔", "第二關｜…", "第三關｜…", "結尾"] },
+  "watermark": "示範片段",
+  "scenes": [
+    {
+      "id": "opening",
+      "duration": 75,
+      "stage": "void",
+      "watermark": false,
+      "subtitles": [
+        { "start": 0, "end": 75, "text": "有一本書，改變了很多人的命運", "highlight": [{ "word": "一本書", "at": 32 }] }
+      ],
+      "events": [
+        { "component": "BeamDrop", "start": 0, "props": { "asset": "Weapons_武器装备/武器装备-冒险岛/206.png", "scale": 2 } }
+      ]
+    },
+    {
+      "id": "title",
+      "duration": 84,
+      "stage": "study-room",
+      "host": { "pose": "full_point_happy", "x": 160 },
+      "navIndex": 1,
+      "ambience": ["dust", { "type": "lamp", "x": 348, "y": 132, "radius": 50, "cone": 40 }],
+      "events": [
+        { "component": "LevelTitleCard", "start": 4, "props": { "level": 1, "title": "一生只打二十個孔", "hold": 56 } },
+        { "component": "LevelTransition", "start": 66, "props": { "type": "iris", "mode": "close", "duration": 14, "hold": 4, "x": 120, "y": 177 } }
+      ]
+    },
+    {
+      "id": "lesson",
+      "duration": 190,
+      "stage": "study-room",
+      "host": { "pose": "full_surprised_explain", "x": 150 },
+      "navIndex": 1,
+      "ambience": ["dust", { "type": "lamp", "x": 348, "y": 132, "radius": 50, "cone": 40 }],
+      "camera": [{ "type": "push", "start": 24, "duration": 40, "to": { "x": 215, "y": 128, "zoom": 2 } }],
+      "subtitles": [
+        { "start": 0, "end": 70, "text": "每打一個孔，就是一次重大決定", "highlight": [{ "word": "重大決定", "at": 50 }] },
+        { "start": 70, "end": 125, "text": "選錯了，價值就歸零", "highlight": [{ "word": "歸零", "at": 100 }] },
+        { "start": 125, "end": 190, "text": "選對了，作品能賣一萬次", "highlight": [{ "word": "一萬次", "at": 160 }] }
+      ],
+      "events": [
+        { "component": "LevelTransition", "start": 0, "props": { "type": "iris", "mode": "open", "duration": 14, "hold": 0, "x": 120, "y": 177 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/2-宝箱-钱袋-宝石-25多张合集图【共900多张】/拆分-根据图片名找文件夹/子图_四时芳菲-收集整理 (10)_png/2.png", "x": 270, "y": 160 } },
+        { "component": "RingPulse", "start": "@重大決定", "props": { "x": 270, "y": 147 } },
+        { "component": "Tag", "start": "@重大決定", "duration": 50, "props": { "text": "一生一張卡", "x": 270, "y": 128, "variant": "red" } },
+        { "component": "Stamp", "start": "@歸零", "duration": 25, "props": { "x": 270, "y": 147, "variant": "x", "size": 2 } },
+        { "component": "SunBurst", "start": "@一萬次", "props": { "x": 270, "y": 147, "radius": 50 } },
+        { "component": "GlowText", "start": "@一萬次", "props": { "text": "×10,000", "y": 64, "size": 3, "appear": "pop" } }
+      ]
+    },
+    {
+      "id": "choice",
+      "duration": 150,
+      "stage": "study-room",
+      "host": { "pose": "full_wave_talk", "x": 240 },
+      "watermark": false,
+      "ambience": ["dust", { "type": "lamp", "x": 348, "y": 132, "radius": 50, "cone": 40 }],
+      "events": [
+        {
+          "component": "ChoiceDialog",
+          "start": 0,
+          "props": {
+            "text": "這本書有四關。你想先做什麼？",
+            "options": [
+              { "label": "翻開書", "reply": "好！那我們翻開第一關。" },
+              { "label": "道具欄", "reply": "道具欄打開了，看看這關拿到什麼。" },
+              { "label": "先收藏", "reply": "先把這本書放進收藏，晚點再讀。" },
+              { "label": "離開", "reply": "……真的要離開嗎？下一期見。" }
+            ],
+            "picks": [
+              { "at": 50, "index": 3 },
+              { "at": 66, "index": 2 },
+              { "at": 80, "index": 0 }
+            ],
+            "confirmAt": 100,
+            "dialog": { "x": 22, "y": 24, "w": 300, "h": 60 },
+            "menu": { "x": 338, "y": 24 }
+          }
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "duration": 200,
+      "stage": "study-room",
+      "host": { "pose": "full_point_happy", "x": 150 },
+      "navIndex": 4,
+      "ambience": ["dust", { "type": "lamp", "x": 348, "y": 132, "radius": 50, "cone": 40 }],
+      "subtitles": [
+        { "start": 0, "end": 90, "text": "最後，送你三個今天就能用的技能", "highlight": [{ "word": "三個", "at": 36 }] },
+        { "start": 90, "end": 200, "text": "每天一點點，小到不會斷", "highlight": ["一點點"] }
+      ],
+      "events": [
+        { "component": "ChestDeal", "start": 0, "props": { "x": 240, "takeAt": [9999, 90, 9999] } },
+        {
+          "component": "SkillCard",
+          "start": 90,
+          "props": { "index": 2, "title": "每天一點點", "desc": "小到不會斷，斷了重來", "demo": "daily", "fromChest": { "index": 1, "of": 3 } }
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "duration": 180,
+      "stage": "study-room",
+      "host": { "pose": "full_wave_talk", "x": 150 },
+      "navIndex": 4,
+      "ambience": ["dust", { "type": "lamp", "x": 348, "y": 132, "radius": 50, "cone": 40 }],
+      "subtitles": [
+        { "start": 0, "end": 60, "text": "如果有幫到你，點個關注", "highlight": ["關注"] },
+        { "start": 60, "end": 140, "text": "評論區告訴我，你最久堅持過幾天？", "highlight": ["評論區"] },
+        { "start": 140, "end": 180, "text": "讀完原書，解鎖成就", "highlight": ["成就"] }
+      ],
+      "events": [
+        { "component": "GamePopup", "start": 0, "duration": 60, "props": { "variant": "follow" } },
+        { "component": "GamePopup", "start": 60, "duration": 80, "props": { "variant": "input", "title": "✦ 留言挑戰", "question": "你最久堅持過一件事幾天？", "answer": "我最久堅持 365 天" } },
+        { "component": "GamePopup", "start": 140, "props": { "variant": "achievement", "name": "自救" } }
+      ]
+    },
+    {
+      "id": "end",
+      "duration": 120,
+      "stage": "study-room",
+      "host": { "pose": "half_read_paper", "x": 200 },
+      "ambience": ["dust"],
+      "camera": [{ "type": "push", "start": 0, "duration": 50, "to": { "x": 200, "y": 128, "zoom": 2 } }],
+      "subtitles": [
+        { "start": 0, "end": 120, "text": "這裡是超級人機，我們下一期見", "highlight": [{ "word": "超級人機", "at": 20 }] }
+      ],
+      "events": [
+        { "component": "GamePopup", "start": 0, "duration": 60, "props": { "variant": "ending", "y": 40 } },
+        { "component": "Spotlight", "start": 10, "props": { "x": 200, "y": 142, "to": 30, "duration": 40 } },
+        { "component": "NextTeaser", "start": 70 }
+      ]
+    }
+  ]
+}
