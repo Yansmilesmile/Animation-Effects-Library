@@ -9,7 +9,7 @@
 ```jsonc
 {
   "name": "office",
-  "bg3d": { "html": "scenes3d/金色頂層辦公室.html", "image": "bg3d/金色頂層辦公室-480x270.png" }, // 3D 場景背景（只是圖片）
+  "bg3d": { "html": "scenes3d/金色頂層辦公室.html", "image": "bg3d/金色頂層辦公室-480x270.png", "x": -20, "y": 11, "scale": 1.5 }, // 3D 場景背景（只是圖片；x / y 偏移、scale 以畫面中心縮放）
   "items": [
     { "name": "金寶箱", "asset": "…/0160.png", "x": 240, "y": 160, "scale": 2, "rotate": 0, "depth": "main" }
   ],

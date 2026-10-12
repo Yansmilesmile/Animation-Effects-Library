@@ -148,7 +148,7 @@
     <div class="layers" id="layers"></div>
 
     <h3>快捷鍵</h3>
-    <div class="kbd">方向鍵：移動 1 像素（Shift = 10）<br>Delete：刪除　Ctrl+D：複製<br>[ / ]：往後 / 往前一層<br>F：水平翻轉　1–8：倍數（0.5 倍數在右側選）<br>R / Shift+R：旋轉 ±90°；拖藍色把手自由旋轉（15° 吸附，Shift 自由）<br>Ctrl+Z：復原　Ctrl+S：存檔</div>
+    <div class="kbd">方向鍵：移動 1 像素（Shift = 10）<br>Delete：刪除　Ctrl+D：複製<br>[ / ]：往後 / 往前一層<br>F：水平翻轉　1–8：倍數（0.5 倍數在右側選）<br>3D 背景：點選後拖曳、滾輪 / + - 縮放<br>R / Shift+R：旋轉 ±90°；拖藍色把手自由旋轉（15° 吸附，Shift 自由）<br>Ctrl+Z：復原　Ctrl+S：存檔</div>
   </aside>
 </div>
 
@@ -196,6 +196,7 @@ const fileBase = (p) => p.split("/").pop().replace(/\.[^.]+$/, "");
 function getObj(s = sel) {
   if (!s) return null;
   if (s.kind === "host") return stage.host || null;
+  if (s.kind === "bg") return stage.bg3d || null;
   return (s.kind === "item" ? stage.items : stage.lights).find((x) => x.id === s.id) || null;
 }
 
@@ -244,7 +245,18 @@ function toWorld(clientX, clientY) {
 function renderWorld() {
   const w = $("world");
   w.innerHTML = "";
-  if (stage.bg3d) w.insertAdjacentHTML("beforeend", `<img src="/${stage.bg3d.image}${bust()}" style="position:absolute;left:0;top:0;width:${W}px;height:${H}px;image-rendering:pixelated">`);
+  if (stage.bg3d) {
+    // 3D 背景：(x, y) 是相對畫面中心的偏移，scale 以中心為軸縮放（和影片端 LayoutStage 一致）
+    const b = stage.bg3d, s = b.scale || 1;
+    const bw = W * s, bh = H * s;
+    const img = document.createElement("img");
+    img.src = `/${b.image}${bust()}`;
+    img.draggable = false;
+    img.style.cssText = `position:absolute;left:${Math.round(W / 2 + (b.x || 0) - bw / 2)}px;top:${Math.round(H / 2 + (b.y || 0) - bh / 2)}px;width:${bw}px;height:${bh}px;image-rendering:pixelated;${b.locked ? "pointer-events:none;" : "cursor:move;"}`;
+    if (sel && sel.kind === "bg") img.style.outline = "1px dashed #4fd1ff";
+    if (!b.locked) img.addEventListener("mousedown", (e) => startDrag(e, "bg", "bg"));
+    w.appendChild(img);
+  }
   const showWF = !stage.bg3d || stage.bg3d.keepWallFloor;
   const wallBg = stage.wall.css || stage.wall.color;
   if (showWF) w.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:0;top:0;width:${W}px;height:${stage.floor.y}px;background:${wallBg}"></div>`);
@@ -338,6 +350,11 @@ function renderInspector() {
   if (!sel) { box.className = "hint"; box.textContent = "點選畫布上的素材、主持人或燈光"; return; }
   box.className = "";
   const scaleSel = (v) => `<select data-k="scale">${SCALES.map((n) => `<option value="${n}" ${v == n ? "selected" : ""}>${scaleLabel(n)}</option>`).join("")}</select>`;
+  if (sel.kind === "bg") {
+    box.className = "hint";
+    box.innerHTML = "已選取 3D 背景：拖曳移動、方向鍵微調、滾輪或 + / - 縮放；數值在上方「舞台」區調整。Delete 移除背景。";
+    return;
+  }
   if (sel.kind === "host") {
     const h = stage.host;
     if (!h) return;
@@ -420,7 +437,22 @@ function renderStageInputs() {
   const bi = $("bg3dInfo");
   if (stage.bg3d) {
     bi.innerHTML = `<div class="row"><span>3D 背景</span><span style="flex:1;font-size:12px">${stage.bg3d.html.split("/").pop()}</span><button id="rmBg3d">移除</button></div>
+      <div class="row"><span>位置 x / y</span><input type="number" id="bgX" value="${stage.bg3d.x || 0}"><input type="number" id="bgY" value="${stage.bg3d.y || 0}"></div>
+      <div class="row"><span>縮放</span><input type="range" id="bgScaleR" min="0.5" max="4" step="0.05" value="${stage.bg3d.scale || 1}" style="flex:1"><input type="number" id="bgScale" min="0.1" max="8" step="0.05" value="${stage.bg3d.scale || 1}" style="width:60px"></div>
+      <div class="row"><button id="bgSel">選取背景</button><button id="bgReset">重設位置與縮放</button></div>
+      <div class="row"><label><input type="checkbox" id="bgLock" ${stage.bg3d.locked ? "checked" : ""}> 鎖定背景（點背景不會選到它）</label></div>
+      ${(stage.bg3d.scale || 1) > 1 && (stage.bg3d.w || 480) <= 480 ? `<div class="hint">放大超過 1 倍時，建議在「3D 場景」用 960×540 重新截圖，細節較清楚</div>` : ""}
       <div class="row"><label><input type="checkbox" id="keepWF" ${stage.bg3d.keepWallFloor ? "checked" : ""}> 仍顯示牆面與地板</label></div>`;
+    const setBg = (k, v) => { snapshot(); stage.bg3d[k] = v; renderStageInputs(); renderAll(); };
+    $("bgX").onchange = () => setBg("x", Math.round(+$("bgX").value || 0));
+    $("bgY").onchange = () => setBg("y", Math.round(+$("bgY").value || 0));
+    $("bgScale").onchange = () => setBg("scale", clampScale(+$("bgScale").value));
+    $("bgScaleR").oninput = () => { stage.bg3d.scale = clampScale(+$("bgScaleR").value); $("bgScale").value = stage.bg3d.scale; renderWorld(); };
+    $("bgScaleR").onchange = () => { renderStageInputs(); };
+    $("bgScaleR").onmousedown = () => snapshot();
+    $("bgSel").onclick = () => { sel = { kind: "bg", id: "bg" }; renderAll(); };
+    $("bgReset").onclick = () => { snapshot(); Object.assign(stage.bg3d, { x: 0, y: 0, scale: 1 }); renderStageInputs(); renderAll(); };
+    $("bgLock").onchange = () => { snapshot(); stage.bg3d.locked = $("bgLock").checked; if (stage.bg3d.locked && sel && sel.kind === "bg") sel = null; renderAll(); };
     $("rmBg3d").onclick = () => { snapshot(); delete stage.bg3d; renderStageInputs(); renderAll(); };
     $("keepWF").onchange = () => { snapshot(); stage.bg3d.keepWallFloor = $("keepWF").checked; renderAll(); };
   } else bi.innerHTML = "";
@@ -433,7 +465,7 @@ function startDrag(e, kind, id) {
   e.preventDefault(); e.stopPropagation();
   sel = { kind, id };
   const obj = getObj(sel);
-  const p0 = toWorld(e.clientX, e.clientY), o0 = { x: obj.x, y: obj.y };
+  const p0 = toWorld(e.clientX, e.clientY), o0 = { x: obj.x || 0, y: obj.y || 0 };
   let moved = false;
   const move = (ev) => {
     const p = toWorld(ev.clientX, ev.clientY);
@@ -448,6 +480,18 @@ function startDrag(e, kind, id) {
   renderAll();
 }
 $("viewport").addEventListener("mousedown", () => { sel = null; renderAll(); });
+
+const clampScale = (v) => Math.round(Math.min(8, Math.max(0.1, v || 1)) * 100) / 100;
+// 選中 3D 背景時，滾輪縮放（每格 5%）
+$("viewport").addEventListener("wheel", (e) => {
+  if (!sel || sel.kind !== "bg" || !stage.bg3d) return;
+  e.preventDefault();
+  if (!wheelSnap) { snapshot(); wheelSnap = true; setTimeout(() => (wheelSnap = false), 400); }
+  stage.bg3d.scale = clampScale((stage.bg3d.scale || 1) * (e.deltaY < 0 ? 1.05 : 1 / 1.05));
+  renderWorld();
+  clearTimeout(wheelTimer); wheelTimer = setTimeout(() => { renderStageInputs(); renderInspector(); }, 150);
+}, { passive: false });
+let wheelSnap = false, wheelTimer = 0;
 
 const normAngle = (a) => ((Math.round(a) % 360) + 360) % 360;
 
@@ -493,7 +537,8 @@ $("frame").addEventListener("drop", (e) => {
 function removeSel() {
   if (!sel) return;
   snapshot();
-  if (sel.kind === "host") stage.host = null;
+  if (sel.kind === "bg") { delete stage.bg3d; renderStageInputs(); }
+  else if (sel.kind === "host") stage.host = null;
   else if (sel.kind === "item") stage.items = stage.items.filter((x) => x.id !== sel.id);
   else stage.lights = stage.lights.filter((x) => x.id !== sel.id);
   sel = null; renderAll();
@@ -530,6 +575,7 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "Delete" || e.key === "Backspace") { e.preventDefault(); removeSel(); return; }
   if (e.key === "[") reorder(-1);
   if (e.key === "]") reorder(1);
+  if (sel.kind === "bg" && (e.key === "+" || e.key === "=" || e.key === "-")) { snapshot(); obj.scale = clampScale((obj.scale || 1) + (e.key === "-" ? -0.05 : 0.05)); renderStageInputs(); renderAll(); return; }
   const scalable = sel.kind === "item" || sel.kind === "host";
   if (scalable && (e.key === "f" || e.key === "F")) { snapshot(); obj.flipX = !obj.flipX; renderAll(); }
   if (sel.kind === "item" && (e.key === "r" || e.key === "R")) { snapshot(); obj.rotate = normAngle((obj.rotate || 0) + (e.shiftKey ? -90 : 90)); renderAll(); }
@@ -712,7 +758,9 @@ function useBg3d(s) {
   if (!shot) { alert("請先截圖"); return; }
   snapshot();
   const [w, h] = (shot.match(/-(\d+)x(\d+)\.png$/) || [0, 480, 270]).slice(1).map(Number);
-  stage.bg3d = { html: "scenes3d/" + s.file, image: shot, w, h, keepWallFloor: false };
+  const prev = stage.bg3d || {};
+  // 換場景時保留目前的位置與縮放
+  stage.bg3d = { html: "scenes3d/" + s.file, image: shot, w, h, keepWallFloor: !!prev.keepWallFloor, x: prev.x || 0, y: prev.y || 0, scale: prev.scale || 1, locked: !!prev.locked };
   renderStageInputs(); renderAll();
 }
 $("reload3d").onclick = loadScenes3d;
@@ -745,6 +793,7 @@ async function loadStage(name) {
   stage.items.forEach((it) => (it.id = it.id || newId()));
   stage.lights.forEach((l) => (l.id = l.id || newId()));
   if (stage.host === undefined) stage.host = defaultHost(); // 舊舞台檔沒有主持人欄位
+  if (stage.bg3d) stage.bg3d = { x: 0, y: 0, scale: 1, ...stage.bg3d }; // 舊舞台檔沒有背景位置
   // 舊舞台檔沒有名稱：補上
   stage.items.forEach((it) => { if (!it.name) it.name = uniqueName(fileBase(it.asset), it); });
   stage.lights.forEach((l) => { if (!l.name) l.name = uniqueName("檯燈光", l); });

@@ -174,6 +174,8 @@ npm run stage-editor          # = python tools/stage_editor/server.py，然後�
 - **物件名稱**：加入時自動帶入素材名稱，可在右側改（例如「主角的床」）。AI 加動畫時用名稱指名物件。
 - **3D 場景背景**：把 3D 場景的 HTML 放進 `scenes3d/`，在「3D 場景」分頁按「截圖」，再拖到畫布或按「設為背景」。
   截圖存在 `public/bg3d/`（預設 480×270、只截 3D 畫布、等 4 秒讓模型載入）；影片裡用這張圖，不跑 3D。
+  背景可以調整：點背景選取後拖曳移動、方向鍵微調、滾輪或 + / - 縮放；右側可輸入 X、Y、倍數，也能「鎖定背景」避免擺道具時誤拖。
+  放大超過 1 倍時，建議用 960×540 重新截圖，細節較清楚。
 - **給 AI**：AI 讀 `stages/*.json`，用時間軸的 `target` 和 `PropFx` 在場景上加動畫，說明在 `docs/stage-for-ai.md`。
 - 存檔後執行 `npm run assets`（會複製舞台用到的素材，並把舞台註冊進 Remotion），
   在 Studio 的 `StagePreview` 填舞台名稱預覽，時間軸寫 `"stage": "<名稱>"` 就能用。

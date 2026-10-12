@@ -31,7 +31,19 @@ export type StageItem = {
 };
 export type StageLight = { name?: string; type: "lamp"; x: number; y: number; radius?: number; cone?: number; color?: string };
 /** 3D 場景背景：scenes3d/*.html 截圖成 public/bg3d/*.png；影片裡用圖片，不跑 3D */
-export type StageBg3d = { html: string; image: string; w: number; h: number; keepWallFloor?: boolean };
+export type StageBg3d = {
+  html: string;
+  image: string;
+  w: number;
+  h: number;
+  keepWallFloor?: boolean;
+  /** 相對畫面中心的偏移（世界像素） */
+  x?: number;
+  y?: number;
+  /** 以中心為軸縮放，預設 1 */
+  scale?: number;
+  locked?: boolean;
+};
 export type StageSpec = {
   name: string;
   wall: { color: string; css?: string };
@@ -56,6 +68,25 @@ const ItemSprite: React.FC<{ it: StageItem }> = ({ it }) => (
   />
 );
 
+const Bg3dImage: React.FC<{ bg: StageBg3d }> = ({ bg }) => {
+  const s = bg.scale ?? 1;
+  const w = PIXEL.width * s;
+  const h = PIXEL.height * s;
+  return (
+    <Img
+      src={staticFile(bg.image)}
+      style={{
+        position: "absolute",
+        left: Math.round(PIXEL.width / 2 + (bg.x ?? 0) - w / 2),
+        top: Math.round(PIXEL.height / 2 + (bg.y ?? 0) - h / 2),
+        width: w,
+        height: h,
+        imageRendering: "pixelated",
+      }}
+    />
+  );
+};
+
 export const LayoutStage: React.FC<{ spec: StageSpec; host?: React.ReactNode; children?: React.ReactNode }> = ({ spec, host, children }) => {
   const by = (d: StageItem["depth"]) => spec.items.filter((it) => (it.depth ?? "main") === d);
   const showWallFloor = !spec.bg3d || spec.bg3d.keepWallFloor;
@@ -65,7 +96,7 @@ export const LayoutStage: React.FC<{ spec: StageSpec; host?: React.ReactNode; ch
   return (
     <>
       {spec.bg3d ? (
-        <Img src={staticFile(spec.bg3d.image)} style={{ position: "absolute", left: 0, top: 0, width: PIXEL.width, height: PIXEL.height, imageRendering: "pixelated" }} />
+        <Bg3dImage bg={spec.bg3d} />
       ) : null}
       <Layer blur={0.35} dim={0.4}>
         {showWallFloor ? <div style={{ position: "absolute", left: 0, top: 0, width: PIXEL.width, height: spec.floor.y, background: spec.wall.css || spec.wall.color }} /> : null}
