@@ -104,22 +104,22 @@ const SKILLS = [
 ];
 
 // 技能段的時間表（相對於這一段）
-const CARD_START = [45, 130, 215];
+const CARD_START = [90, 175, 260];
 const CARD_LEN = 80;
-const SUMMARY_AT = 305;
+const SUMMARY_AT = 350;
 
 const LINES_SKILLS: SubtitleLine[] = [
-  { start: 0, end: 45, text: "最後，送你三個今天就能用的技能", highlight: [{ word: "三個", at: 20 }] },
-  { start: 45, end: 130, text: "第一，選一件願意做十年的事", highlight: ["十年"] },
-  { start: 130, end: 215, text: "第二，小到不會斷，斷了就重來", highlight: ["斷"] },
-  { start: 215, end: 305, text: "第三，別看今天，看一年後的自己", highlight: ["一年後"] },
-  { start: 305, end: 365, text: "三個技能，已經全部交給你了", highlight: ["全部"] },
+  { start: 0, end: 90, text: "最後，送你三個今天就能用的技能", highlight: [{ word: "三個", at: 36 }] },
+  { start: 90, end: 175, text: "第一，選一件願意做十年的事", highlight: ["十年"] },
+  { start: 175, end: 260, text: "第二，小到不會斷，斷了就重來", highlight: ["斷"] },
+  { start: 260, end: 350, text: "第三，別看今天，看一年後的自己", highlight: ["一年後"] },
+  { start: 350, end: 410, text: "三個技能，已經全部交給你了", highlight: ["全部"] },
 ];
 
 const SkillsScene: React.FC = () => {
   const f = useCurrentFrame();
   const note =
-    f < 45 ? "ChestDeal C24：掉落彈跳 → 光環 + 放射光 → 開蓋 → 三張「?」卡扇形飛出" : f < SUMMARY_AT ? "SkillCard C25 + C11：飛到中央 → 翻面 → 示範動畫 → 收到左上角（C59）" : "SkillSummary C59：飛回扇形展開「已習得 3/3」";
+    f < 90 ? "ChestDeal C24：掉落彈跳 → 搖晃透光 → 半開 → 全開 → 三張「?」卡扇形飛出" : f < SUMMARY_AT ? "SkillCard C25 + C11：飛到中央 → 翻面 → 示範動畫 → 收到左上角（C59）" : "SkillSummary C59：飛回扇形展開「已習得 3/3」";
   return (
     <PixelStage
       hud={
@@ -250,7 +250,7 @@ const EndScene: React.FC = () => {
 };
 
 export const SHOWCASE4_SECTIONS: [React.FC, number][] = [
-  [SkillsScene, 365],
+  [SkillsScene, 410],
   [CtaScene, 165],
   [EndScene, 160],
 ];
