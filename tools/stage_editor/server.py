@@ -1,6 +1,7 @@
 """舞台編輯器的本機伺服器。
 
     python tools/stage_editor/server.py          # 開啟 http://localhost:8765
+    python tools/stage_editor/server.py --port 8766   # 換一個埠
 
 - 只在本機（127.0.0.1）監聽，不連外網。
 - 搜尋直接用素材庫 asset_tools/search.py 的 text_search；CLIP 模型在背景載入一次，之後每次搜尋都很快。
@@ -23,6 +24,9 @@ PROJECT = HERE.parent.parent
 STAGES_DIR = PROJECT / "stages"
 ASSET_TOOLS = Path("D:/桌面/PixelSRPG-Forge-main/asset_tools")
 PORT = 8765
+# 可用 --port 指定其他埠，例如 python server.py --port 8766
+if "--port" in sys.argv:
+    PORT = int(sys.argv[sys.argv.index("--port") + 1])
 
 sys.path.insert(0, str(ASSET_TOOLS))
 import search as S  # noqa: E402  素材庫的查詢模組（不修改）
@@ -89,7 +93,14 @@ def load_clip():
         print("CLIP 無法載入，只用文字比對：", e)
 
 
-def clip_search(q, k, folder):
+# 素材的名稱與分類（assets.json 的文字描述；只有部分素材有）
+INFO = {}
+for it in json.load(open(OUT / "assets.json", encoding="utf-8")):
+    INFO[it["path"]] = {"name": it.get("name", ""), "category": it.get("category", "")}
+
+
+def clip_rank(q, folder, limit):
+    """CLIP：全部素材依相似度排序，取前 limit 名（相似度分布很窄，用名次比用門檻穩定）"""
     if CLIP["status"] != "ready":
         return []
     import numpy as np
@@ -102,22 +113,62 @@ def clip_search(q, k, folder):
     paths = CLIP["paths"]
     if folder:
         sims[[not p.startswith(folder) for p in paths]] = -9
-    idx = np.argsort(-sims)[: k * 2]
-    return [{"path": paths[i], "score": round(float(sims[i]), 4), "via": "clip"} for i in idx]
+    idx = np.argsort(-sims)
+    out = []
+    for i in idx:
+        s = float(sims[i])
+        if s < -1 or len(out) >= limit:
+            break
+        out.append({"path": paths[i], "score": round(s, 4), "via": "clip"})
+    return out
 
 
-def do_search(q, k, folder, use_clip):
-    res = [r for r in S.text_search(q, k * 2, folder) if usable(r["path"])][:k]
+def enrich(r):
+    r.update(meta(r["path"]))
+    info = INFO.get(r["path"], {})
+    r.setdefault("name", info.get("name", ""))
+    if not r.get("name"):
+        r["name"] = info.get("name", "")
+    r["category"] = r.get("category") or info.get("category", "")
+    return r
+
+
+def do_search(q, folder, use_clip, clip_n=100):
+    """關鍵詞命中全部列出（命中數高的在前），接著是 CLIP 畫面相似的前 clip_n 名"""
+    res = [r for r in S.text_search(q, 100000, folder) if usable(r["path"])]
     seen = {r["path"] for r in res}
     if use_clip:
-        for r in clip_search(q, k, folder):
-            if r["path"] not in seen and usable(r["path"]) and len(res) < k * 2:
+        added = 0
+        for r in clip_rank(q, folder, clip_n * 2):
+            if added >= clip_n:
+                break
+            if r["path"] not in seen and usable(r["path"]):
                 res.append(r)
                 seen.add(r["path"])
-    for r in res:
-        r.update(meta(r["path"]))
-    return res
+                added += 1
+    return [enrich(r) for r in res]
 
+
+def folder_list(max_depth=3, min_count=8):
+    """資料夾清單（前三層、至少 min_count 張可用 PNG），給「限定資料夾 / 瀏覽資料夾」用"""
+    counts = {}
+    for p in INV:
+        if not usable(p):
+            continue
+        parts = p.split("/")[:-1]
+        for d in range(1, min(max_depth, len(parts)) + 1):
+            k = "/".join(parts[:d])
+            counts[k] = counts.get(k, 0) + 1
+    return [{"path": k, "count": n, "depth": k.count("/") + 1} for k, n in sorted(counts.items()) if n >= min_count]
+
+
+FOLDERS = folder_list()
+
+
+def browse(folder, limit=5000):
+    """瀏覽資料夾：列出這個路徑底下全部可用的 PNG"""
+    paths = sorted(p for p in INV if p.startswith(folder) and usable(p))[:limit]
+    return [enrich({"path": p, "via": "browse", "score": 0}) for p in paths]
 
 # ── HTTP ────────────────────────────────────────────
 NAME_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{0,40}$")
@@ -127,12 +178,13 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         pass
 
-    def send(self, code, body, ctype="application/json; charset=utf-8"):
+    def send(self, code, body, ctype="application/json; charset=utf-8", cache=False):
         data = body if isinstance(body, bytes) else json.dumps(body, ensure_ascii=False).encode("utf-8")
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(data)))
-        self.send_header("Cache-Control", "no-store")
+        # 素材圖可以快取（大量縮圖捲動時不重複下載）；API 不快取
+        self.send_header("Cache-Control", "max-age=3600" if cache else "no-store")
         self.end_headers()
         self.wfile.write(data)
 
@@ -148,12 +200,21 @@ class Handler(BaseHTTPRequestHandler):
             q = (qs.get("q") or [""])[0].strip()
             if not q:
                 return self.send(200, {"results": []})
-            k = min(60, int((qs.get("k") or ["30"])[0]))
             folder = (qs.get("folder") or [""])[0]
             use_clip = (qs.get("clip") or ["1"])[0] == "1"
+            clip_n = min(2000, int((qs.get("n") or ["100"])[0]))
             t0 = time.time()
-            res = do_search(q, k, folder, use_clip)
+            res = do_search(q, folder, use_clip, clip_n)
             return self.send(200, {"query": q, "results": res, "ms": int((time.time() - t0) * 1000), "clip": CLIP["status"]})
+        if p == "/api/folders":
+            return self.send(200, FOLDERS)
+        if p == "/api/browse":
+            folder = (qs.get("folder") or [""])[0]
+            if not folder:
+                return self.send(400, {"error": "請指定資料夾"})
+            t0 = time.time()
+            res = browse(folder)
+            return self.send(200, {"query": folder, "results": res, "ms": int((time.time() - t0) * 1000), "clip": CLIP["status"]})
         if p == "/api/status":
             return self.send(200, {"clip": CLIP["status"]})
         if p == "/api/meta":
@@ -177,7 +238,7 @@ class Handler(BaseHTTPRequestHandler):
             # 只允許素材庫底下的圖片
             if ROOT.resolve() not in f.parents or f.suffix.lower() not in IMG_EXT or not f.exists():
                 return self.send(404, {"error": "not found"})
-            return self.send(200, f.read_bytes(), mimetypes.guess_type(str(f))[0] or "application/octet-stream")
+            return self.send(200, f.read_bytes(), mimetypes.guess_type(str(f))[0] or "application/octet-stream", cache=True)
         return self.send(404, {"error": "not found"})
 
     def do_POST(self):

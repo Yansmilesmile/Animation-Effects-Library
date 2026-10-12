@@ -18,6 +18,8 @@ export type StageItem = {
   y: number;
   scale?: number;
   flipX?: boolean;
+  /** 旋轉角度（度），以素材中心為軸 */
+  rotate?: number;
   depth?: "back" | "main" | "front";
   noBloom?: boolean;
 };
@@ -34,7 +36,7 @@ export type StageSpec = {
 export type StageHost = { pose: string; x: number; y: number; scale?: number; flipX?: boolean };
 
 const ItemSprite: React.FC<{ it: StageItem }> = ({ it }) => (
-  <Sprite asset={it.asset} x={it.x} y={it.y} scale={it.scale ?? 1} flipX={it.flipX} bloom={!it.noBloom} />
+  <Sprite asset={it.asset} x={it.x} y={it.y} scale={it.scale ?? 1} flipX={it.flipX} rotate={it.rotate ?? 0} bloom={!it.noBloom} />
 );
 
 export const LayoutStage: React.FC<{ spec: StageSpec; host?: React.ReactNode; children?: React.ReactNode }> = ({ spec, host, children }) => {

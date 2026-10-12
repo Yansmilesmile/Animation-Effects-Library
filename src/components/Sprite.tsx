@@ -26,6 +26,8 @@ export type SpriteProps = {
   /** 放大倍數，預設 1；整數最一致，也接受 0.5 的倍數 */
   scale?: number;
   flipX?: boolean;
+  /** 旋轉角度（度），以素材中心為軸；90 的倍數最清晰，其他角度像素邊緣會有鋸齒 */
+  rotate?: number;
   /** "red" | "gray" | "gold" | "#rrggbb" */
   tint?: string;
   /** 0..1，染色強度，預設 0.85 */
@@ -81,6 +83,7 @@ export const Sprite: React.FC<SpriteProps> = ({
   anchor = "bottom",
   scale = 1,
   flipX = false,
+  rotate = 0,
   tint,
   tintAmount = 0.85,
   glow,
@@ -149,7 +152,7 @@ export const Sprite: React.FC<SpriteProps> = ({
         height: h,
         overflow: "hidden",
         opacity,
-        transform: flipX ? "scaleX(-1)" : undefined,
+        transform: rotate || flipX ? `${rotate ? `rotate(${rotate}deg) ` : ""}${flipX ? "scaleX(-1)" : ""}` : undefined,
         filter: filters.length ? filters.join(" ") : undefined,
         // 發光外框會被 overflow 裁掉，所以發光時讓外層溢出、裁切交給內層
         ...(glow ? { overflow: "visible" } : null),

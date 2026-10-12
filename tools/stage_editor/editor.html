@@ -19,7 +19,9 @@
   header h1 { font-size: 15px; margin: 0 12px 0 0; color: var(--gold); }
   header .status { margin-left: auto; color: var(--muted); font-size: 12px; }
   .left, .right { background: var(--panel); overflow: auto; padding: 10px; }
-  .left { border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; overflow-x: hidden; }
+  .left { border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+  .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .filters select { min-width: 0; font-size: 12px; padding: 3px 4px; }
   .right { border-left: 1px solid var(--line); }
   .tabs { display: flex; gap: 4px; } .tabs button.on { border-color: var(--gold); color: var(--gold); }
   .search { display: flex; gap: 4px; } .search input { flex: 1; }
@@ -42,6 +44,11 @@
   .item .clip { overflow: hidden; position: relative; }
   .item img { position: absolute; left: 0; top: 0; image-rendering: pixelated; pointer-events: none; }
   .item.sel { outline: 0.5px solid #4fd1ff; }
+  #inspector button { padding: 2px 6px; font-size: 12px; }
+  #inspector select[data-k="scale"] { width: 130px; }
+  #inspector .row label { white-space: nowrap; }
+  .rot-stem { position: absolute; left: 50%; top: -10px; width: 0; height: 10px; border-left: 0.5px solid #4fd1ff; pointer-events: none; }
+  .rot-handle { position: absolute; left: 50%; top: -14px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: #4fd1ff; box-shadow: 0 0 0 0.5px #06202b; cursor: grab; }
   .light { position: absolute; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; }
   .light-handle { position: absolute; width: 6px; height: 6px; margin: -3px 0 0 -3px; border: 0.5px solid #ffe08a; border-radius: 50%; cursor: move; background: rgba(255,224,138,0.3); }
   .light-handle.sel { border-color: #4fd1ff; background: rgba(79,209,255,0.4); }
@@ -69,25 +76,30 @@
 
   <aside class="left">
     <div class="tabs"><button id="tabSearch" class="on">素材搜尋</button><button id="tabHost">主持人</button></div>
-    <div id="paneSearch" style="display:flex;flex-direction:column;gap:8px;min-height:0">
-      <div class="search"><input id="q" placeholder="輸入關鍵詞，例如：桌子、書架 木"><button id="goBtn">搜尋</button></div>
-      <div class="row" style="margin:0"><label><input type="checkbox" id="useClip" checked> 以文搜圖（CLIP）</label></div>
-      <div style="display:flex;flex-direction:column;gap:4px"><span class="hint">限定資料夾（同一個素材包的風格比較一致）</span>
-        <select id="folder" style="width:100%;min-width:0">
-          <option value="">全部</option>
-          <option>_自動拆分/Interior_Decoration_室内装饰</option>
-          <option>Interior_Decoration_室内装饰</option>
-          <option>Asset_Packs_素材套图/FarmLife</option>
-          <option>Asset_Packs_素材套图/CleanCity</option>
-          <option>Asset_Packs_素材套图/2D Pixel Dungeon Asset Pack</option>
-          <option>_自動拆分</option>
-          <option>other_其他素材3万多张</option>
-          <option>UI_Elements_界面元素</option>
-        </select>
+    <div id="paneSearch" style="display:flex;flex-direction:column;gap:8px;min-height:0;flex:1">
+      <div class="tabs"><button id="modeSearch" class="on">關鍵詞搜尋</button><button id="modeBrowse">瀏覽資料夾</button></div>
+      <div id="searchBox" style="display:flex;flex-direction:column;gap:6px">
+        <div class="search"><input id="q" placeholder="輸入關鍵詞，例如：桌子、床 木"><button id="goBtn">搜尋</button></div>
+        <div class="row" style="margin:0;gap:10px">
+          <label><input type="checkbox" id="useClip" checked> 加上畫面相似（CLIP）</label>
+          <label title="畫面相似的取前幾名（越後面越不準）">前 <select id="clipN"><option>50</option><option selected>100</option><option>200</option><option>500</option><option>1000</option></select> 名</label>
+        </div>
       </div>
-      <div class="hint">把素材拖到畫布上，或點一下加到畫面中央。關鍵詞用空白分開的短詞。</div>
-      <div class="hint" id="searchInfo"></div>
-      <div class="grid" id="results"></div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span class="hint" id="folderHint">限定資料夾（同一個素材包的風格比較一致）</span>
+        <select id="folder" style="width:100%;min-width:0"><option value="">全部</option></select>
+      </div>
+      <div class="filters">
+        <select id="fVia" title="來源"><option value="">全部來源</option><option value="desc">只看關鍵詞命中</option><option value="clip">只看畫面相似</option></select>
+        <select id="fCat" title="分類"><option value="">全部分類</option></select>
+        <select id="fSize" title="尺寸"><option value="">全部尺寸</option><option value="s">小 ≤24px</option><option value="m">中 25–64px</option><option value="l">大 &gt;64px</option></select>
+        <select id="fAnim" title="動畫"><option value="">靜態+動畫</option><option value="static">只要靜態</option><option value="anim">只要動畫</option></select>
+      </div>
+      <div class="hint" id="searchInfo">把素材拖到畫布上，或點一下加到畫面中央。</div>
+      <div id="resultsWrap" style="flex:1;overflow-y:auto;min-height:0">
+        <div class="grid" id="results"></div>
+        <div id="sentinel" class="hint" style="text-align:center;padding:8px"></div>
+      </div>
     </div>
     <div id="paneHost" style="display:none">
       <div class="hint">主持人是畫布上的物件：可以拖曳、方向鍵移動、翻轉、改倍數、刪除。點下面的姿勢換造型。<br>
@@ -121,7 +133,7 @@
     <div class="layers" id="layers"></div>
 
     <h3>快捷鍵</h3>
-    <div class="kbd">方向鍵：移動 1 像素（Shift = 10）<br>Delete：刪除　Ctrl+D：複製<br>[ / ]：往後 / 往前一層<br>F：水平翻轉　1–8：倍數（0.5 倍數在右側選）<br>Ctrl+Z：復原　Ctrl+S：存檔</div>
+    <div class="kbd">方向鍵：移動 1 像素（Shift = 10）<br>Delete：刪除　Ctrl+D：複製<br>[ / ]：往後 / 往前一層<br>F：水平翻轉　1–8：倍數（0.5 倍數在右側選）<br>R / Shift+R：旋轉 ±90°；拖藍色把手自由旋轉（15° 吸附，Shift 自由）<br>Ctrl+Z：復原　Ctrl+S：存檔</div>
   </aside>
 </div>
 
@@ -233,10 +245,22 @@ function drawItem(w, it) {
   el.className = "item" + (sel && sel.kind === "item" && sel.id === it.id ? " sel" : "");
   el.style.left = Math.round(it.x - (f.w * sc) / 2) + "px";
   el.style.top = Math.round(it.y - f.h * sc) + "px";
-  el.style.transform = it.flipX ? "scaleX(-1)" : "";
+  // 旋轉以素材中心為軸（和影片端 Sprite 一致），翻轉在旋轉之後
+  el.style.transform = `${it.rotate ? `rotate(${it.rotate}deg) ` : ""}${it.flipX ? "scaleX(-1)" : ""}`;
   if (it.depth === "back") el.style.filter = "blur(0.35px) brightness(0.6)";
   el.innerHTML = `<div class="clip" style="width:${f.w * sc}px;height:${f.h * sc}px"><img src="${lib(it.asset)}" style="width:${m.w * sc}px;height:${m.h * sc}px"></div>`;
   el.addEventListener("mousedown", (e) => startDrag(e, "item", it.id));
+  if (sel && sel.kind === "item" && sel.id === it.id) {
+    // 旋轉把手：選中時出現在素材上方，拖著轉（每 15° 吸附，按住 Shift 自由旋轉）
+    const stem = document.createElement("div");
+    stem.className = "rot-stem";
+    const hd = document.createElement("div");
+    hd.className = "rot-handle";
+    hd.title = "拖曳旋轉（Shift = 自由角度）";
+    hd.addEventListener("mousedown", (e) => startRotate(e, it, el));
+    el.appendChild(stem);
+    el.appendChild(hd);
+  }
   w.appendChild(el);
 }
 
@@ -302,6 +326,9 @@ function renderInspector() {
       <div class="row"><span>x / y</span><input type="number" data-k="x" value="${it.x}"><input type="number" data-k="y" value="${it.y}"></div>
       <div class="row"><span>倍數</span>${scaleSel(it.scale || 1)}
         <label><input type="checkbox" data-k="flipX" ${it.flipX ? "checked" : ""}> 翻轉</label></div>
+      <div class="row"><span>旋轉</span><input type="number" data-k="rotate" value="${it.rotate || 0}" style="width:56px">°
+        <button data-rot="-90" title="Shift+R">↺90°</button><button data-rot="90" title="R">↻90°</button><button data-rot="0" title="回到 0°">0°</button></div>
+      ${it.rotate && it.rotate % 90 ? `<div class="hint">非 90° 的角度，像素邊緣會有鋸齒</div>` : ""}
       <div class="row"><span>深度</span><select data-k="depth">
         <option value="back" ${it.depth === "back" ? "selected" : ""}>背景（模糊壓暗）</option>
         <option value="main" ${it.depth === "main" ? "selected" : ""}>主體（人物後面）</option>
@@ -323,7 +350,14 @@ function renderInspector() {
     snapshot();
     const obj = getObj();
     const k = inp.dataset.k;
-    obj[k] = inp.type === "checkbox" ? inp.checked : k === "scale" ? +inp.value : inp.type === "number" ? Math.round(+inp.value) : inp.value;
+    obj[k] = inp.type === "checkbox" ? inp.checked : k === "scale" ? +inp.value : k === "rotate" ? normAngle(+inp.value) : inp.type === "number" ? Math.round(+inp.value) : inp.value;
+    renderAll();
+  }));
+  box.querySelectorAll("[data-rot]").forEach((b) => (b.onclick = () => {
+    const obj = getObj();
+    snapshot();
+    const d = +b.dataset.rot;
+    obj.rotate = d === 0 ? 0 : normAngle((obj.rotate || 0) + d);
     renderAll();
   }));
   const del = $("delBtn"); if (del) del.onclick = removeSel;
@@ -375,6 +409,27 @@ function startDrag(e, kind, id) {
   renderAll();
 }
 $("viewport").addEventListener("mousedown", () => { sel = null; renderAll(); });
+
+const normAngle = (a) => ((Math.round(a) % 360) + 360) % 360;
+
+// 旋轉：以素材中心為軸，角度 = 滑鼠相對中心的方向（把手在正上方 = 0°）
+function startRotate(e, it, el) {
+  e.preventDefault(); e.stopPropagation();
+  const r = el.getBoundingClientRect();
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  let moved = false;
+  const move = (ev) => {
+    if (!moved) { snapshot(); moved = true; }
+    let a = (Math.atan2(ev.clientY - cy, ev.clientX - cx) * 180) / Math.PI + 90;
+    if (!ev.shiftKey) a = Math.round(a / 15) * 15;
+    it.rotate = normAngle(a);
+    renderWorld();
+    renderInspector();
+  };
+  const up = () => { window.removeEventListener("mousemove", move); window.removeEventListener("mouseup", up); renderAll(); };
+  window.addEventListener("mousemove", move);
+  window.addEventListener("mouseup", up);
+}
 
 async function addItem(path, x, y, hint) {
   await getMeta(path, hint);
@@ -436,42 +491,117 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "]") reorder(1);
   const scalable = sel.kind === "item" || sel.kind === "host";
   if (scalable && (e.key === "f" || e.key === "F")) { snapshot(); obj.flipX = !obj.flipX; renderAll(); }
+  if (sel.kind === "item" && (e.key === "r" || e.key === "R")) { snapshot(); obj.rotate = normAngle((obj.rotate || 0) + (e.shiftKey ? -90 : 90)); renderAll(); }
   if (scalable && /^[1-8]$/.test(e.key)) { snapshot(); obj.scale = +e.key; renderAll(); }
 });
 
-// ── 搜尋 ─────────────────────────────────────────
+// ── 搜尋 / 瀏覽 ───────────────────────────────────
+// 伺服器回傳全部結果；畫面上分批顯示（捲到底自動載入下一批），縮圖延遲載入，幾千筆也不會卡
+let allResults = [];
+let shown = [];
+let rendered = 0;
+let lastInfo = "";
+let mode = "search";
+const PAGE = 90;
+const CAT_ZH = { item: "道具", skill: "技能", weapon: "武器", food: "食物", gem: "寶石", ui_icon: "介面圖示", furniture: "家具", effect: "特效", character: "角色", accessory: "飾品", potion: "藥水", monster: "怪物", armor: "護甲", clothes: "服裝", tile: "地塊", helmet: "頭盔", building: "建築", other: "其他", shoes: "鞋子", money: "錢幣", ui_frame: "介面框", ui_button: "按鈕", trap: "陷阱", npc: "NPC", vehicle: "載具", ui_text: "文字" };
+
 function tileHtml(r) {
   const f = frameSize(r.w ? r : { w: 32, h: 32 });
   // 縮圖：小圖整數倍放大（像素清晰），大圖縮小塞進格子；動畫條只顯示第一格
   let d = Math.min(84 / f.w, 72 / f.h);
   if (d >= 1) d = Math.min(4, Math.floor(d));
-  const inner = `<div class="px" style="width:${Math.round(f.w * d)}px;height:${Math.round(f.h * d)}px;background-image:url('${lib(r.path)}');background-size:${(r.w || f.w) * d}px ${(r.h || f.h) * d}px"></div>`;
-  return `<div class="tile" draggable="true" data-path="${encodeURIComponent(r.path)}">
-    <div class="thumb"><div>${inner}</div></div>
+  const inner = `<div style="width:${Math.round(f.w * d)}px;height:${Math.round(f.h * d)}px;overflow:hidden;position:relative"><img loading="lazy" src="${lib(r.path)}" style="position:absolute;left:0;top:0;width:${(r.w || f.w) * d}px;height:${(r.h || f.h) * d}px;image-rendering:pixelated"></div>`;
+  const via = r.via === "clip" ? "相似 " + Number(r.score).toFixed(2) : r.via === "desc" ? "關鍵詞 " + r.score : "";
+  const cat = r.category ? " · " + (CAT_ZH[r.category] || r.category) : "";
+  return `<div class="tile" draggable="true">
+    <div class="thumb">${inner}</div>
     <div class="name" title="${r.path}">${r.name || r.path.split("/").pop()}</div>
-    <div class="sub">${r.w || "?"}×${r.h || "?"}${r.anim ? " · 動畫" : ""}</div>
-    <div class="via">${r.via === "clip" ? "相似 " + r.score.toFixed(2) : "關鍵詞 " + r.score}</div></div>`;
+    <div class="sub">${r.w || "?"}×${r.h || "?"}${r.anim ? " · 動畫" : ""}${cat}</div>
+    <div class="via">${via}</div></div>`;
 }
-function bindTiles(container, list) {
-  container.querySelectorAll(".tile").forEach((t, i) => {
-    const r = list[i];
-    t.addEventListener("dragstart", (e) => e.dataTransfer.setData("application/json", JSON.stringify(r)));
-    t.addEventListener("click", () => addItem(r.path, 240, GROUND, r));
+function bindTile(t, r) {
+  t.addEventListener("dragstart", (e) => e.dataTransfer.setData("application/json", JSON.stringify(r)));
+  t.addEventListener("click", () => addItem(r.path, 240, GROUND, r));
+}
+
+function applyFilters() {
+  const via = $("fVia").value, cat = $("fCat").value, size = $("fSize").value, an = $("fAnim").value;
+  shown = allResults.filter((r) => {
+    if (via && mode === "search" && r.via !== via) return false;
+    if (cat && (r.category || "(未分類)") !== cat) return false;
+    const f = frameSize(r.w ? r : { w: 0, h: 0 });
+    const m = Math.max(f.w, f.h);
+    if (size === "s" && m > 24) return false;
+    if (size === "m" && (m <= 24 || m > 64)) return false;
+    if (size === "l" && m <= 64) return false;
+    if (an === "static" && r.anim) return false;
+    if (an === "anim" && !r.anim) return false;
+    return true;
   });
+  $("results").innerHTML = "";
+  rendered = 0;
+  renderMore();
+  $("searchInfo").textContent = `${lastInfo}篩選後 ${shown.length} 筆`;
 }
-async function doSearch() {
+function renderMore() {
+  const next = shown.slice(rendered, rendered + PAGE);
+  const tmp = document.createElement("div");
+  tmp.innerHTML = next.map(tileHtml).join("");
+  [...tmp.children].forEach((t, i) => { bindTile(t, next[i]); $("results").appendChild(t); });
+  rendered += next.length;
+  $("sentinel").textContent = rendered < shown.length ? `往下捲動載入更多（${rendered} / ${shown.length}）` : shown.length ? `已全部顯示（${shown.length}）` : "";
+}
+new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting) && rendered < shown.length) renderMore(); }, { root: $("resultsWrap"), rootMargin: "400px" }).observe($("sentinel"));
+
+function fillCategories() {
+  const counts = {};
+  allResults.forEach((r) => { const k = r.category || "(未分類)"; counts[k] = (counts[k] || 0) + 1; });
+  $("fCat").innerHTML = `<option value="">全部分類</option>` + Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([k, n]) => `<option value="${k}">${CAT_ZH[k] || k}（${n}）</option>`).join("");
+}
+async function run(url) {
+  $("searchInfo").textContent = "載入中…";
+  $("results").innerHTML = "";
+  $("sentinel").textContent = "";
+  const r = await fetch(url).then((x) => x.json());
+  if (r.error) { $("searchInfo").textContent = r.error; return; }
+  allResults = r.results;
+  const nk = allResults.filter((x) => x.via === "desc").length, nc = allResults.filter((x) => x.via === "clip").length;
+  const clipNote = mode === "search" && $("useClip").checked && r.clip !== "ready" ? (r.clip === "loading" ? "（CLIP 載入中，暫時只有關鍵詞）" : "（CLIP 無法使用）") : "";
+  lastInfo = mode === "search" ? `共 ${allResults.length} 筆：關鍵詞 ${nk}、相似 ${nc}${clipNote} · ${r.ms} ms · ` : `資料夾共 ${allResults.length} 張 · `;
+  fillCategories();
+  applyFilters();
+  $("resultsWrap").scrollTop = 0;
+}
+function doSearch() {
+  if (mode === "browse") return doBrowse();
   const q = $("q").value.trim();
   if (!q) return;
-  $("searchInfo").textContent = "搜尋中…";
-  const url = `/api/search?q=${encodeURIComponent(q)}&k=30&clip=${$("useClip").checked ? 1 : 0}&folder=${encodeURIComponent($("folder").value)}`;
-  const r = await fetch(url).then((r) => r.json());
-  $("searchInfo").textContent = `${r.results.length} 筆 · ${r.ms} ms${r.clip !== "ready" && $("useClip").checked ? " · CLIP " + (r.clip === "loading" ? "載入中，暫時只有關鍵詞結果" : "無法使用") : ""}`;
-  $("results").innerHTML = r.results.map(tileHtml).join("");
-  bindTiles($("results"), r.results);
+  run(`/api/search?q=${encodeURIComponent(q)}&clip=${$("useClip").checked ? 1 : 0}&n=${$("clipN").value}&folder=${encodeURIComponent($("folder").value)}`);
+}
+function doBrowse() {
+  const folder = $("folder").value;
+  if (!folder) { $("searchInfo").textContent = "先在上面選一個資料夾"; return; }
+  run(`/api/browse?folder=${encodeURIComponent(folder)}`);
+}
+function setMode(m) {
+  mode = m;
+  $("modeSearch").classList.toggle("on", m === "search");
+  $("modeBrowse").classList.toggle("on", m === "browse");
+  $("searchBox").style.display = m === "search" ? "flex" : "none";
+  $("fVia").style.display = m === "search" ? "" : "none"; // 瀏覽模式沒有「來源」可篩
+  $("folderHint").textContent = m === "search" ? "限定資料夾（同一個素材包的風格比較一致）" : "選一個資料夾，列出裡面全部素材";
+  if (m === "browse" && $("folder").value) doBrowse();
+}
+async function loadFolders() {
+  const list = await fetch("/api/folders").then((x) => x.json());
+  $("folder").innerHTML = `<option value="">全部</option>` + list.map((d) => `<option value="${d.path}">${"　".repeat(d.depth - 1)}${d.path.split("/").pop()}（${d.count}）</option>`).join("");
 }
 $("goBtn").onclick = doSearch;
 $("q").addEventListener("keydown", (e) => { if (e.key === "Enter") doSearch(); });
-
+$("modeSearch").onclick = () => setMode("search");
+$("modeBrowse").onclick = () => setMode("browse");
+$("folder").addEventListener("change", () => { if (mode === "browse") doBrowse(); });
+["fVia", "fCat", "fSize", "fAnim"].forEach((id) => $(id).addEventListener("change", applyFilters));
 // ── 主持人 ───────────────────────────────────────
 async function loadPoses() {
   poses = await fetch("/api/host-poses").then((r) => r.json());
@@ -546,6 +676,7 @@ loadPoses().then(renderAll);
 const q0 = new URLSearchParams(location.search).get("q");
 if (q0) { $("q").value = q0; doSearch(); }
 loadStageList();
+loadFolders();
 pollStatus();
 </script>
 </body>

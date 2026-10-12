@@ -32,7 +32,7 @@ export type RegistryEntry = {
 };
 
 const POS = { x: "number", y: "number" } as const;
-const SPRITE_LOOK = { anchor: "string", scale: "number", flipX: "boolean", tint: "string", tintAmount: "number", glow: "string", opacity: "number", bloom: "boolean" } as const;
+const SPRITE_LOOK = { anchor: "string", scale: "number", flipX: "boolean", rotate: "number", tint: "string", tintAmount: "number", glow: "string", opacity: "number", bloom: "boolean" } as const;
 
 const demoCheck = (name: unknown) => (name !== undefined && !(String(name) in SKILL_DEMOS) ? [`demo「${name}」不存在，可用：${Object.keys(SKILL_DEMOS).join("、")}`] : []);
 
