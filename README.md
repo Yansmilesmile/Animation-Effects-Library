@@ -5,7 +5,9 @@
 
 + 第三批結構類（LevelTitleCard、LevelTransition iris/tilt、Counter、CrowdGrid、Spotlight，在 `src/components/structure/`）。
 
-展示：`Showcase1`（第零、一批）、`Showcase2`（第二批）、`Showcase3`（第三批）。
++ 第四批片尾模板（ChestDeal、SkillCard、SkillSummary、GamePopup follow/input/achievement/ending、NextTeaser，在 `src/components/ending/`）。
+
+展示：`Showcase1`（第零、一批）、`Showcase2`（第二批）、`Showcase3`（第三批）、`Showcase4`（第四批：照詞典片尾模板順序演一遍）、`Test3D`（3D 試驗）。
 
 強調組件的 `useCurrentFrame()` 是「觸發後經過的幀數」，時間軸用 `<Sequence from={觸發幀}>` 包住。
 跟物件走的（光環、標籤）放在 PixelStage 的 children；不跟鏡頭動的（印章泛紅、發光大字）放在 `hud`。

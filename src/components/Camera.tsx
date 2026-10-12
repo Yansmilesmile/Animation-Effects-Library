@@ -45,6 +45,12 @@ export const shot = ({ x = WORLD.centerX, groundY = WORLD.groundY, zoom = STAGE_
 
 export const CAMERA_HOME = shot();
 
+/** 世界座標 → 畫面座標（像素層 480×270），給「場景裡的東西飛到 hud」這類銜接用 */
+export const worldToScreen = (cam: CameraState, wx: number, wy: number) => ({
+  x: PIXEL.width / 2 + (wx - cam.x) * cam.zoom,
+  y: PIXEL.height / 2 + (wy - cam.y) * cam.zoom,
+});
+
 const DEFAULT_DURATION: Record<CameraMove["type"], number> = {
   push: 45,
   pull: 45,

@@ -4,6 +4,7 @@ import { ensureFonts } from "./fonts";
 import { Showcase1, SHOWCASE1_DURATION } from "./showcase/Showcase1";
 import { Showcase2, SHOWCASE2_DURATION } from "./showcase/Showcase2";
 import { Showcase3, SHOWCASE3_DURATION } from "./showcase/Showcase3";
+import { Showcase4, SHOWCASE4_DURATION } from "./showcase/Showcase4";
 import { Test3D, TEST3D_DURATION } from "./showcase/Test3D";
 import { VIDEO } from "./theme";
 
@@ -31,6 +32,14 @@ export const Root: React.FC = () => (
       id="Showcase3"
       component={Showcase3}
       durationInFrames={SHOWCASE3_DURATION}
+      fps={VIDEO.fps}
+      width={VIDEO.width}
+      height={VIDEO.height}
+    />
+    <Composition
+      id="Showcase4"
+      component={Showcase4}
+      durationInFrames={SHOWCASE4_DURATION}
       fps={VIDEO.fps}
       width={VIDEO.width}
       height={VIDEO.height}
