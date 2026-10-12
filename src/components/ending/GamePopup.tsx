@@ -17,13 +17,13 @@ import { popScale } from "../emphasis/common";
  * - "input"（C30 / C46）：可選藍色標題（「✦ 天賦檢測」），問題逐字打出（每 typeEvery 幀一個字），
  *    輸入框閃游標；answer 有值時接著逐字打出答案；右邊紅色「送出」。
  * - "achievement"（B9）：頂部滑下深藍底金邊橫幅，左邊獎盃，右邊「成就解鎖」+ 成就名稱；exitAt 時往上收。
- * - "ending"（B9 小牌）：「解鎖結局｜最好的結局」小牌子，3 幀回彈。
+ * - "ending"（B9 小牌）：「解鎖結局｜最好的結局」小牌子，3 幀回彈；exitAt 時往上淡出。
  */
 export type GamePopupProps =
   | { variant: "follow"; x?: number; y?: number; clickAt?: number; exitAt?: number; compact?: boolean; channel?: string }
   | { variant: "input"; title?: string; question: string; answer?: string; typeEvery?: number; x?: number; y?: number }
   | { variant: "achievement"; name: string; exitAt?: number; y?: number }
-  | { variant: "ending"; text?: string; x?: number; y?: number };
+  | { variant: "ending"; text?: string; x?: number; y?: number; exitAt?: number };
 
 const font = (size: number, c: string = color.white): React.CSSProperties => ({ fontFamily: FONT_PIXEL, fontSize: size, lineHeight: 1, color: c, whiteSpace: "nowrap" });
 const box: React.CSSProperties = {
@@ -39,9 +39,12 @@ const Cursor: React.FC<{ x: number; y: number; pressed?: boolean }> = ({ x, y, p
 );
 
 // ── follow ───────────────────────────────────────
+// 版面（框內座標）：頭像 52×52、名字 24px、副標 12px、按鈕 84×22（左右留白，「✓ 已關注」不會擠到邊框）
+const F = { W: 180, H: 84, avatar: 56, textX: 70, btn: { x: 70, y: 54, w: 92, h: 22 } } as const;
+
 const Follow: React.FC<Extract<GamePopupProps, { variant: "follow" }>> = ({
-  x = 372,
-  y = 96,
+  x = 360,
+  y = 100,
   clickAt = 26,
   exitAt = 48,
   compact = false,
@@ -52,24 +55,29 @@ const Follow: React.FC<Extract<GamePopupProps, { variant: "follow" }>> = ({
   const exit = exitAt !== undefined && f >= exitAt ? easeCamera(Math.min(1, (f - exitAt) / 8)) : 0;
   if (exit >= 1) return null;
   const clicked = f >= clickAt;
-  const btnW = 52;
-  // 按鈕在框內的位置
-  const bx = compact ? 0 : 54;
-  const by = compact ? 0 : 32;
-  // 游標：從右下角移到按鈕上，clickAt 時按下
+  const b = compact ? { x: 0, y: 0, w: F.btn.w, h: F.btn.h } : F.btn;
+  const W = compact ? b.w : F.W;
+  const H = compact ? b.h : F.H;
+  // 游標：從右下角移到按鈕中央，clickAt 時按下
   const ct = easeCamera(Math.min(1, Math.max(0, (f - 8) / (clickAt - 10))));
-  const cursorX = 80 + (bx + btnW / 2 - 80) * ct;
-  const cursorY = 70 + (by + 8 - 70) * ct;
+  const tx = b.x + b.w / 2;
+  const ty = b.y + b.h / 2;
+  const cursorX = W + 24 + (tx - W - 24) * ct;
+  const cursorY = H + 30 + (ty - H - 30) * ct;
 
   const button = (
     <div
       style={{
         position: "absolute",
-        left: bx,
-        top: by,
-        width: btnW,
-        padding: "3px 0",
-        textAlign: "center",
+        left: b.x,
+        top: b.y,
+        width: b.w,
+        height: b.h,
+        boxSizing: "border-box",
+        padding: "0 10px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         background: clicked ? "#2f9e57" : color.red,
         border: `1px solid ${clicked ? "#9df0b8" : color.goldLight}`,
         boxShadow: `0 0 0 1px ${color.ink}, 0 2px 0 1px rgba(0,0,0,0.5)`,
@@ -85,29 +93,27 @@ const Follow: React.FC<Extract<GamePopupProps, { variant: "follow" }>> = ({
     <div
       style={{
         position: "absolute",
-        left: Math.round(x + (1 - enter) * 160 + exit * 60),
+        left: Math.round(x + (1 - enter) * 200 + exit * 60),
         top: Math.round(y - exit * 80),
         transform: `translate(-50%, -50%) scale(${1 - exit * 0.8})`,
         opacity: 1 - exit,
       }}
     >
-      <div style={{ position: "relative", width: compact ? btnW : 112, height: compact ? 16 : 54, ...(compact ? {} : box) }}>
+      <div style={{ position: "relative", width: W, height: H, boxSizing: "border-box", ...(compact ? {} : box) }}>
         {compact ? null : (
           <>
-            {/* 頭像：主持人半身的上半部 */}
-            <div style={{ position: "absolute", left: 4, top: 4, width: 44, height: 46, overflow: "hidden", background: color.navy, boxShadow: `inset 0 0 0 1px ${color.goldDark}` }}>
-              <Host pose="bust_front" x={22} y={56} />
+            {/* 頭像：主持人半身像 */}
+            <div style={{ position: "absolute", left: 10, top: 12, width: F.avatar - 4, height: F.avatar, overflow: "hidden", background: color.navy, boxShadow: `inset 0 0 0 1px ${color.goldDark}` }}>
+              <Host pose="bust_front" x={(F.avatar - 4) / 2} y={F.avatar + 2} />
             </div>
-            <div style={{ position: "absolute", left: 54, top: 5, ...font(12, color.goldLight) }}>{channel}</div>
-            <div style={{ position: "absolute", left: 54, top: 19, fontFamily: FONT_PIXEL, fontSize: 12, lineHeight: 1, color: color.gray, whiteSpace: "nowrap", transform: "scale(0.75)", transformOrigin: "0 0" }}>
-              邀請你組隊
-            </div>
+            <div style={{ position: "absolute", left: F.textX, top: 12, ...font(24, color.goldLight) }}>{channel}</div>
+            <div style={{ position: "absolute", left: F.textX, top: 38, ...font(12, color.gray) }}>邀請你組隊</div>
           </>
         )}
         {button}
         {f >= clickAt && f < clickAt + 15 ? (
           <div style={{ position: "absolute", left: 0, top: 0 }}>
-            <RingPulse x={bx + btnW / 2} y={by + 8} radius={30} color="#9df0b8" flash={false} />
+            <RingPulse x={tx} y={ty} radius={36} color="#9df0b8" flash={false} />
           </div>
         ) : null}
         {f >= 6 && f < (exitAt ?? 999) ? <Cursor x={cursorX} y={cursorY} pressed={f >= clickAt && f < clickAt + 3} /> : null}
@@ -127,23 +133,25 @@ const Input: React.FC<Extract<GamePopupProps, { variant: "input" }>> = ({ title,
   const an = Math.min(a.length, Math.max(0, Math.floor((f - startA) / typeEvery) + 1));
   const blink = Math.floor(f / 8) % 2 === 0;
   const pop = popScale(f);
-  const W = 260;
+  const W = 340;
   return (
     <div style={{ position: "absolute", left: x, top: y, transform: `translate(-50%, -50%) scale(${pop})` }}>
-      <div style={{ ...box, width: W, padding: 8, boxSizing: "border-box" }}>
+      <div style={{ ...box, width: W, padding: "12px 14px", boxSizing: "border-box" }}>
         {title ? (
-          <div style={{ ...font(12, "#8fd0ff"), marginBottom: 8, paddingBottom: 6, borderBottom: `1px solid ${color.navyLight}` }}>{title}</div>
+          <div style={{ ...font(12, "#8fd0ff"), marginBottom: 10, paddingBottom: 8, borderBottom: `1px solid ${color.navyLight}` }}>{title}</div>
         ) : null}
-        <div style={{ ...font(12), whiteSpace: "normal", lineHeight: 1.3, minHeight: 16 }}>
+        <div style={{ ...font(24), whiteSpace: "normal", lineHeight: 1.25, minHeight: 30 }}>
           {q.slice(0, qn).join("")}
           {qn < q.length && blink ? <span style={{ color: color.goldLight }}>▌</span> : null}
         </div>
-        <div style={{ display: "flex", gap: 4, marginTop: 8 }}>
-          <div style={{ flex: 1, height: 18, background: "#f2ecd9", boxShadow: `inset 0 0 0 1px ${color.ink}`, display: "flex", alignItems: "center", padding: "0 4px", ...font(12, color.ink) }}>
+        <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+          <div style={{ flex: 1, height: 32, background: "#f2ecd9", boxShadow: `inset 0 0 0 1px ${color.ink}`, display: "flex", alignItems: "center", padding: "0 8px", ...font(24, color.ink) }}>
             {a.slice(0, an).join("")}
             {qn >= q.length && blink ? <span style={{ color: color.ink }}>_</span> : null}
           </div>
-          <div style={{ width: 40, height: 18, background: color.red, border: `1px solid ${color.goldLight}`, boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "center", ...font(12) }}>送出</div>
+          <div style={{ padding: "0 12px", height: 32, background: color.red, border: `1px solid ${color.goldLight}`, boxShadow: `0 0 0 1px ${color.ink}`, boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "center", ...font(12) }}>
+            送出
+          </div>
         </div>
       </div>
     </div>
@@ -156,21 +164,21 @@ const Achievement: React.FC<Extract<GamePopupProps, { variant: "achievement" }>>
   const enter = easeCamera(Math.min(1, f / 6));
   const exit = exitAt !== undefined && f >= exitAt ? easeCamera(Math.min(1, (f - exitAt) / 6)) : 0;
   if (exit >= 1) return null;
-  const top = -40 + (y + 40) * enter - exit * (y + 40);
+  const top = -50 + (y + 50) * enter - exit * (y + 50);
   return (
     <div style={{ position: "absolute", left: LAYOUT.centerX, top: Math.round(top), transform: "translate(-50%, -50%)" }}>
-      <div style={{ ...box, background: color.navyDark, border: `2px solid ${color.gold}`, display: "flex", alignItems: "center", gap: 8, padding: "5px 12px 5px 8px" }}>
-        <div style={{ position: "relative", width: 22, height: 20, filter: `drop-shadow(0 0 3px ${color.gold})` }}>
-          <PixelBitmap rows={[...BITMAP.trophy]} palette={{ g: color.gold, w: "#FFF2B8", d: color.goldDark }} size={2} />
+      <div style={{ ...box, background: color.navyDark, border: `2px solid ${color.gold}`, display: "flex", alignItems: "center", gap: 14, padding: "8px 22px 8px 14px" }}>
+        <div style={{ position: "relative", width: 33, height: 30, filter: `drop-shadow(0 0 3px ${color.gold})` }}>
+          <PixelBitmap rows={[...BITMAP.trophy]} palette={{ g: color.gold, w: "#FFF2B8", d: color.goldDark }} size={3} />
         </div>
         <div>
-          <div style={{ ...font(12, color.gold), marginBottom: 3 }}>成就解鎖</div>
+          <div style={{ ...font(12, color.gold), marginBottom: 5 }}>成就解鎖</div>
           <div style={font(24, color.white)}>{name}</div>
         </div>
       </div>
       {f < 15 ? (
-        <div style={{ position: "absolute", left: 15, top: 20 }}>
-          <RingPulse x={0} y={0} radius={24} color={color.goldLight} />
+        <div style={{ position: "absolute", left: 30, top: 25 }}>
+          <RingPulse x={0} y={0} radius={30} color={color.goldLight} />
         </div>
       ) : null}
     </div>
@@ -178,17 +186,19 @@ const Achievement: React.FC<Extract<GamePopupProps, { variant: "achievement" }>>
 };
 
 // ── ending plaque ────────────────────────────────
-const Ending: React.FC<Extract<GamePopupProps, { variant: "ending" }>> = ({ text = "解鎖結局｜最好的結局", x = LAYOUT.centerX, y = 60 }) => {
+const Ending: React.FC<Extract<GamePopupProps, { variant: "ending" }>> = ({ text = "解鎖結局｜最好的結局", x = LAYOUT.centerX, y = 60, exitAt }) => {
   const f = useCurrentFrame();
+  const exit = exitAt !== undefined && f >= exitAt ? easeCamera(Math.min(1, (f - exitAt) / 6)) : 0;
+  if (exit >= 1) return null;
   return (
-    <div style={{ position: "absolute", left: x, top: y, transform: `translate(-50%, -50%) scale(${popScale(f)})` }}>
-      <div style={{ ...box, display: "flex", alignItems: "center", gap: 5, padding: "4px 8px" }}>
-        <div style={{ position: "relative", width: 7, height: 7 }}>
-          <PixelBitmap rows={[...BITMAP.star]} palette={{ w: color.goldLight }} />
+    <div style={{ position: "absolute", left: x, top: y - exit * 20, opacity: 1 - exit, transform: `translate(-50%, -50%) scale(${popScale(f) * (1 - exit * 0.3)})` }}>
+      <div style={{ ...box, display: "flex", alignItems: "center", gap: 10, padding: "8px 16px" }}>
+        <div style={{ position: "relative", width: 14, height: 14 }}>
+          <PixelBitmap rows={[...BITMAP.star]} palette={{ w: color.goldLight }} size={2} />
         </div>
-        <div style={font(12, color.goldLight)}>{text}</div>
-        <div style={{ position: "relative", width: 7, height: 7 }}>
-          <PixelBitmap rows={[...BITMAP.star]} palette={{ w: color.goldLight }} />
+        <div style={font(24, color.goldLight)}>{text}</div>
+        <div style={{ position: "relative", width: 14, height: 14 }}>
+          <PixelBitmap rows={[...BITMAP.star]} palette={{ w: color.goldLight }} size={2} />
         </div>
       </div>
     </div>

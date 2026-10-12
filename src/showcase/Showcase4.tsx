@@ -11,7 +11,7 @@ import { Spotlight } from "../components/structure";
 import { TopNav } from "../components/TopNav";
 import { Watermark } from "../components/Watermark";
 import { A, HOST_CENTER, HOST_FEET, LAMP_GLOW, StudyRoom } from "../scenes/StudyRoom";
-import { color, FONT_PIXEL } from "../theme";
+import { color, FONT_PIXEL, WORLD } from "../theme";
 import { At } from "./Showcase2";
 import { Label } from "./Label";
 
@@ -20,7 +20,8 @@ import { Label } from "./Label";
 const G = HOST_FEET;
 const lamp = { type: "lamp" as const, ...LAMP_GLOW, radius: 50, cone: 40 };
 const CHAPTERS = ["序章", "第一關｜找到專長", "第二關｜用槓桿", "第三關｜複利", "結尾"];
-const CHEST_X = 262;
+// 寶箱放在畫面正中央（預設取景的中心是世界 x = 240）
+const CHEST_X = WORLD.centerX;
 
 // ── 技能卡裡的示範小動畫（座標是示範框 126×84 的區域座標）────────
 const demoText = (t: string, c: string = color.white): React.CSSProperties => ({ fontFamily: FONT_PIXEL, fontSize: 12, lineHeight: 1, color: c, whiteSpace: "nowrap" });
@@ -155,7 +156,7 @@ const SkillsScene: React.FC = () => {
       }
     >
       <Camera>
-        <StudyRoom host={<Host pose="full_point_happy" x={176} y={G} />}>
+        <StudyRoom host={<Host pose="full_point_happy" x={150} y={G} />}>
           <Ambience layers={["dust", lamp]} />
           <ChestDeal x={CHEST_X} takeAt={CARD_START} />
         </StudyRoom>
@@ -214,10 +215,10 @@ const EndScene: React.FC = () => {
       hud={
         <>
           <At f={50}>
-            <GamePopup variant="ending" y={52} />
+            <GamePopup variant="ending" y={50} exitAt={56} />
           </At>
           <At f={78}>
-            <GamePopup variant="achievement" name="自救" exitAt={60} y={92} />
+            <GamePopup variant="achievement" name="自救" exitAt={60} y={100} />
           </At>
           <At f={112}>
             <NextTeaser />
