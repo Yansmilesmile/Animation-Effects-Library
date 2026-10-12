@@ -5,7 +5,7 @@
 | 組件 | 詞典 | 層 | 用途 | 主要 props | 自身節奏 |
 |---|---|---|---|---|---|
 | Sprite | 素材 | world | 顯示素材 / 動畫條 | asset*, x, y, anchor(bottom/center/top-left), scale(整數), flipX, tint(red/gray/gold/#hex), glow, animFps | 動畫 10fps |
-| Host | 主持人 | world | 額外的主持人（scene.host 之外） | pose*, x, y, flipX, tint | — |
+| Host | 主持人 | world | 額外的主持人（scene.host 之外） | pose*, x, y, flipX, tint, talk | — |
 | Ambience | G | world | 氛圍層 | layers*: dust / snow / lamp{x,y} / stars / beam{x} / confetti / zzz{x,y} | 持續 |
 | RingPulse | B1 | world | 光環脈衝，對準高亮詞 | x*, y*, radius(34), color | 15 幀 |
 | Tag | B2/B13/B11 | world | 標籤彈出 | text*, x*, y*(標籤底部), variant: red / dark / hang / locked, appear: pop / instant | 3 幀回彈 |

@@ -153,7 +153,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   const hx = h?.x ?? 160;
   const hy = h?.y ?? WORLD.groundY;
   const host = h ? (
-    <FxTarget name="主持人" x={hx} y={hy} render={(f) => <Host pose={h.pose} x={hx} y={hy} flipX={h.flipX} scale={h.scale ?? 1} glow={f.glow} tint={f.tint} />} />
+    <FxTarget name="主持人" x={hx} y={hy} render={(f) => <Host pose={h.pose} x={hx} y={hy} flipX={h.flipX} scale={h.scale ?? 1} talk={h.talk} glow={f.glow} tint={f.tint} />} />
   ) : null;
   const worldContent = (
     <>

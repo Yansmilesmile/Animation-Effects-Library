@@ -27,7 +27,7 @@ export type Scene = {
   /** 像素層底色（CSS background） */
   background?: string;
   /** 主持人：pose 與站位（世界座標，y 預設地面線）。省略 = 用舞台存的預設站位（舞台編輯器擺的）；null = 不出現 */
-  host?: { pose: string; x?: number; y?: number; flipX?: boolean; scale?: number } | null;
+  host?: { pose: string; x?: number; y?: number; flipX?: boolean; scale?: number; talk?: boolean } | null;
   /** 這個 scene 導航高亮第幾段；省略 = 不顯示導航 */
   navIndex?: number;
   /** false = 這個 scene 不顯示浮水印 */

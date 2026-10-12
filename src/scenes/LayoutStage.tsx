@@ -2,9 +2,10 @@ import React from "react";
 import { Ambience, AmbienceLayer } from "../components/Ambience";
 import { Layer } from "../components/PixelStage";
 import { Sprite } from "../components/Sprite";
-import { Img, staticFile } from "remotion";
+import { Img, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { PIXEL } from "../theme";
 import { FxTarget } from "../timeline/propfx";
+import { ChatDots, chatBobAt } from "../components/Talk";
 
 /**
  * LayoutStage —— 渲染舞台編輯器（tools/stage_editor）存下來的舞台 stages/<name>.json。
@@ -28,6 +29,8 @@ export type StageItem = {
   rotate?: number;
   depth?: "back" | "main" | "front";
   noBloom?: boolean;
+  /** 常駐動畫：chat = 對話泡泡上下浮動＋三個點輪流跳（給 expression_chat，搭配主持人說話） */
+  anim?: "chat";
 };
 export type StageLight = { name?: string; type: "lamp"; x: number; y: number; radius?: number; cone?: number; color?: string };
 /** 3D 場景背景：scenes3d/*.html 截圖成 public/bg3d/*.png；影片裡用圖片，不跑 3D */
@@ -43,6 +46,8 @@ export type StageBg3d = {
   /** 以中心為軸縮放，預設 1 */
   scale?: number;
   locked?: boolean;
+  /** 循環版背景（npm run assets 自動帶入，來源 scripts/bg3d-loop.mjs）：dir/000.png… 依 fps 逐格循環 */
+  loop?: { dir: string; frames: number; fps: number };
 };
 export type StageSpec = {
   name: string;
@@ -54,27 +59,47 @@ export type StageSpec = {
   host?: StageHost | null;
   bg3d?: StageBg3d;
 };
-export type StageHost = { pose: string; x: number; y: number; scale?: number; flipX?: boolean };
+export type StageHost = { pose: string; x: number; y: number; scale?: number; flipX?: boolean; talk?: boolean };
 
 // 有名字的物件會套用時間軸的 PropFx（晃動、彈跳、發光、消失…）
-const ItemSprite: React.FC<{ it: StageItem }> = ({ it }) => (
-  <FxTarget
-    name={it.name}
-    x={it.x}
-    y={it.y}
-    render={(fx) => (
-      <Sprite asset={it.asset} x={it.x} y={it.y} scale={it.scale ?? 1} flipX={it.flipX} rotate={it.rotate ?? 0} bloom={!it.noBloom} glow={fx.glow} tint={fx.tint} />
-    )}
-  />
-);
+const ItemSprite: React.FC<{ it: StageItem }> = ({ it }) => {
+  const f = useCurrentFrame();
+  const chat = it.anim === "chat";
+  return (
+    <FxTarget
+      name={it.name}
+      x={it.x}
+      y={it.y}
+      render={(fx) => (
+        <Sprite
+          asset={it.asset}
+          x={it.x}
+          y={it.y + (chat ? chatBobAt(f) : 0)}
+          scale={it.scale ?? 1}
+          flipX={it.flipX}
+          rotate={it.rotate ?? 0}
+          bloom={!it.noBloom}
+          glow={fx.glow}
+          tint={fx.tint}
+          overlay={chat ? <ChatDots /> : undefined}
+        />
+      )}
+    />
+  );
+};
 
 const Bg3dImage: React.FC<{ bg: StageBg3d }> = ({ bg }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
   const s = bg.scale ?? 1;
   const w = PIXEL.width * s;
   const h = PIXEL.height * s;
+  const src = bg.loop
+    ? `${bg.loop.dir}/${String(Math.floor((frame / fps) * bg.loop.fps) % bg.loop.frames).padStart(3, "0")}.png`
+    : bg.image;
   return (
     <Img
-      src={staticFile(bg.image)}
+      src={staticFile(src)}
       style={{
         position: "absolute",
         left: Math.round(PIXEL.width / 2 + (bg.x ?? 0) - w / 2),

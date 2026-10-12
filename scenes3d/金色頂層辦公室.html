@@ -44,13 +44,20 @@ body.clean .ui{display:none}
     <button id="bloomBtn" aria-pressed="true">光暈</button>
     <button id="reflBtn" aria-pressed="true">地面倒影</button>
     <span>亮度</span>
-    <input id="expo" type="range" min="0.4" max="1.3" step="0.05" value="0.78" aria-label="亮度">
+    <input id="expo" type="range" min="0.4" max="1.3" step="0.05" value="0.55" aria-label="亮度">
   </div>
   <div class="group"><span class="hint">H 隱藏介面，方便錄屏</span></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+
+// ---------- URL params (for video capture) ----------
+// ?t=秒 固定時間（逐幀截圖用）；?loop=秒 燈光閃爍改成剛好 loop 秒循環一次（循環背景用）；?expo=亮度
+const PARAMS=new URLSearchParams(location.search);
+const FIXED_T=PARAMS.has('t')?+PARAMS.get('t'):null;
+const LOOP_LEN=+(PARAMS.get('loop')||0);
+const EXPO=PARAMS.has('expo')?+PARAMS.get('expo'):0.55;
 
 // ---------- helpers ----------
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
@@ -476,21 +483,24 @@ lightGeo.setAttribute('position',new THREE.Float32BufferAttribute(cityPts,3));
 lightGeo.setAttribute('color',new THREE.Float32BufferAttribute(cityCol,3));
 lightGeo.setAttribute('info',new THREE.Float32BufferAttribute(cityInfo,4));
 const lightMat=new THREE.ShaderMaterial({
-  uniforms:{time:{value:0},scale:{value:1},neon:{value:1}},
+  uniforms:{time:{value:0},scale:{value:1},neon:{value:1},loopLen:{value:LOOP_LEN}},
   vertexShader:`
-    attribute vec3 color; attribute vec4 info; uniform float time,scale,neon; varying vec3 vC; varying float vA;
+    attribute vec3 color; attribute vec4 info; uniform float time,scale,neon,loopLen; varying vec3 vC; varying float vA;
     float h(float n){return fract(sin(n)*43758.5453);}
+    // 角速度 w（弧度/秒）；循環模式下取整成「每 loopLen 秒剛好 n 圈」，首尾接得上
+    float q(float w){ return loopLen>0. ? 6.2831853*max(1.,floor(w*loopLen/6.2831853+.5))/loopLen : w; }
     void main(){
       float ph=info.x, sp=info.y, kind=info.z; float a=1.;
       if(kind<0.5){
-        a=.8+.2*sin(time*sp+ph);
-        float slot=floor(time*.15+ph); a*=mix(1.,step(.12,h(slot*13.1+ph)),neon);
+        a=.8+.2*sin(time*q(sp)+ph);
+        float slot=loopLen>0. ? mod(floor(time*2./loopLen+ph),2.) : floor(time*.15+ph);
+        a*=mix(1.,step(.12,h(slot*13.1+ph)),neon);
       } else if(kind<1.5){
-        float b=step(.45,fract(time*sp*.5+ph*.01)); a=mix(.95,mix(.15,1.15,b),neon);
+        float b=step(.45,fract(time*q(sp*3.14159265)/6.2831853+ph*.01)); a=mix(.95,mix(.15,1.15,b),neon);
       } else if(kind<2.5){
-        float b=.5+.5*sin(time*sp*3.-ph*6.); a=mix(.95,.25+.95*b,neon);
+        float b=.5+.5*sin(time*q(sp*3.)-ph*6.); a=mix(.95,.25+.95*b,neon);
       } else {
-        float b=pow(max(0.,sin(time*sp+ph)),14.); a=.35+1.3*b;
+        float b=pow(max(0.,sin(time*q(sp)+ph)),14.); a=.35+1.3*b;
       }
       vC=color; vA=a;
       vec4 mv=modelViewMatrix*vec4(position,1.);
@@ -506,7 +516,7 @@ let resH=270, bloomOn=true, reflOn=true;
 const lowRT=new THREE.WebGLRenderTarget(1,1,{minFilter:THREE.NearestFilter,magFilter:THREE.NearestFilter});
 const bloomRT=new THREE.WebGLRenderTarget(1,1,{minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter});
 const quadMat=new THREE.ShaderMaterial({
-  uniforms:{tLow:{value:lowRT.texture},tBloom:{value:bloomRT.texture},bloom:{value:1},expo:{value:0.78}},
+  uniforms:{tLow:{value:lowRT.texture},tBloom:{value:bloomRT.texture},bloom:{value:1},expo:{value:EXPO}},
   vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`,
   fragmentShader:`
     uniform sampler2D tLow,tBloom;uniform float bloom,expo;varying vec2 vUv;
@@ -557,7 +567,8 @@ addEventListener('resize',resize);
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const t0=performance.now();
 function frame(now){
-  lightMat.uniforms.time.value=reduce?0:(now-t0)/1000;
+  const el=(now-t0)/1000;
+  lightMat.uniforms.time.value=FIXED_T!==null?FIXED_T:reduce?0:LOOP_LEN>0?el%LOOP_LEN:el;
   renderRoom(lowRT,reflOn);
   if(bloomOn) renderRoom(bloomRT,false);
   quadMat.uniforms.bloom.value=bloomOn?1:0;
@@ -573,6 +584,7 @@ $('neonBtn').onclick=e=>{const on=lightMat.uniforms.neon.value?0:1;lightMat.unif
 $('bloomBtn').onclick=e=>{bloomOn=!bloomOn;e.currentTarget.setAttribute('aria-pressed',String(bloomOn));};
 $('reflBtn').onclick=e=>{reflOn=!reflOn;e.currentTarget.setAttribute('aria-pressed',String(reflOn));};
 $('expo').oninput=e=>{quadMat.uniforms.expo.value=+e.target.value;};
+$('expo').value=EXPO;
 addEventListener('keydown',e=>{if(e.key==='h'||e.key==='H')document.body.classList.toggle('clean');});
 
 resize();

@@ -25,6 +25,16 @@
 
 時間軸的 scene 寫 `"stage": "<舞台名稱>"` 就會用這個舞台；`host` 省略 = 用舞台存的主持人站位。
 
+### 舞台自帶的常駐動畫（不用寫進時間軸）
+
+- **主持人說話**：pose 是 `full_mic_hold` 時，主持人改用 SVG 骨架（`assets/host-svg/` → `node scripts/host-rig.mjs` → `src/generated/host-rigs.json`），
+  嘴巴一直開合、握麥克風的手輕微上下動。不想讓他講話時，scene 的 host 寫 `"talk": false`。
+- **對話泡泡**：舞台物件寫 `"anim": "chat"`（目前給 `expression_chat`）→ 泡泡上下浮動、三個點輪流跳。
+- **3D 背景燈光閃爍**：`node scripts/bg3d-loop.mjs scenes3d/<名稱>.html` 截一組 4 秒循環的幀到 `public/bg3d/<名稱>-480x270-loop/`，
+  再跑 `npm run assets`，用到這張背景的舞台在影片裡就會播循環版（窗外城市燈光閃爍）。改了 3D 場景（亮度等）要重跑一次。
+
+介紹類 scene 一般直接用 `introduce` 舞台，要介紹的東西用 `BeamDrop` 從天而降放到舞台上即可。
+
 ## 2. 用 target 指名物件
 
 任何需要 x / y 的組件都可以改寫 `target`，座標自動抓物件位置：

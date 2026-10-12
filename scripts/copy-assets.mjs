@@ -116,6 +116,12 @@ fs.writeFileSync(path.join(GENERATED, "character.json"), JSON.stringify(characte
 const stages = {};
 for (const f of STAGE_FILES) {
   const spec = JSON.parse(fs.readFileSync(f, "utf8"));
+  // 3D 背景有循環版（scripts/bg3d-loop.mjs 產生）時，影片裡改播循環版（燈光閃爍）
+  if (spec.bg3d?.image) {
+    const loopDir = spec.bg3d.image.replace(/\.png$/i, "-loop");
+    const lj = path.join(PROJECT, "public", loopDir, "loop.json");
+    if (fs.existsSync(lj)) spec.bg3d.loop = { dir: loopDir, ...JSON.parse(fs.readFileSync(lj, "utf8")) };
+  }
   stages[spec.name || path.basename(f, ".json")] = spec;
 }
 fs.writeFileSync(path.join(GENERATED, "stages.json"), JSON.stringify(stages, null, 1));

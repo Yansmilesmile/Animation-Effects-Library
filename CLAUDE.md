@@ -21,6 +21,8 @@ npm run assets                                            # 新增素材或舞�
 node scripts/stills.mjs Timeline 0 45 120 --props-file=timelines/<名稱>.json   # 截指定幀到 out/stills/，自檢用
 node scripts/render-timeline.mjs timelines/<名稱>.json    # 渲染成 out/<名稱>.mp4
 npm run typecheck
+node scripts/bg3d-loop.mjs scenes3d/<名稱>.html          # 3D 背景截成循環幀（燈光閃爍）；之後跑 npm run assets
+node scripts/host-rig.mjs                                 # 改了 assets/host-svg 或骨架設定後重產主持人說話骨架
 ```
 
 ## 自檢

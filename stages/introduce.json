@@ -1,0 +1,105 @@
+{
+ "name": "introduce",
+ "wall": {
+  "color": "#141c3c"
+ },
+ "floor": {
+  "y": 146,
+  "color": "#24170f",
+  "planks": true
+ },
+ "items": [
+  {
+   "id": "imv5thf305",
+   "name": "木箱（無蓋）",
+   "asset": "_自動拆分/Interior_Decoration_室内装饰/Interior_1/Interior_1_036.png",
+   "x": 205,
+   "y": 165,
+   "scale": 1,
+   "flipX": false,
+   "depth": "front"
+  },
+  {
+   "id": "imv5tpocj8",
+   "name": "茶壺與茶杯",
+   "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合_png/74.png",
+   "x": 191,
+   "y": 149,
+   "scale": 1,
+   "flipX": true,
+   "depth": "front"
+  },
+  {
+   "id": "imv5twste17",
+   "name": "expression_chat",
+   "asset": "Asset_Packs_素材套图/FarmLife/expression_chat.png",
+   "x": 212,
+   "y": 72,
+   "scale": 1.5,
+   "flipX": false,
+   "depth": "main",
+   "rotate": 0,
+   "anim": "chat"
+  },
+  {
+   "id": "imv5u2suh19",
+   "name": "木箱（無蓋） 2",
+   "asset": "_自動拆分/Interior_Decoration_室内装饰/Interior_1/Interior_1_036.png",
+   "x": 268,
+   "y": 165,
+   "scale": 1,
+   "flipX": false,
+   "depth": "front"
+  },
+  {
+   "id": "imv5u6dvl22",
+   "name": "蠟燭",
+   "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合3_png/37.png",
+   "x": 366,
+   "y": 82,
+   "scale": 1,
+   "flipX": true,
+   "depth": "main"
+  },
+  {
+   "id": "imv5u6nc923",
+   "name": "蠟燭 2",
+   "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合3_png/37.png",
+   "x": 102,
+   "y": 82,
+   "scale": 1,
+   "flipX": false,
+   "depth": "front"
+  },
+  {
+   "id": "imv5u9zwp24",
+   "name": "打開的書本",
+   "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/18.png",
+   "x": 205,
+   "y": 126,
+   "scale": 1,
+   "flipX": false,
+   "depth": "front",
+   "rotate": 0
+  }
+ ],
+ "lights": [],
+ "host": {
+  "pose": "full_mic_hold",
+  "x": 194,
+  "y": 119,
+  "scale": 1,
+  "flipX": true
+ },
+ "bg3d": {
+  "x": -6,
+  "y": -62,
+  "scale": 0.9,
+  "html": "scenes3d/金色頂層辦公室.html",
+  "image": "bg3d/金色頂層辦公室-480x270.png",
+  "w": 480,
+  "h": 270,
+  "keepWallFloor": false,
+  "locked": false
+ }
+}

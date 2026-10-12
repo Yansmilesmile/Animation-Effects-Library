@@ -44,6 +44,10 @@ export type SpriteProps = {
   /** false = 不參與 PixelStage 的 bloom（淺色但不該發光的東西，例如地毯），預設 true */
   bloom?: boolean;
   style?: React.CSSProperties;
+  /** 疊在素材上的內容（和素材同大小的框，例如 viewBox 為素材原生像素的 SVG）；主持人說話骨架、對話泡泡的點用 */
+  overlay?: React.ReactNode;
+  /** true = 不畫素材圖本身，只畫 overlay（overlay 取代整張圖） */
+  hideImage?: boolean;
 };
 
 type Meta = {
@@ -93,6 +97,8 @@ export const Sprite: React.FC<SpriteProps> = ({
   opacity = 1,
   bloom = true,
   style,
+  overlay,
+  hideImage = false,
 }) => {
   const frame = useCurrentFrame();
   const inBloomPass = useBloomPass();
@@ -167,18 +173,21 @@ export const Sprite: React.FC<SpriteProps> = ({
         </svg>
       ) : null}
       <div style={{ width: w, height: h, overflow: "hidden", position: "relative" }}>
-        <Img
-          src={src}
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            width: meta.w * scale,
-            height: meta.h * scale,
-            imageRendering: "pixelated",
-            transform: isAnim ? `translate(${-col * w}px, ${-row * h}px)` : undefined,
-          }}
-        />
+        {hideImage ? null : (
+          <Img
+            src={src}
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: meta.w * scale,
+              height: meta.h * scale,
+              imageRendering: "pixelated",
+              transform: isAnim ? `translate(${-col * w}px, ${-row * h}px)` : undefined,
+            }}
+          />
+        )}
+        {overlay ? <div style={{ position: "absolute", inset: 0 }}>{overlay}</div> : null}
       </div>
     </div>
   );

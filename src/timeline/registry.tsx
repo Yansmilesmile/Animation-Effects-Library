@@ -46,7 +46,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     props: { asset: "string", assetQuery: "string", ...POS, ...SPRITE_LOOK, animFps: "number", row: "number", frameIndex: "number" },
     check: (p) => (p.asset ? [] : p.assetQuery ? [`assetQuery「${p.assetQuery}」尚未解析成 asset，請先執行解析並使用鎖定版 JSON`] : ["缺少 asset"]),
   },
-  Host: { component: Host, layer: "world", code: "主持人", props: { pose: "string", ...POS, ...SPRITE_LOOK }, required: ["pose"] },
+  Host: { component: Host, layer: "world", code: "主持人", props: { pose: "string", talk: "boolean", ...POS, ...SPRITE_LOOK }, required: ["pose"] },
   Ambience: { component: Ambience, layer: "world", code: "G", props: { layers: "array" }, required: ["layers"] },
 
   // ── 強調 ──
