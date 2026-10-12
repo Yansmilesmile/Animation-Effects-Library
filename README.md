@@ -1,58 +1,178 @@
-# 超級人機 · 像素動效組件（Remotion）
+# 超級人機 · 像素動效組件庫（Remotion）
 
-目前進度：第零批（素材複製、Sprite、Host）+ 第一批（PixelStage、Camera、Ambience、Subtitle、TopNav、Watermark）
-+ 第二批強調類（RingPulse、Tag、Stamp、SunBurst、GlowText、BeamDrop、MissPop，在 `src/components/emphasis/`）。
+知識類短影片頻道「超級人機」的像素風動效組件。依《動效詞典 v2》第六節「必須遵守」的風格常量實作，
+用 Remotion（React + TypeScript）逐幀渲染，1920×1080、30fps，可直接匯出 mp4。
 
-+ 第三批結構類（LevelTitleCard、LevelTransition iris/tilt、Counter、CrowdGrid、Spotlight，在 `src/components/structure/`）。
+風格：**像素素材 + 現代光影**。角色、道具、UI 是硬邊像素；bloom、暗角、景深、光束是平滑的光影層。
+色彩語義固定：金 = 好 / 價值、紅 = 壞 / 否定 / 歸零、深藍 = 夜晚 / 普通的你。
 
-+ 第四批片尾模板（ChestDeal、SkillCard、SkillSummary、GamePopup follow/input/achievement/ending、NextTeaser，在 `src/components/ending/`）。
+---
 
-展示：`Showcase1`（第零、一批）、`Showcase2`（第二批）、`Showcase3`（第三批）、`Showcase4`（第四批：照詞典片尾模板順序演一遍）、`Test3D`（3D 試驗）。
-
-強調組件的 `useCurrentFrame()` 是「觸發後經過的幀數」，時間軸用 `<Sequence from={觸發幀}>` 包住。
-跟物件走的（光環、標籤）放在 PixelStage 的 children；不跟鏡頭動的（印章泛紅、發光大字）放在 `hud`。
-
-構圖：人物和物品站在畫面 80% 高度的地面線（底部往上 20%，剛好在字幕上方）。
-`Camera` 預設取景 `shot()` 放大 1.5 倍（每像素 6 螢幕 px），世界座標的地面線 `WORLD.groundY = 160` 會落在畫面 80%；
-預設取景下看得到世界 x 80–400、y 16–196。要廣角就 `pull` 到 zoom 1。
-
-## 指令
+## 快速開始
 
 ```powershell
 npm install
-npm run assets                              # 從素材庫複製用到的素材到 public/lib/，產生 src/generated/asset-meta.json
-npx remotion studio                         # 預覽（或 npm run studio，會先跑 assets）
-npx remotion render Showcase1 out/showcase1.mp4
-node scripts/stills.mjs Showcase1 60 230    # 輸出指定幀的截圖到 out/stills/
+npm run assets          # 從素材庫複製用到的素材到 public/lib/（需要本機素材庫，見「素材」）
+npx remotion studio     # 預覽（或 npm run studio，會先跑 assets）
 ```
+
+匯出與截圖：
+
+```powershell
+npx remotion render Showcase4 out/showcase4.mp4
+node scripts/stills.mjs Showcase4 50 440 700   # 一次打包，輸出指定幀的截圖到 out/stills/
+```
+
+## 展示 Composition
+
+| ID | 內容 |
+|---|---|
+| `Showcase1` | 第零、一批：Sprite / Host、PixelStage、Camera、Ambience、Subtitle、TopNav、Watermark |
+| `Showcase2` | 第二批強調類，最後一段示範「字幕高亮詞那一幀觸發光環 + 標籤」 |
+| `Showcase3` | 第三批結構類：標題卡、進關轉場、計數器、群像網格、聚光燈 |
+| `Showcase4` | 第四批片尾模板，照詞典「片尾模板」的順序演一遍 |
+| `Test3D` | 3D 試驗：Three.js 長廊當背景，2D 組件疊在上面 |
+
+---
+
+## 組件一覽
+
+括號是《動效詞典 v2》的編號。
+
+### 第零批：素材（`src/components/`）
+
+| 組件 | 用途 |
+|---|---|
+| `Sprite` | 顯示素材庫的單張圖或動畫條。原生尺寸繪製、整數倍放大；動畫 8–12fps 逐格播放、不補間；支援 `flipX`、`tint`（red / gray / gold / #hex）、`glow`、`bloom={false}` |
+| `Host` | 主持人「超級人機」（`Me_我的像素人物/pixel/`，33 個姿勢），`pose` 用 character.json 的 name |
+| `PixelBitmap` | 用字串畫小型像素圖（✕、王冠、星星、鎖、汗滴、游標、獎盃） |
+| `ErrorBox` | 素材、姿勢、參數錯誤時在畫面上顯示紅框 |
+
+### 第一批：畫面基底（`src/components/`）
+
+| 組件 | 用途 |
+|---|---|
+| `PixelStage` | 場景容器：480×270 像素層 ×4、bloom（亮度門檻）、暗角；`hud`（像素座標、不跟鏡頭）、`ui`（螢幕座標） |
+| `Layer` | 像素層裡的圖層，做背景景深（模糊、壓暗） |
+| `Camera`（A4 / A5 / A6） | push / pull / pan / tilt-push / cut；預設取景 `shot()` 放大 1.5 倍 |
+| `Ambience`（G） | dust、snow、lamp、stars、beam、confetti、zzz，可疊加，固定 seed |
+| `Subtitle` / `Subtitles`（F3） | 底部字幕，白字粗描邊，高亮詞金橙色，換句 2 幀 |
+| `TopNav`（F2） | 頂部章節導航，目前章節高亮、已完成打勾 |
+| `Watermark`（F6） | 右上角「超級人機・主題」 |
+
+### 第二批：強調類（`src/components/emphasis/`）
+
+| 組件 | 用途 |
+|---|---|
+| `RingPulse`（B1） | 光環脈衝：中心白光 + 細線圓環 + 點狀粒子，15 幀 |
+| `Tag`（B2 / B13 / B11） | 標籤：red、dark、hang（吊牌價籤）、locked（未解鎖卡） |
+| `Stamp`（B6 / B3 + A9） | 蓋章；`variant="x"` 是 ✕ + 全畫面泛紅 |
+| `SunBurst`（B5） | 放射光，持續旋轉 |
+| `GlowText`（B7） | 點陣發光大字（最好 / 最差 / ×10,000），可加王冠 |
+| `BeamDrop`（B12 + B4） | 光柱降臨：核心物件從天而降 |
+| `MissPop`（B10） | MISS 彈字 + 頭上飄字 + 汗滴 |
+
+### 第三批：結構類（`src/components/structure/`）
+
+| 組件 | 用途 |
+|---|---|
+| `LevelTitleCard`（C8） | 關卡標題卡「第 N 關｜規則」，殘影錯位離場 |
+| `LevelTransition`（A21 / A6） | `type="iris"` 圓形遮罩；`type="tilt"` 俯仰推入 |
+| `Counter`（D1 / C41 / C20 / C62） | 翻牌計數機：數字跳動、換標籤、歸零碎裂變紅、復活 |
+| `CrowdGrid`（A1 / A18 / A2） | 群像網格：zoom-out、pull-out、push-in |
+| `Spotlight`（A13） | 聚光燈收窄 |
+
+### 第四批：片尾模板（`src/components/ending/`）
+
+| 組件 | 用途 |
+|---|---|
+| `ChestDeal`（C24） | 正面寶箱掉落 → 搖晃透光 → 半開 → 全開 → N 張「?」卡扇形飛出；`pace` 調節奏（預設 1.5） |
+| `SkillCard`（C25 + C11 + C59） | 技能卡：從扇形位置飛到中央 → 翻面 → 示範動畫（`renderDemo`）→ 收到左上角 |
+| `SkillSummary`（C59） | 三張卡飛回扇形展開「已習得 N/N」 |
+| `GamePopup`（C29 / C30 / B9） | `follow` 關注邀請、`input` 留言框、`achievement` 成就解鎖、`ending` 解鎖結局小牌 |
+| `NextTeaser`（C32） | 右上角 ??? 下集預告框 |
+
+---
+
+## 使用規則
+
+### 座標與構圖
+
+- **像素層 480×270，整層放大 4 倍。** PixelStage 的 children、Sprite、Host、Ambience 用像素層（世界）座標，座標取整數。
+- **構圖**：人物和物品站在畫面 80% 高度的地面線（底部往上 20%），剛好在字幕上方，字幕不擋人。
+- **預設取景**：`Camera` 沒給 `initial` 時用 `shot()`，放大 1.5 倍（每像素 6 螢幕 px，仍是整數倍）。
+  世界座標的地面線 `WORLD.groundY = 160` 會落在畫面 80%；可見範圍是世界 x 80–400、y 16–196。要廣角就 `pull` 到 zoom 1。
+- **三個圖層**：
+  - `children`：跟鏡頭走的場景內容（人物、道具、跟著物件的光環和標籤）。
+  - `hud`：像素座標、不跟鏡頭動、會參與 bloom（標題卡、發光大字、技能卡、彈窗）。
+  - `ui`：螢幕座標 1920×1080（字幕、導航、浮水印）。
+- 世界座標換成畫面座標用 `worldToScreen(cam, x, y)`（例如寶箱上的卡片飛進 hud 的技能卡）。
+
+### 時間
+
+- 所有動畫只由 `useCurrentFrame()` 計算，不用 CSS transition / setTimeout，每次渲染結果一致。
+- 強調和片尾組件的 `useCurrentFrame()` 是「觸發後經過的幀數」，時間軸用 `<Sequence from={觸發幀}>` 包住。
+- 字幕高亮詞可以帶 `at`（念出的幀），強調動效對準這一幀觸發（詞典規則 2）。
+
+### 節奏（詞典規則 10）
+
+- 強調元素（標籤、印章、標題卡）：瞬間出現或 2–3 幀回彈。
+- 鏡頭和光：平滑緩動 `cubic-bezier(.65,0,.35,1)`。
+- 掉落、彈出的道具：帶彈跳。
+
+---
 
 ## 素材
 
-- 素材庫 `D:/桌面/PixelSRPG-Forge-main`、索引 `D:/桌面/asset_index` 都只讀。
-- 要用的素材列在 `assets.list.json`（之後改成由 assetQuery 解析出的 `*.lock.json`），執行 `npm run assets` 後才能在組件裡用。
+- 素材庫 `D:/桌面/PixelSRPG-Forge-main`、索引 `D:/桌面/asset_index` **只讀**，不修改。
+- 要用的素材列在 `assets.list.json`，執行 `npm run assets` 複製到 `public/lib/`，並產生 `src/generated/asset-meta.json`（尺寸與動畫格子）。
 - 主持人 `Me_我的像素人物/pixel/*` 和 `character.json` 會自動複製。
-- 動畫格子資訊來自 `inventory.csv`；檔名帶 `(寬x高)` 時以檔名為準（索引偶爾判錯，例如 Slime）。
-- 沒登記的素材、不存在的姿勢、錯誤的參數，會在畫面上顯示紅框錯誤。
+- 動畫格子資訊來自 `inventory.csv`；檔名帶 `(寬x高)` 時以檔名為準（索引偶爾判錯，例如 Slime 被判成 88×30）。
+- `public/lib/` 不進 git（素材包與個人形象不公開散布）。clone 下來後，在有素材庫的電腦上執行 `npm run assets` 即可。
 
 ## 字體
 
 `public/fonts/fusion-pixel-12px-zh_tw.woff2`（Fusion Pixel Font，OFL-1.1，可商用，授權檔在同一資料夾）。
-只用 12 的整數倍字號（24 / 36 / 48 / 60 / 96）。換字體改 `src/fonts.ts`。
+只用 12 的整數倍字號（12 / 24 / 36 / 48 / 60 / 96），字才不會糊。換字體改 `src/fonts.ts`。
 
-## 座標
+## 3D（試驗，方案一：3D 當背景、2D 疊在上面）
 
-- 像素層 480×270，整層放大 4 倍。PixelStage 的 children、Sprite、Host、Ambience、Camera 都用像素層座標。
-- PixelStage 的 `ui`（Subtitle、TopNav、Watermark）用螢幕座標 1920×1080。
+`Test3D`（`src/three/MuseumHall.tsx`、`src/showcase/Test3D.tsx`）：
 
-## 3D（試驗）
-
-`Test3D`：Three.js 場景當背景，2D 組件疊在上面（`src/three/MuseumHall.tsx`、`src/showcase/Test3D.tsx`）。
-- 3D 以 320×180、無抗鋸齒渲染，放大成像素層 480×270 → 每個 3D 像素 6px，和 1.5 倍取景下的 2D 素材一樣大。
-- 鏡頭路徑寫成純函式，`project(frame, [x,y,z])` 把 3D 座標換成畫面座標，2D 的光環、標籤就能跟著 3D 物件走。
-- bloom 層不重畫 3D（避免兩個 WebGL 畫面）。
+- Three.js 以 320×180、無抗鋸齒渲染，放大成 480×270 → 每個 3D 像素 6px，和 1.5 倍取景下的 2D 素材一樣大。
+- 鏡頭路徑寫成純函式，`project(frame, [x, y, z])` 把 3D 座標換成畫面座標，2D 的光環、標籤就能跟著 3D 物件走。
+- bloom 層不重畫 3D（避免兩個 WebGL 畫面）；3D 物件要發光之後可加 Three.js 後製 bloom。
 - 渲染需要 `remotion.config.ts` 的 `setChromiumOpenGlRenderer("angle")`。
+
+---
+
+## 專案結構
+
+```
+src/
+  components/          第零、一批 + 共用（Sprite、Host、PixelStage、Camera、Ambience…）
+    emphasis/          第二批強調類
+    structure/         第三批結構類
+    ending/            第四批片尾模板
+  scenes/StudyRoom.tsx 試驗用的書房場景（用素材拼的臨時場景，不是正式舞台組件）
+  showcase/            展示 Composition
+  three/               3D 試驗場景
+  generated/           npm run assets 產生的素材資訊
+  theme.ts             色彩 tokens、像素層、構圖常數
+scripts/
+  copy-assets.mjs      素材複製
+  stills.mjs           批次截圖
+```
+
+## 待辦
+
+- 讀 JSON 的總合成：時間軸型別、`"@詞"` 對準字幕高亮詞觸發、組件名稱或參數錯誤時顯示紅框。
+- `assetQuery` 自動解析（呼叫 search.py 的邏輯）與鎖定版 `*.lock.json`。
+- 給分鏡 AI 看的組件清單 markdown，以及 20–30 秒的 JSON 驅動示範片段。
+- 正式的舞台預設組件（「家」舞台可切換燈光與道具），取代試驗用書房。
 
 ## 已知限制
 
-- Node 22.9 在 Windows 上對含「【】」的路徑呼叫 `mkdirSync({recursive:true})` 會崩潰，copy-assets 已改成逐層建立。
-- Camera 縮放倍率不是整數時，像素寬度會略有不均（平滑鏡頭的必然代價）；tilt-push 期間畫面會稍微柔化。
+- Node 22.9 在 Windows 上對含「【】」的路徑呼叫 `mkdirSync({ recursive: true })` 會崩潰，copy-assets 已改成逐層建立。
+- Camera 縮放倍率不是 0.25 的倍數時，像素寬度會略有不均；tilt-push 期間畫面會稍微柔化。
+- 字號小於 12 的文字（例如縮小後的技能卡）不再是像素清晰。
