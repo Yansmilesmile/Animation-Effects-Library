@@ -1,0 +1,9 @@
+node_modules/
+# 渲染輸出（影片、截圖），可以重新產生
+out/
+# 從素材庫複製的素材（素材包與個人形象，不公開散布）；執行 npm run assets 重新複製
+public/lib/
+.remotion/
+*.log
+.DS_Store
+Thumbs.db

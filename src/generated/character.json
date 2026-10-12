@@ -1,0 +1,625 @@
+{
+ "poses": [
+  {
+   "name": "full_front",
+   "file": "pixel/full_front.png",
+   "width": 27,
+   "height": 51,
+   "description": "me 全身正面站姿",
+   "source": "me1.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "自我介紹",
+    "日常",
+    "上班",
+    "旁白"
+   ],
+   "head_height": 27
+  },
+  {
+   "name": "full_front_right",
+   "file": "pixel/full_front_right.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身右前方 3/4 側站姿",
+   "source": "me1.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "日常",
+    "對話",
+    "上班",
+    "通勤"
+   ],
+   "head_height": 27
+  },
+  {
+   "name": "full_side_right",
+   "file": "pixel/full_side_right.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身右側面站姿",
+   "source": "me1.png",
+   "type": "full",
+   "facing": "side",
+   "emotion": "平靜",
+   "tags": [
+    "走路",
+    "通勤",
+    "移動",
+    "上班"
+   ],
+   "head_height": 26
+  },
+  {
+   "name": "full_back_left",
+   "file": "pixel/full_back_left.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身左後方 3/4 背影",
+   "source": "me1.png",
+   "type": "full",
+   "facing": "back",
+   "emotion": "平靜",
+   "tags": [
+    "離開",
+    "下班",
+    "回頭",
+    "背影"
+   ],
+   "head_height": 25
+  },
+  {
+   "name": "full_back",
+   "file": "pixel/full_back.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身背面",
+   "source": "me1.png",
+   "type": "full",
+   "facing": "back",
+   "emotion": "平靜",
+   "tags": [
+    "下班",
+    "離開",
+    "背影",
+    "回顧"
+   ],
+   "head_height": 25
+  },
+  {
+   "name": "full_back_right",
+   "file": "pixel/full_back_right.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身右後方 3/4 背影",
+   "source": "me1.png",
+   "type": "full",
+   "facing": "back",
+   "emotion": "平靜",
+   "tags": [
+    "離開",
+    "下班",
+    "遠望",
+    "背影"
+   ],
+   "head_height": 25
+  },
+  {
+   "name": "full_phone_smile",
+   "file": "pixel/full_phone_smile.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身，雙手拿手機、瞇眼微笑",
+   "source": "me2.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "開心",
+   "tags": [
+    "賺錢",
+    "看手機",
+    "好消息",
+    "社群"
+   ],
+   "head_height": 26
+  },
+  {
+   "name": "full_mic_talk",
+   "file": "pixel/full_mic_talk.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身，雙手握麥克風說話",
+   "source": "me2.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "認真",
+   "tags": [
+    "發表",
+    "演講",
+    "訪談",
+    "直播"
+   ],
+   "head_height": 27
+  },
+  {
+   "name": "full_mic_hold",
+   "file": "pixel/full_mic_hold.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身，單手拿麥克風、另一手握拳",
+   "source": "me2.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "發表",
+    "主持",
+    "演講",
+    "訪談"
+   ],
+   "head_height": 27
+  },
+  {
+   "name": "full_surprised_explain",
+   "file": "pixel/full_surprised_explain.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身，冒汗驚訝地比手勢說明",
+   "source": "me2.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "緊張",
+   "tags": [
+    "解釋",
+    "出包",
+    "會議",
+    "被質問"
+   ],
+   "head_height": 26
+  },
+  {
+   "name": "full_point_happy",
+   "file": "pixel/full_point_happy.png",
+   "width": 31,
+   "height": 51,
+   "description": "me 全身，開心地指向前方",
+   "source": "me2.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "開心",
+   "tags": [
+    "推薦",
+    "介紹",
+    "成功",
+    "指引"
+   ],
+   "head_height": 26
+  },
+  {
+   "name": "full_laugh_clasp",
+   "file": "pixel/full_laugh_clasp.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身，雙手交握、瞇眼大笑",
+   "source": "me2.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "開心",
+   "tags": [
+    "成功",
+    "慶祝",
+    "感謝",
+    "賺錢"
+   ],
+   "head_height": 26
+  },
+  {
+   "name": "full_sit_cheer",
+   "file": "pixel/full_sit_cheer.png",
+   "width": 33,
+   "height": 50,
+   "description": "me 全身，坐在地上舉拳、開心微笑",
+   "source": "me3.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "開心",
+   "tags": [
+    "慶祝",
+    "放假",
+    "休息",
+    "賺錢"
+   ],
+   "head_height": 26
+  },
+  {
+   "name": "full_wave_talk",
+   "file": "pixel/full_wave_talk.png",
+   "width": 31,
+   "height": 51,
+   "description": "me 全身，揮手說話",
+   "source": "me3.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "熱情",
+   "tags": [
+    "打招呼",
+    "發表",
+    "開場",
+    "對話"
+   ],
+   "head_height": 25
+  },
+  {
+   "name": "full_mic_sing",
+   "file": "pixel/full_mic_sing.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身，閉眼拿麥克風唱歌",
+   "source": "me3.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "陶醉",
+   "tags": [
+    "唱歌",
+    "尾牙",
+    "表演",
+    "慶祝"
+   ],
+   "head_height": 27
+  },
+  {
+   "name": "full_nervous_teary",
+   "file": "pixel/full_nervous_teary.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身，冒汗、眼眶含淚緊張站著",
+   "source": "me3.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "緊張",
+   "tags": [
+    "出包",
+    "被罵",
+    "破產",
+    "壓力"
+   ],
+   "head_height": 26
+  },
+  {
+   "name": "full_point_nervous",
+   "file": "pixel/full_point_nervous.png",
+   "width": 31,
+   "height": 51,
+   "description": "me 全身，冒汗指向前方",
+   "source": "me3.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "緊張",
+   "tags": [
+    "推卸責任",
+    "解釋",
+    "出包",
+    "會議"
+   ],
+   "head_height": 26
+  },
+  {
+   "name": "full_crouch_cry",
+   "file": "pixel/full_crouch_cry.png",
+   "width": 28,
+   "height": 51,
+   "description": "me 全身，蹲著抱膝哭泣",
+   "source": "me3.png",
+   "type": "full",
+   "facing": "front",
+   "emotion": "崩潰",
+   "tags": [
+    "破產",
+    "失敗",
+    "低潮",
+    "失戀"
+   ],
+   "head_height": 26
+  },
+  {
+   "name": "half_laptop",
+   "file": "pixel/half_laptop.png",
+   "width": 34,
+   "height": 40,
+   "description": "me 半身，坐在桌前用筆電打字",
+   "source": "me4.png",
+   "type": "half",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "加班",
+    "工作",
+    "寫程式",
+    "遠端"
+   ],
+   "head_height": 24
+  },
+  {
+   "name": "half_phone_call",
+   "file": "pixel/half_phone_call.png",
+   "width": 26,
+   "height": 40,
+   "description": "me 半身，手貼耳邊講電話",
+   "source": "me4.png",
+   "type": "half",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "講電話",
+    "業務",
+    "工作",
+    "聯絡"
+   ],
+   "head_height": 23
+  },
+  {
+   "name": "half_phone_call_alt",
+   "file": "pixel/half_phone_call_alt.png",
+   "width": 27,
+   "height": 40,
+   "description": "me 半身，拿手機講電話（另一款）",
+   "source": "me4.png",
+   "type": "half",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "講電話",
+    "客服",
+    "工作",
+    "聯絡"
+   ],
+   "head_height": 23
+  },
+  {
+   "name": "half_read_paper",
+   "file": "pixel/half_read_paper.png",
+   "width": 22,
+   "height": 32,
+   "description": "me 半身，雙手拿文件閱讀",
+   "source": "me4.png",
+   "type": "half",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "看文件",
+    "審閱",
+    "報告",
+    "工作"
+   ],
+   "head_height": 20
+  },
+  {
+   "name": "half_present_coffee",
+   "file": "pixel/half_present_coffee.png",
+   "width": 33,
+   "height": 32,
+   "description": "me 半身，一手拿咖啡、一手指向旁邊做簡報",
+   "source": "me4.png",
+   "type": "half",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "發表",
+    "簡報",
+    "會議",
+    "教學"
+   ],
+   "head_height": 18
+  },
+  {
+   "name": "half_coffee_document",
+   "file": "pixel/half_coffee_document.png",
+   "width": 26,
+   "height": 32,
+   "description": "me 半身，一手拿咖啡、一手拿文件",
+   "source": "me4.png",
+   "type": "half",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "早晨",
+    "上班",
+    "看報告",
+    "會議"
+   ],
+   "head_height": 18
+  },
+  {
+   "name": "half_desk_sleep_side",
+   "file": "pixel/half_desk_sleep_side.png",
+   "width": 34,
+   "height": 27,
+   "description": "me 半身，側臉趴在桌上睡覺",
+   "source": "me4.png",
+   "type": "half",
+   "facing": "front",
+   "emotion": "疲憊",
+   "tags": [
+    "加班",
+    "熬夜",
+    "午睡",
+    "累倒"
+   ],
+   "head_height": 18
+  },
+  {
+   "name": "half_desk_sleep",
+   "file": "pixel/half_desk_sleep.png",
+   "width": 34,
+   "height": 26,
+   "description": "me 半身，趴在桌上睡覺",
+   "source": "me4.png",
+   "type": "half",
+   "facing": "front",
+   "emotion": "疲憊",
+   "tags": [
+    "加班",
+    "熬夜",
+    "午睡",
+    "摸魚"
+   ],
+   "head_height": 18
+  },
+  {
+   "name": "half_panic",
+   "file": "pixel/half_panic.png",
+   "width": 29,
+   "height": 30,
+   "description": "me 半身，雙手抓頭崩潰大叫",
+   "source": "me4.png",
+   "type": "half",
+   "facing": "front",
+   "emotion": "崩潰",
+   "tags": [
+    "破產",
+    "截止日",
+    "出包",
+    "加班"
+   ],
+   "head_height": 18
+  },
+  {
+   "name": "bust_front",
+   "file": "pixel/bust_front.png",
+   "width": 31,
+   "height": 51,
+   "description": "me 胸像正面",
+   "source": "me5.png",
+   "type": "bust",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "自我介紹",
+    "頭像",
+    "對話",
+    "旁白"
+   ],
+   "head_height": 31
+  },
+  {
+   "name": "bust_front_right",
+   "file": "pixel/bust_front_right.png",
+   "width": 32,
+   "height": 51,
+   "description": "me 胸像，微向右轉的正面",
+   "source": "me5.png",
+   "type": "bust",
+   "facing": "front",
+   "emotion": "平靜",
+   "tags": [
+    "對話",
+    "頭像",
+    "旁白",
+    "思考"
+   ],
+   "head_height": 33
+  },
+  {
+   "name": "bust_side_right",
+   "file": "pixel/bust_side_right.png",
+   "width": 32,
+   "height": 51,
+   "description": "me 胸像右側面",
+   "source": "me5.png",
+   "type": "bust",
+   "facing": "side",
+   "emotion": "平靜",
+   "tags": [
+    "對話",
+    "思考",
+    "側臉",
+    "旁白"
+   ],
+   "head_height": 31
+  },
+  {
+   "name": "bust_back_left",
+   "file": "pixel/bust_back_left.png",
+   "width": 31,
+   "height": 52,
+   "description": "me 胸像左後方 3/4 背影",
+   "source": "me5.png",
+   "type": "bust",
+   "facing": "back",
+   "emotion": "平靜",
+   "tags": [
+    "回頭",
+    "離開",
+    "背影",
+    "回顧"
+   ],
+   "head_height": 29
+  },
+  {
+   "name": "bust_back",
+   "file": "pixel/bust_back.png",
+   "width": 31,
+   "height": 52,
+   "description": "me 胸像背面",
+   "source": "me5.png",
+   "type": "bust",
+   "facing": "back",
+   "emotion": "平靜",
+   "tags": [
+    "背影",
+    "離開",
+    "回顧",
+    "遠望"
+   ],
+   "head_height": 29
+  },
+  {
+   "name": "bust_back_right",
+   "file": "pixel/bust_back_right.png",
+   "width": 33,
+   "height": 52,
+   "description": "me 胸像右後方 3/4 背影",
+   "source": "me5.png",
+   "type": "bust",
+   "facing": "back",
+   "emotion": "平靜",
+   "tags": [
+    "背影",
+    "離開",
+    "遠望",
+    "回顧"
+   ],
+   "head_height": 28
+  }
+ ],
+ "palette": [
+  "#6d6f75",
+  "#888b91",
+  "#b3b6bc",
+  "#fcfcfb",
+  "#23241e",
+  "#e3a27a",
+  "#fdddb0",
+  "#56504c",
+  "#a66950",
+  "#383833",
+  "#a08679",
+  "#0d0c08",
+  "#060603",
+  "#3c425d",
+  "#5d6273",
+  "#f1c696",
+  "#161410",
+  "#cd8a66",
+  "#2c2d29",
+  "#1d1d1a"
+ ],
+ "notes": {
+  "type": "full = 全身（含腳）、half = 腰部以上、bust = 胸像",
+  "facing": "front / side / back；side 一律朝右，需要朝左時水平翻轉即可",
+  "head_height": "頭部像素高度（原尺寸），場景中以 目標頭高 / head_height 作為縮放倍率，可讓不同姿勢大小一致"
+ }
+}

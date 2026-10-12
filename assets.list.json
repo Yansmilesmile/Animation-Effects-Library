@@ -1,0 +1,20 @@
+{
+  "_comment": "第一批暫用的素材清單（相對素材庫根目錄）。之後由 assetQuery 解析出的 *.lock.json 取代。主持人 Me_我的像素人物/pixel/* 會自動複製，不用列。",
+  "paths": [
+    "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/赠品-像素小人和杂物/一些杂物/object_B39.png",
+    "_自動拆分/Interior_Decoration_室内装饰/Interior_1/Interior_1_029.png",
+    "_自動拆分/Interior_Decoration_室内装饰/Interior_1/Interior_1_040.png",
+    "_自動拆分/Interior_Decoration_室内装饰/Interior_1/Interior_1_079.png",
+    "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合2_png/454.png",
+    "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (14)_png/232.png",
+    "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合_png/210.png",
+    "_自動拆分/Interior_Decoration_室内装饰/Interior_1/Interior_1_007.png",
+    "_自動拆分/Interior_Decoration_室内装饰/Interior_1/Interior_1_054.png",
+    "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合2_png/280.png",
+    "Weapons_武器装备/武器装备-冒险岛/172.png",
+    "Weapons_武器装备/武器装备-冒险岛/206.png",
+    "Skill_Icons_技能图标/技能图标/0267.png",
+    "Characters_角色人物/monster/Plant/Idle (44x42).png",
+    "Characters_角色人物/monster/Slime/Idle-Run (44x30).png"
+  ]
+}
