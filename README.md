@@ -118,8 +118,11 @@ node scripts/stills.mjs Showcase4 50 440 700   # 一次打包，輸出指定幀�
 - 換一份時間軸：改 `src/Root.tsx` 的 import，或在 Studio 右側直接編輯 `timeline` props
 
 ```powershell
-npx remotion render Timeline out/timeline.mp4
+npx remotion render Timeline out/timeline.mp4                 # 渲染 Root.tsx 裡預設的 demo.json
+node scripts/render-timeline.mjs timelines/<名稱>.json        # 渲染任一份時間軸 → out/<名稱>.mp4
 ```
+
+給 AI 的入口是根目錄的 `CLAUDE.md`（Claude Code 在這個資料夾開啟時會自動讀取）。
 
 ---
 
