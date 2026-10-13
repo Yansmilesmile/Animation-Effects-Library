@@ -1,0 +1,16 @@
+{
+  "name": "招手",
+  "views": ["front"],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 4, "face": "smile" },
+    { "f": 6, "ease": "out", "pose": { "arm_R_upper": 120, "arm_R_lower": 60 } },
+    { "f": 10, "pose": { "arm_R_lower": 85 } },
+    { "f": 14, "pose": { "arm_R_lower": 40 } },
+    { "f": 18, "pose": { "arm_R_lower": 85 } },
+    { "f": 22, "pose": { "arm_R_lower": 40 } },
+    { "f": 26, "pose": { "arm_R_lower": 60 } }
+  ]
+}

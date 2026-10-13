@@ -37,6 +37,8 @@
 - **時間**：全部以幀為單位（30fps）。scene 內的 `start` 相對於 scene 開頭。
 - **`"@詞"`**：event 的 `start` 寫 `"@重大決定"` 或 `"@重大決定+5"`，對準這個 scene 字幕裡高亮詞的 `at`。
   高亮詞要寫成 `{ "word": "...", "at": 幀 }` 才能被對準（詞典規則 2：高亮詞 = 動效觸發點）。
+  `"@每次+mark:release"`：對準 start 同樣是 `"@每次"` 的 `Act` 動作裡的時間點（例如遞錢的金幣離手），後面還能再加 `+N`。
+- **角色動作**：scene 寫 `actors` 宣告角色，`Act` / `ActorState` 事件讓角色做動作、換裝、變剪影。詳見 `docs/actors.md`。
 - **`duration`**：event 顯示多久；省略 = 到 scene 結束。
 - **`target`**：用名稱指名舞台編輯器裡的物件（或「主持人」），自動帶入座標；`anchor` 選 center / top / bottom，`offset` 再微調。
   `PropFx` 讓物件本身晃動、彈跳、發光、染色、消失、移動。詳見 `docs/stage-for-ai.md`。

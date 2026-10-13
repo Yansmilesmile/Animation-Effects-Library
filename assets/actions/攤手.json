@@ -1,0 +1,13 @@
+{
+  "name": "攤手",
+  "views": ["front"],
+  "duration": 20,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "pose": { "arm_L_upper": 10, "arm_L_lower": 60, "hand_L": 30, "arm_R_upper": 10, "arm_R_lower": 60, "hand_R": 30 } },
+    { "f": 10, "pose": { "head": -6 } },
+    { "f": 14, "pose": { "head": 6 } },
+    { "f": 18, "pose": { "head": 0 } }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "摔倒",
+  "views": ["side"],
+  "duration": 30,
+  "end": "hold",
+  "breathe": false,
+  "keys": [
+    { "f": 0, "pose": { "root": { "dx": 0, "dy": 0, "r": 0 }, "leg_R": { "dx": 0 } } },
+    { "f": 6, "ease": "out", "pose": { "root": { "dx": 2 }, "leg_R": { "dx": 2 } } },
+    { "f": 10, "face": "surprise", "pose": { "root": { "dx": 3, "dy": 2, "r": 10 }, "arm_R_upper": 50, "arm_L_upper": -30, "leg_R": { "dx": 3 } } },
+    { "f": 16, "ease": "in", "pose": { "root": { "dx": 3, "dy": 8, "r": 20 }, "arm_R_upper": 95, "arm_L_upper": -50 } },
+    { "f": 30, "pose": { "root": { "dx": 3, "dy": 8, "r": 20 }, "arm_R_upper": 95, "arm_L_upper": -50 } }
+  ],
+  "fx": [{ "f": 16, "type": "dust" }],
+  "marks": [{ "f": 16, "name": "land" }]
+}

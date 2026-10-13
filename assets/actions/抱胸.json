@@ -1,0 +1,16 @@
+{
+  "name": "抱胸",
+  "views": ["side", "front"],
+  "duration": 12,
+  "end": "hold",
+  "keys": {
+    "front": [
+      { "f": 0, "pose": {} },
+      { "f": 12, "ease": "out", "pose": { "arm_L_upper": -10, "arm_L_lower": -100, "arm_R_upper": -10, "arm_R_lower": -100 } }
+    ],
+    "side": [
+      { "f": 0, "pose": {} },
+      { "f": 12, "ease": "out", "pose": { "arm_R_upper": 15, "arm_R_lower": 80, "arm_L_upper": 20, "arm_L_lower": 80 } }
+    ]
+  }
+}

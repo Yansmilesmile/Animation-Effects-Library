@@ -1,0 +1,14 @@
+{
+  "name": "張望",
+  "views": ["side"],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 8, "ease": "out", "pose": { "arm_R_upper": 130, "arm_R_lower": 30, "torso": 6 } },
+    { "f": 12, "pose": { "head": -3 } },
+    { "f": 16, "pose": { "head": 4 } },
+    { "f": 20, "pose": { "head": 0 } },
+    { "f": 24, "pose": { "arm_R_upper": 130, "arm_R_lower": 30, "torso": 6 } }
+  ]
+}

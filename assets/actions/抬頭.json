@@ -1,0 +1,18 @@
+{
+  "name": "抬頭",
+  "views": ["front", "side"],
+  "duration": 10,
+  "end": "hold",
+  "keys": {
+    "front": [
+      { "f": 0, "pose": {} },
+      { "f": 4, "face": "lookup" },
+      { "f": 8, "ease": "out", "pose": { "head": { "r": 0, "dy": 0 } } }
+    ],
+    "side": [
+      { "f": 0, "pose": {} },
+      { "f": 4, "face": "lookup" },
+      { "f": 8, "ease": "out", "pose": { "head": -15 } }
+    ]
+  }
+}

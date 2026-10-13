@@ -1,0 +1,16 @@
+{
+  "name": "拿書",
+  "views": ["front"],
+  "duration": 20,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "pose": { "arm_L_upper": 25, "arm_L_lower": -20, "arm_R_upper": 25, "arm_R_lower": -20, "head": 0 } },
+    { "f": 10, "pose": { "arm_L_upper": 25, "arm_L_lower": -20, "arm_R_upper": 25, "arm_R_lower": -20 } },
+    { "f": 18, "ease": "out", "pose": { "arm_L_upper": -5, "arm_L_lower": -75, "arm_R_upper": -5, "arm_R_lower": -75 } }
+  ],
+  "props": [
+    { "slot": "chest", "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/19.png", "from": 12, "dy": 0 }
+  ],
+  "marks": [{ "f": 12, "name": "pick" }]
+}

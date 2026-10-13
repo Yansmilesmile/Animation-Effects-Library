@@ -1,0 +1,15 @@
+{
+  "name": "看衣服",
+  "views": ["front"],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 4, "face": "lookdown" },
+    { "f": 6, "pose": { "head": 0 } },
+    { "f": 12, "ease": "out", "pose": { "arm_L_upper": { "r": -5, "dy": 0 }, "arm_L_lower": -25, "arm_R_upper": { "r": -5, "dy": 0 }, "arm_R_lower": -25 } },
+    { "f": 16, "ease": "step", "pose": { "arm_L_upper": { "r": -5, "dy": 1 }, "arm_R_upper": { "r": -5, "dy": 1 }, "torso": { "dy": 1 } } },
+    { "f": 20, "ease": "step", "pose": { "arm_L_upper": { "r": -5, "dy": 0 }, "arm_R_upper": { "r": -5, "dy": 0 }, "torso": { "dy": 0 } } },
+    { "f": 24, "face": "normal", "pose": { "arm_L_upper": { "r": -5, "dy": 0 }, "arm_R_upper": { "r": -5, "dy": 0 } } }
+  ]
+}

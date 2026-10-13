@@ -1,0 +1,11 @@
+{
+  "name": "指",
+  "views": ["side"],
+  "duration": 10,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "show": ["finger_R"], "pose": { "arm_R_upper": 75, "arm_R_lower": 0, "hand_R": 0, "torso": { "r": 4, "dx": 1 } } }
+  ],
+  "marks": [{ "f": 6, "name": "point" }]
+}

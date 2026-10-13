@@ -1,0 +1,84 @@
+{
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "front-grid",
+      "duration": 90,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "actors": [
+        { "id": "a1", "rig": "host", "anchor": { "x": 120, "y": 100 } },
+        { "id": "a2", "rig": "host", "anchor": { "x": 180, "y": 100 } },
+        { "id": "a3", "rig": "host", "anchor": { "x": 240, "y": 100 } },
+        { "id": "a4", "rig": "host", "anchor": { "x": 300, "y": 100 } },
+        { "id": "a5", "rig": "host", "anchor": { "x": 360, "y": 100 } },
+        { "id": "b1", "rig": "host", "anchor": { "x": 120, "y": 160 } },
+        { "id": "b2", "rig": "host", "anchor": { "x": 180, "y": 160 } },
+        { "id": "b3", "rig": "host", "anchor": { "x": 240, "y": 160 } },
+        { "id": "b4", "rig": "host", "anchor": { "x": 300, "y": 160 } },
+        { "id": "b5", "rig": "host", "anchor": { "x": 360, "y": 160 }, "costume": "tshirt_white" }
+      ],
+      "events": [
+        { "component": "Act", "start": 10, "props": { "actor": "a1", "action": "攤手" } },
+        { "component": "Act", "start": 10, "props": { "actor": "a2", "action": "招手" } },
+        { "component": "Act", "start": 10, "props": { "actor": "a3", "action": "介紹" } },
+        { "component": "Act", "start": 10, "props": { "actor": "a4", "action": "抱胸" } },
+        { "component": "Act", "start": 30, "props": { "actor": "a4", "action": "搖頭" } },
+        { "component": "Act", "start": 10, "props": { "actor": "a5", "action": "愣住" } },
+        { "component": "Act", "start": 10, "props": { "actor": "b1", "action": "驚嚇" } },
+        { "component": "Act", "start": 10, "props": { "actor": "b2", "action": "思考" } },
+        { "component": "Act", "start": 10, "props": { "actor": "b3", "action": "抬頭" } },
+        { "component": "Act", "start": 10, "props": { "actor": "b4", "action": "看衣服" } },
+        { "component": "Act", "start": 10, "props": { "actor": "b5", "action": "看吊牌" } }
+      ]
+    },
+    {
+      "id": "side-grid",
+      "duration": 110,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "actors": [
+        { "id": "walker", "rig": "host", "anchor": { "x": 100, "y": 100 }, "view": "side" },
+        { "id": "pointer", "rig": "host", "anchor": { "x": 240, "y": 100 }, "view": "side" },
+        { "id": "crossed", "rig": "host", "anchor": { "x": 300, "y": 100 }, "view": "side", "facing": "left" },
+        { "id": "looker", "rig": "host", "anchor": { "x": 360, "y": 100 }, "view": "side" },
+        { "id": "giver", "rig": "host", "anchor": { "x": 110, "y": 160 }, "view": "side" },
+        { "id": "trophy", "rig": "host", "anchor": { "x": 180, "y": 160 }, "view": "side" },
+        { "id": "faller", "rig": "host", "anchor": { "x": 250, "y": 160 }, "view": "side" },
+        { "id": "reader", "rig": "host", "anchor": { "x": 320, "y": 160 } },
+        { "id": "shadow", "rig": "host", "anchor": { "x": 380, "y": 160 }, "view": "side", "facing": "left", "silhouette": true }
+      ],
+      "events": [
+        { "component": "Act", "start": 5, "props": { "actor": "walker", "action": "走路", "to": { "x": 190, "y": 100 } } },
+        { "component": "Act", "start": 10, "props": { "actor": "pointer", "action": "指" } },
+        { "component": "Act", "start": 10, "props": { "actor": "crossed", "action": "抱胸" } },
+        { "component": "Act", "start": 30, "props": { "actor": "crossed", "action": "搖頭" } },
+        { "component": "Act", "start": 10, "props": { "actor": "looker", "action": "張望" } },
+        { "component": "Act", "start": 10, "props": { "actor": "giver", "action": "遞錢" } },
+        { "component": "Act", "start": 10, "props": { "actor": "trophy", "action": "放下獎盃" } },
+        { "component": "Act", "start": 10, "props": { "actor": "faller", "action": "摔倒" } },
+        { "component": "Act", "start": 5, "props": { "actor": "reader", "action": "拿書" } },
+        { "component": "Act", "start": 35, "props": { "actor": "reader", "action": "掰書" } },
+        { "component": "Act", "start": 70, "props": { "actor": "reader", "action": "闔書" } },
+        { "component": "Act", "start": 10, "props": { "actor": "shadow", "action": "指" } },
+        { "component": "ActorState", "start": 60, "props": { "actor": "shadow", "silhouette": false } }
+      ]
+    },
+    {
+      "id": "host-on-stage",
+      "duration": 120,
+      "stage": "introduce",
+      "subtitles": [
+        { "start": 0, "end": 60, "text": "大家好，我是超級人機", "highlight": [{ "word": "超級人機", "at": 12 }] },
+        { "start": 60, "end": 120, "text": "每次都把錢遞出去", "highlight": [{ "word": "每次", "at": 66 }] }
+      ],
+      "actors": [{ "id": "host", "talk": true }],
+      "events": [
+        { "component": "Act", "start": "@超級人機", "props": { "actor": "host", "action": "招手" } },
+        { "component": "Act", "start": "@每次", "props": { "actor": "host", "action": "遞錢" } },
+        { "component": "RingPulse", "target": "host", "anchor": "top", "start": "@超級人機" },
+        { "component": "RingPulse", "start": "@每次+mark:release", "props": { "x": 222, "y": 104 } }
+      ]
+    }
+  ]
+}

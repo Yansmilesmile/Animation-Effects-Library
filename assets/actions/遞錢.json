@@ -1,0 +1,17 @@
+{
+  "name": "遞錢",
+  "views": ["side"],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "pose": { "arm_R_upper": -25, "arm_R_lower": 0 } },
+    { "f": 10, "pose": { "arm_R_upper": 0 } },
+    { "f": 16, "ease": "out", "pose": { "arm_R_upper": 65, "arm_R_lower": 5, "torso": { "r": 3, "dx": 1 } } },
+    { "f": 22, "pose": { "arm_R_upper": 65, "arm_R_lower": 5, "torso": { "r": 3, "dx": 1 } } }
+  ],
+  "props": [
+    { "slot": "hand_R", "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合1_png/369.png", "from": 8, "to": 18 }
+  ],
+  "marks": [{ "f": 18, "name": "release" }]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "走路",
+  "views": ["side"],
+  "duration": 16,
+  "loop": true,
+  "breathe": false,
+  "speed": 0.75,
+  "keys": [
+    { "f": 0, "pose": { "leg_L": { "dx": -2, "dy": 0 }, "leg_R": { "dx": 2, "dy": 0 }, "arm_R_upper": -20, "arm_L_upper": 20, "torso": { "dy": 1 } } },
+    { "f": 4, "ease": "step", "pose": { "leg_L": { "dx": 0, "dy": -1 }, "leg_R": { "dx": 0, "dy": 0 }, "arm_R_upper": 0, "arm_L_upper": 0, "torso": { "dy": 0 } } },
+    { "f": 8, "ease": "step", "pose": { "leg_L": { "dx": 2, "dy": 0 }, "leg_R": { "dx": -2, "dy": 0 }, "arm_R_upper": 20, "arm_L_upper": -20, "torso": { "dy": 1 } } },
+    { "f": 12, "ease": "step", "pose": { "leg_L": { "dx": 0, "dy": 0 }, "leg_R": { "dx": 0, "dy": -1 }, "arm_R_upper": 0, "arm_L_upper": 0, "torso": { "dy": 0 } } },
+    { "f": 16, "ease": "step", "pose": { "leg_L": { "dx": -2, "dy": 0 }, "leg_R": { "dx": 2, "dy": 0 }, "arm_R_upper": -20, "arm_L_upper": 20, "torso": { "dy": 1 } } }
+  ]
+}

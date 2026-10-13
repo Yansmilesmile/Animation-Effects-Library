@@ -1,0 +1,14 @@
+{
+  "name": "搖頭",
+  "views": ["side", "front"],
+  "layer": ["head"],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": { "head": { "r": 0, "dx": 0 } } },
+    { "f": 7, "pose": { "head": { "r": -5, "dx": -1 } } },
+    { "f": 15, "pose": { "head": { "r": 5, "dx": 1 } } },
+    { "f": 22, "pose": { "head": { "r": -5, "dx": -1 } } },
+    { "f": 30, "pose": { "head": { "r": 0, "dx": 0 } } }
+  ]
+}

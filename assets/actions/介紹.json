@@ -1,0 +1,11 @@
+{
+  "name": "介紹",
+  "views": ["front"],
+  "duration": 20,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "pose": { "arm_R_upper": 60, "arm_R_lower": -150, "hand_R": 20, "head": 6 } },
+    { "f": 16, "pose": { "arm_R_upper": 60, "arm_R_lower": -150, "head": 6 } }
+  ]
+}

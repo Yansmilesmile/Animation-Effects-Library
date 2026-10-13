@@ -1,0 +1,1244 @@
+{
+ "介紹": {
+  "name": "介紹",
+  "views": [
+   "front"
+  ],
+  "duration": 20,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 6,
+    "ease": "out",
+    "pose": {
+     "arm_R_upper": 60,
+     "arm_R_lower": -150,
+     "hand_R": 20,
+     "head": 6
+    }
+   },
+   {
+    "f": 16,
+    "pose": {
+     "arm_R_upper": 60,
+     "arm_R_lower": -150,
+     "head": 6
+    }
+   }
+  ]
+ },
+ "張望": {
+  "name": "張望",
+  "views": [
+   "side"
+  ],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 8,
+    "ease": "out",
+    "pose": {
+     "arm_R_upper": 130,
+     "arm_R_lower": 30,
+     "torso": 6
+    }
+   },
+   {
+    "f": 12,
+    "pose": {
+     "head": -3
+    }
+   },
+   {
+    "f": 16,
+    "pose": {
+     "head": 4
+    }
+   },
+   {
+    "f": 20,
+    "pose": {
+     "head": 0
+    }
+   },
+   {
+    "f": 24,
+    "pose": {
+     "arm_R_upper": 130,
+     "arm_R_lower": 30,
+     "torso": 6
+    }
+   }
+  ]
+ },
+ "思考": {
+  "name": "思考",
+  "views": [
+   "front"
+  ],
+  "duration": 70,
+  "loop": true,
+  "loopFrom": 10,
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 10,
+    "ease": "out",
+    "pose": {
+     "arm_R_upper": 10,
+     "arm_R_lower": -160,
+     "hand_R": 0,
+     "arm_L_upper": -5,
+     "arm_L_lower": -95,
+     "head": 5
+    }
+   },
+   {
+    "f": 30,
+    "ease": "step",
+    "pose": {
+     "hand_R": 0
+    }
+   },
+   {
+    "f": 32,
+    "ease": "step",
+    "pose": {
+     "hand_R": 25
+    }
+   },
+   {
+    "f": 36,
+    "ease": "step",
+    "pose": {
+     "hand_R": 0
+    }
+   },
+   {
+    "f": 40,
+    "ease": "step",
+    "pose": {
+     "hand_R": 25
+    }
+   },
+   {
+    "f": 44,
+    "ease": "step",
+    "pose": {
+     "hand_R": 0
+    }
+   },
+   {
+    "f": 70,
+    "pose": {
+     "arm_R_upper": 10,
+     "arm_R_lower": -160,
+     "hand_R": 0,
+     "arm_L_upper": -5,
+     "arm_L_lower": -95,
+     "head": 5
+    }
+   }
+  ]
+ },
+ "愣住": {
+  "name": "愣住",
+  "views": [
+   "front",
+   "side"
+  ],
+  "duration": 15,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {
+     "root": {
+      "dy": 0
+     }
+    }
+   },
+   {
+    "f": 2,
+    "ease": "step",
+    "pose": {
+     "root": {
+      "dy": -1
+     }
+    }
+   },
+   {
+    "f": 4,
+    "ease": "step",
+    "pose": {
+     "root": {
+      "dy": 0
+     }
+    }
+   },
+   {
+    "f": 5,
+    "face": "blink"
+   },
+   {
+    "f": 7,
+    "face": "normal"
+   },
+   {
+    "f": 10,
+    "face": "blink"
+   },
+   {
+    "f": 12,
+    "face": "normal"
+   }
+  ]
+ },
+ "抬頭": {
+  "name": "抬頭",
+  "views": [
+   "front",
+   "side"
+  ],
+  "duration": 10,
+  "end": "hold",
+  "keys": {
+   "front": [
+    {
+     "f": 0,
+     "pose": {}
+    },
+    {
+     "f": 4,
+     "face": "lookup"
+    },
+    {
+     "f": 8,
+     "ease": "out",
+     "pose": {
+      "head": {
+       "r": 0,
+       "dy": 0
+      }
+     }
+    }
+   ],
+   "side": [
+    {
+     "f": 0,
+     "pose": {}
+    },
+    {
+     "f": 4,
+     "face": "lookup"
+    },
+    {
+     "f": 8,
+     "ease": "out",
+     "pose": {
+      "head": -15
+     }
+    }
+   ]
+  }
+ },
+ "抱胸": {
+  "name": "抱胸",
+  "views": [
+   "side",
+   "front"
+  ],
+  "duration": 12,
+  "end": "hold",
+  "keys": {
+   "front": [
+    {
+     "f": 0,
+     "pose": {}
+    },
+    {
+     "f": 12,
+     "ease": "out",
+     "pose": {
+      "arm_L_upper": -10,
+      "arm_L_lower": -100,
+      "arm_R_upper": -10,
+      "arm_R_lower": -100
+     }
+    }
+   ],
+   "side": [
+    {
+     "f": 0,
+     "pose": {}
+    },
+    {
+     "f": 12,
+     "ease": "out",
+     "pose": {
+      "arm_R_upper": 15,
+      "arm_R_lower": 80,
+      "arm_L_upper": 20,
+      "arm_L_lower": 80
+     }
+    }
+   ]
+  }
+ },
+ "招手": {
+  "name": "招手",
+  "views": [
+   "front"
+  ],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 4,
+    "face": "smile"
+   },
+   {
+    "f": 6,
+    "ease": "out",
+    "pose": {
+     "arm_R_upper": 120,
+     "arm_R_lower": 60
+    }
+   },
+   {
+    "f": 10,
+    "pose": {
+     "arm_R_lower": 85
+    }
+   },
+   {
+    "f": 14,
+    "pose": {
+     "arm_R_lower": 40
+    }
+   },
+   {
+    "f": 18,
+    "pose": {
+     "arm_R_lower": 85
+    }
+   },
+   {
+    "f": 22,
+    "pose": {
+     "arm_R_lower": 40
+    }
+   },
+   {
+    "f": 26,
+    "pose": {
+     "arm_R_lower": 60
+    }
+   }
+  ]
+ },
+ "拿書": {
+  "name": "拿書",
+  "views": [
+   "front"
+  ],
+  "duration": 20,
+  "end": "hold",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 6,
+    "ease": "out",
+    "pose": {
+     "arm_L_upper": 25,
+     "arm_L_lower": -20,
+     "arm_R_upper": 25,
+     "arm_R_lower": -20,
+     "head": 0
+    }
+   },
+   {
+    "f": 10,
+    "pose": {
+     "arm_L_upper": 25,
+     "arm_L_lower": -20,
+     "arm_R_upper": 25,
+     "arm_R_lower": -20
+    }
+   },
+   {
+    "f": 18,
+    "ease": "out",
+    "pose": {
+     "arm_L_upper": -5,
+     "arm_L_lower": -75,
+     "arm_R_upper": -5,
+     "arm_R_lower": -75
+    }
+   }
+  ],
+  "props": [
+   {
+    "slot": "chest",
+    "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/19.png",
+    "from": 12,
+    "dy": 0
+   }
+  ],
+  "marks": [
+   {
+    "f": 12,
+    "name": "pick"
+   }
+  ]
+ },
+ "指": {
+  "name": "指",
+  "views": [
+   "side"
+  ],
+  "duration": 10,
+  "end": "hold",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 6,
+    "ease": "out",
+    "show": [
+     "finger_R"
+    ],
+    "pose": {
+     "arm_R_upper": 75,
+     "arm_R_lower": 0,
+     "hand_R": 0,
+     "torso": {
+      "r": 4,
+      "dx": 1
+     }
+    }
+   }
+  ],
+  "marks": [
+   {
+    "f": 6,
+    "name": "point"
+   }
+  ]
+ },
+ "掰書": {
+  "name": "掰書",
+  "views": [
+   "front"
+  ],
+  "duration": 18,
+  "end": "hold",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {
+     "arm_L_upper": -5,
+     "arm_L_lower": -75,
+     "arm_R_upper": -5,
+     "arm_R_lower": -75
+    }
+   },
+   {
+    "f": 8,
+    "ease": "in",
+    "pose": {
+     "arm_L_upper": 5,
+     "arm_L_lower": -55,
+     "arm_R_upper": 5,
+     "arm_R_lower": -55
+    }
+   },
+   {
+    "f": 10,
+    "ease": "step",
+    "pose": {
+     "arm_L_upper": 10,
+     "arm_L_lower": -50,
+     "arm_R_upper": 10,
+     "arm_R_lower": -50
+    }
+   },
+   {
+    "f": 18,
+    "pose": {
+     "arm_L_upper": 10,
+     "arm_L_lower": -50,
+     "arm_R_upper": 10,
+     "arm_R_lower": -50
+    }
+   }
+  ],
+  "props": [
+   {
+    "slot": "chest",
+    "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/19.png",
+    "from": 0,
+    "swap": [
+     {
+      "f": 10,
+      "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/18.png"
+     }
+    ],
+    "shake": [
+     10,
+     15
+    ]
+   }
+  ],
+  "marks": [
+   {
+    "f": 10,
+    "name": "open"
+   }
+  ]
+ },
+ "搖頭": {
+  "name": "搖頭",
+  "views": [
+   "side",
+   "front"
+  ],
+  "layer": [
+   "head"
+  ],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {
+     "head": {
+      "r": 0,
+      "dx": 0
+     }
+    }
+   },
+   {
+    "f": 7,
+    "pose": {
+     "head": {
+      "r": -5,
+      "dx": -1
+     }
+    }
+   },
+   {
+    "f": 15,
+    "pose": {
+     "head": {
+      "r": 5,
+      "dx": 1
+     }
+    }
+   },
+   {
+    "f": 22,
+    "pose": {
+     "head": {
+      "r": -5,
+      "dx": -1
+     }
+    }
+   },
+   {
+    "f": 30,
+    "pose": {
+     "head": {
+      "r": 0,
+      "dx": 0
+     }
+    }
+   }
+  ]
+ },
+ "摔倒": {
+  "name": "摔倒",
+  "views": [
+   "side"
+  ],
+  "duration": 30,
+  "end": "hold",
+  "breathe": false,
+  "keys": [
+   {
+    "f": 0,
+    "pose": {
+     "root": {
+      "dx": 0,
+      "dy": 0,
+      "r": 0
+     },
+     "leg_R": {
+      "dx": 0
+     }
+    }
+   },
+   {
+    "f": 6,
+    "ease": "out",
+    "pose": {
+     "root": {
+      "dx": 2
+     },
+     "leg_R": {
+      "dx": 2
+     }
+    }
+   },
+   {
+    "f": 10,
+    "face": "surprise",
+    "pose": {
+     "root": {
+      "dx": 3,
+      "dy": 2,
+      "r": 10
+     },
+     "arm_R_upper": 50,
+     "arm_L_upper": -30,
+     "leg_R": {
+      "dx": 3
+     }
+    }
+   },
+   {
+    "f": 16,
+    "ease": "in",
+    "pose": {
+     "root": {
+      "dx": 3,
+      "dy": 8,
+      "r": 20
+     },
+     "arm_R_upper": 95,
+     "arm_L_upper": -50
+    }
+   },
+   {
+    "f": 30,
+    "pose": {
+     "root": {
+      "dx": 3,
+      "dy": 8,
+      "r": 20
+     },
+     "arm_R_upper": 95,
+     "arm_L_upper": -50
+    }
+   }
+  ],
+  "fx": [
+   {
+    "f": 16,
+    "type": "dust"
+   }
+  ],
+  "marks": [
+   {
+    "f": 16,
+    "name": "land"
+   }
+  ]
+ },
+ "攤手": {
+  "name": "攤手",
+  "views": [
+   "front"
+  ],
+  "duration": 20,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 6,
+    "ease": "out",
+    "pose": {
+     "arm_L_upper": 10,
+     "arm_L_lower": 60,
+     "hand_L": 30,
+     "arm_R_upper": 10,
+     "arm_R_lower": 60,
+     "hand_R": 30
+    }
+   },
+   {
+    "f": 10,
+    "pose": {
+     "head": -6
+    }
+   },
+   {
+    "f": 14,
+    "pose": {
+     "head": 6
+    }
+   },
+   {
+    "f": 18,
+    "pose": {
+     "head": 0
+    }
+   }
+  ]
+ },
+ "放下獎盃": {
+  "name": "放下獎盃",
+  "views": [
+   "side"
+  ],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 4,
+    "ease": "out",
+    "pose": {
+     "arm_R_upper": 160,
+     "arm_R_lower": 0
+    }
+   },
+   {
+    "f": 9,
+    "pose": {
+     "arm_R_upper": 160,
+     "arm_R_lower": 0,
+     "torso": 0
+    }
+   },
+   {
+    "f": 15,
+    "ease": "inout",
+    "pose": {
+     "torso": 25,
+     "arm_R_upper": 55,
+     "arm_R_lower": 15
+    }
+   },
+   {
+    "f": 20,
+    "pose": {
+     "torso": 0,
+     "arm_R_upper": 0,
+     "arm_R_lower": 0
+    }
+   },
+   {
+    "f": 22,
+    "pose": {
+     "arm_R_upper": 120,
+     "arm_R_lower": 40
+    }
+   },
+   {
+    "f": 25,
+    "pose": {
+     "arm_R_lower": 75
+    }
+   },
+   {
+    "f": 28,
+    "pose": {
+     "arm_R_lower": 40
+    }
+   }
+  ],
+  "props": [
+   {
+    "slot": "hand_R",
+    "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (30)_png/374.png",
+    "from": 0,
+    "dy": -6,
+    "drop": 16,
+    "dropTo": "ground"
+   }
+  ],
+  "marks": [
+   {
+    "f": 16,
+    "name": "put"
+   }
+  ]
+ },
+ "看吊牌": {
+  "name": "看吊牌",
+  "views": [
+   "front"
+  ],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 4,
+    "face": "lookdown"
+   },
+   {
+    "f": 8,
+    "ease": "out",
+    "pose": {
+     "arm_R_upper": 5,
+     "arm_R_lower": -120,
+     "tag": {
+      "r": 0,
+      "dy": 0
+     }
+    }
+   },
+   {
+    "f": 12,
+    "pose": {
+     "tag": {
+      "r": 0,
+      "dy": -2
+     }
+    }
+   },
+   {
+    "f": 16,
+    "ease": "step",
+    "pose": {
+     "tag": {
+      "r": 180,
+      "dy": -2
+     }
+    }
+   },
+   {
+    "f": 22,
+    "pose": {
+     "arm_R_upper": 5,
+     "arm_R_lower": -120,
+     "tag": {
+      "r": 180,
+      "dy": -2
+     }
+    }
+   }
+  ],
+  "marks": [
+   {
+    "f": 16,
+    "name": "flip"
+   }
+  ]
+ },
+ "看衣服": {
+  "name": "看衣服",
+  "views": [
+   "front"
+  ],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 4,
+    "face": "lookdown"
+   },
+   {
+    "f": 6,
+    "pose": {
+     "head": 0
+    }
+   },
+   {
+    "f": 12,
+    "ease": "out",
+    "pose": {
+     "arm_L_upper": {
+      "r": -5,
+      "dy": 0
+     },
+     "arm_L_lower": -25,
+     "arm_R_upper": {
+      "r": -5,
+      "dy": 0
+     },
+     "arm_R_lower": -25
+    }
+   },
+   {
+    "f": 16,
+    "ease": "step",
+    "pose": {
+     "arm_L_upper": {
+      "r": -5,
+      "dy": 1
+     },
+     "arm_R_upper": {
+      "r": -5,
+      "dy": 1
+     },
+     "torso": {
+      "dy": 1
+     }
+    }
+   },
+   {
+    "f": 20,
+    "ease": "step",
+    "pose": {
+     "arm_L_upper": {
+      "r": -5,
+      "dy": 0
+     },
+     "arm_R_upper": {
+      "r": -5,
+      "dy": 0
+     },
+     "torso": {
+      "dy": 0
+     }
+    }
+   },
+   {
+    "f": 24,
+    "face": "normal",
+    "pose": {
+     "arm_L_upper": {
+      "r": -5,
+      "dy": 0
+     },
+     "arm_R_upper": {
+      "r": -5,
+      "dy": 0
+     }
+    }
+   }
+  ]
+ },
+ "走路": {
+  "name": "走路",
+  "views": [
+   "side"
+  ],
+  "duration": 16,
+  "loop": true,
+  "breathe": false,
+  "speed": 0.75,
+  "keys": [
+   {
+    "f": 0,
+    "pose": {
+     "leg_L": {
+      "dx": -2,
+      "dy": 0
+     },
+     "leg_R": {
+      "dx": 2,
+      "dy": 0
+     },
+     "arm_R_upper": -20,
+     "arm_L_upper": 20,
+     "torso": {
+      "dy": 1
+     }
+    }
+   },
+   {
+    "f": 4,
+    "ease": "step",
+    "pose": {
+     "leg_L": {
+      "dx": 0,
+      "dy": -1
+     },
+     "leg_R": {
+      "dx": 0,
+      "dy": 0
+     },
+     "arm_R_upper": 0,
+     "arm_L_upper": 0,
+     "torso": {
+      "dy": 0
+     }
+    }
+   },
+   {
+    "f": 8,
+    "ease": "step",
+    "pose": {
+     "leg_L": {
+      "dx": 2,
+      "dy": 0
+     },
+     "leg_R": {
+      "dx": -2,
+      "dy": 0
+     },
+     "arm_R_upper": 20,
+     "arm_L_upper": -20,
+     "torso": {
+      "dy": 1
+     }
+    }
+   },
+   {
+    "f": 12,
+    "ease": "step",
+    "pose": {
+     "leg_L": {
+      "dx": 0,
+      "dy": 0
+     },
+     "leg_R": {
+      "dx": 0,
+      "dy": -1
+     },
+     "arm_R_upper": 0,
+     "arm_L_upper": 0,
+     "torso": {
+      "dy": 0
+     }
+    }
+   },
+   {
+    "f": 16,
+    "ease": "step",
+    "pose": {
+     "leg_L": {
+      "dx": -2,
+      "dy": 0
+     },
+     "leg_R": {
+      "dx": 2,
+      "dy": 0
+     },
+     "arm_R_upper": -20,
+     "arm_L_upper": 20,
+     "torso": {
+      "dy": 1
+     }
+    }
+   }
+  ]
+ },
+ "遞錢": {
+  "name": "遞錢",
+  "views": [
+   "side"
+  ],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {}
+   },
+   {
+    "f": 6,
+    "pose": {
+     "arm_R_upper": -25,
+     "arm_R_lower": 0
+    }
+   },
+   {
+    "f": 10,
+    "pose": {
+     "arm_R_upper": 0
+    }
+   },
+   {
+    "f": 16,
+    "ease": "out",
+    "pose": {
+     "arm_R_upper": 65,
+     "arm_R_lower": 5,
+     "torso": {
+      "r": 3,
+      "dx": 1
+     }
+    }
+   },
+   {
+    "f": 22,
+    "pose": {
+     "arm_R_upper": 65,
+     "arm_R_lower": 5,
+     "torso": {
+      "r": 3,
+      "dx": 1
+     }
+    }
+   }
+  ],
+  "props": [
+   {
+    "slot": "hand_R",
+    "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合1_png/369.png",
+    "from": 8,
+    "to": 18
+   }
+  ],
+  "marks": [
+   {
+    "f": 18,
+    "name": "release"
+   }
+  ]
+ },
+ "闔書": {
+  "name": "闔書",
+  "views": [
+   "front"
+  ],
+  "duration": 10,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {
+     "arm_L_upper": 10,
+     "arm_L_lower": -50,
+     "arm_R_upper": 10,
+     "arm_R_lower": -50
+    }
+   },
+   {
+    "f": 3,
+    "ease": "step",
+    "pose": {
+     "arm_L_upper": -5,
+     "arm_L_lower": -75,
+     "arm_R_upper": -5,
+     "arm_R_lower": -75
+    }
+   },
+   {
+    "f": 7,
+    "ease": "out",
+    "pose": {
+     "arm_L_upper": 15,
+     "arm_L_lower": -30,
+     "arm_R_upper": 15,
+     "arm_R_lower": -30
+    }
+   }
+  ],
+  "props": [
+   {
+    "slot": "chest",
+    "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/18.png",
+    "from": 0,
+    "swap": [
+     {
+      "f": 3,
+      "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/19.png"
+     }
+    ],
+    "shake": [
+     3,
+     6
+    ],
+    "drop": 7,
+    "dropDy": 4
+   }
+  ],
+  "marks": [
+   {
+    "f": 3,
+    "name": "shut"
+   },
+   {
+    "f": 7,
+    "name": "put"
+   }
+  ]
+ },
+ "驚嚇": {
+  "name": "驚嚇",
+  "views": [
+   "front"
+  ],
+  "duration": 22,
+  "end": "idle",
+  "keys": [
+   {
+    "f": 0,
+    "pose": {
+     "root": {
+      "dy": 0
+     }
+    }
+   },
+   {
+    "f": 2,
+    "face": "surprise",
+    "ease": "out",
+    "pose": {
+     "root": {
+      "dy": -2
+     },
+     "arm_L_upper": 15,
+     "arm_L_lower": -110,
+     "arm_R_upper": 15,
+     "arm_R_lower": -110,
+     "head": -3
+    }
+   },
+   {
+    "f": 6,
+    "ease": "in",
+    "pose": {
+     "root": {
+      "dy": 0
+     }
+    }
+   },
+   {
+    "f": 12,
+    "pose": {
+     "head": -3
+    }
+   },
+   {
+    "f": 22,
+    "pose": {
+     "arm_L_upper": 15,
+     "arm_L_lower": -110,
+     "arm_R_upper": 15,
+     "arm_R_lower": -110
+    }
+   }
+  ]
+ }
+}

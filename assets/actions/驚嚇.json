@@ -1,0 +1,13 @@
+{
+  "name": "驚嚇",
+  "views": ["front"],
+  "duration": 22,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": { "root": { "dy": 0 } } },
+    { "f": 2, "face": "surprise", "ease": "out", "pose": { "root": { "dy": -2 }, "arm_L_upper": 15, "arm_L_lower": -110, "arm_R_upper": 15, "arm_R_lower": -110, "head": -3 } },
+    { "f": 6, "ease": "in", "pose": { "root": { "dy": 0 } } },
+    { "f": 12, "pose": { "head": -3 } },
+    { "f": 22, "pose": { "arm_L_upper": 15, "arm_L_lower": -110, "arm_R_upper": 15, "arm_R_lower": -110 } }
+  ]
+}

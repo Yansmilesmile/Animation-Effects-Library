@@ -1,0 +1,15 @@
+{
+  "name": "看吊牌",
+  "views": ["front"],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 4, "face": "lookdown" },
+    { "f": 8, "ease": "out", "pose": { "arm_R_upper": 5, "arm_R_lower": -120, "tag": { "r": 0, "dy": 0 } } },
+    { "f": 12, "pose": { "tag": { "r": 0, "dy": -2 } } },
+    { "f": 16, "ease": "step", "pose": { "tag": { "r": 180, "dy": -2 } } },
+    { "f": 22, "pose": { "arm_R_upper": 5, "arm_R_lower": -120, "tag": { "r": 180, "dy": -2 } } }
+  ],
+  "marks": [{ "f": 16, "name": "flip" }]
+}

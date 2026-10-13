@@ -55,6 +55,8 @@ function collect(file) {
     if (Array.isArray(v)) v.forEach(walk);
     else if (v && typeof v === "object") {
       if (typeof v.asset === "string") out.add(v.asset);
+      // 時間軸 Act 事件的 prop（道具素材 path）
+      if (typeof v.prop === "string" && /\.png$/i.test(v.prop)) out.add(v.prop);
       Object.values(v).forEach(walk);
     }
   })(j);
@@ -65,8 +67,8 @@ const listJson = (dir) => (fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) =
 const STAGE_FILES = listJson(path.join(PROJECT, "stages"));
 const inputs = process.argv.slice(2);
 if (!inputs.length) {
-  // 預設：素材清單 + 舞台編輯器存的舞台 + 時間軸，用到的素材都複製
-  inputs.push(path.join(PROJECT, "assets.list.json"), ...STAGE_FILES, ...listJson(path.join(PROJECT, "timelines")));
+  // 預設：素材清單 + 舞台編輯器存的舞台 + 時間軸 + 動作庫（道具），用到的素材都複製
+  inputs.push(path.join(PROJECT, "assets.list.json"), ...STAGE_FILES, ...listJson(path.join(PROJECT, "timelines")), ...listJson(path.join(PROJECT, "assets", "actions")));
 }
 const wanted = new Set();
 for (const f of inputs) collect(f).forEach((p) => wanted.add(p));

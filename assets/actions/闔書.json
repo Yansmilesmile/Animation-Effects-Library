@@ -1,0 +1,23 @@
+{
+  "name": "闔書",
+  "views": ["front"],
+  "duration": 10,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": { "arm_L_upper": 10, "arm_L_lower": -50, "arm_R_upper": 10, "arm_R_lower": -50 } },
+    { "f": 3, "ease": "step", "pose": { "arm_L_upper": -5, "arm_L_lower": -75, "arm_R_upper": -5, "arm_R_lower": -75 } },
+    { "f": 7, "ease": "out", "pose": { "arm_L_upper": 15, "arm_L_lower": -30, "arm_R_upper": 15, "arm_R_lower": -30 } }
+  ],
+  "props": [
+    {
+      "slot": "chest",
+      "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/18.png",
+      "from": 0,
+      "swap": [{ "f": 3, "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/19.png" }],
+      "shake": [3, 6],
+      "drop": 7,
+      "dropDy": 4
+    }
+  ],
+  "marks": [{ "f": 3, "name": "shut" }, { "f": 7, "name": "put" }]
+}

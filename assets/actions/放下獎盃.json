@@ -1,0 +1,20 @@
+{
+  "name": "放下獎盃",
+  "views": ["side"],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 4, "ease": "out", "pose": { "arm_R_upper": 160, "arm_R_lower": 0 } },
+    { "f": 9, "pose": { "arm_R_upper": 160, "arm_R_lower": 0, "torso": 0 } },
+    { "f": 15, "ease": "inout", "pose": { "torso": 25, "arm_R_upper": 55, "arm_R_lower": 15 } },
+    { "f": 20, "pose": { "torso": 0, "arm_R_upper": 0, "arm_R_lower": 0 } },
+    { "f": 22, "pose": { "arm_R_upper": 120, "arm_R_lower": 40 } },
+    { "f": 25, "pose": { "arm_R_lower": 75 } },
+    { "f": 28, "pose": { "arm_R_lower": 40 } }
+  ],
+  "props": [
+    { "slot": "hand_R", "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (30)_png/374.png", "from": 0, "dy": -6, "drop": 16, "dropTo": "ground" }
+  ],
+  "marks": [{ "f": 16, "name": "put" }]
+}

@@ -25,11 +25,14 @@
 | GamePopup | C29/C30/B9 | hud | 片尾行動呼籲 | variant*: follow{clickAt,exitAt} / input{question*,answer,title} / achievement{name*,exitAt} / ending{text,exitAt} | follow 約 56 幀 |
 | NextTeaser | C32 | hud | ??? 下集預告框 | x(418), y(58), label | 持續 |
 | PropFx | 道具動畫 | （舞台物件） | 讓舞台上已擺好的物件本身動：必須有 event 的 target | effect*: shake / bounce / pulse / glow / tint / hide / show / move；amount, height, times, period, color, dx, dy | 依 effect |
+| Act | ACT | （角色） | 讓 scene.actors 宣告的角色做動作（分鏡 `fx: ACT`） | actor*, action*(動作關鍵詞，見 docs/actors.md), view, facing, loop, from, to, prop, speed | 依動作 |
+| ActorState | ACT | （角色） | 角色狀態：換裝、剪影、壓暗、出場 / 退場、說話 | actor*, costume, silhouette, dim, scale(整數), visible, view, facing, talk, at | 出退場 6 幀 |
 | DialogBox | 對話框 | hud | 像素對話框，逐字打出 | speaker(超級人機), text 或 lines[{at,text}], x, y, w, h, typeEvery(1.65) | 依字數 |
 | ChoiceMenu | C6/C16 | hud | 選項框 | options*: [{label}], picks[{at,index}], confirmAt, x, y, w | 選中 5 幀 |
 | ChoiceDialog | C6/C16 | hud | 對話框 + 選項框連動 | text*, options*: [{label, reply}], picks, confirmAt, dialog{x,y,w,h}, menu{x,y,w} | 確認後打出 reply |
 
 任何需要 x / y 的組件都可以改寫 event 的 `target`（舞台物件名稱或「主持人」）＋ `anchor`（center / top / bottom）＋ `offset`，座標自動帶入。詳見 `docs/stage-for-ai.md`。
 
-scene 層級（不是 event）：`stage`、`host`、`camera`、`ambience`、`subtitles`、`navIndex`、`watermark`。
+scene 層級（不是 event）：`stage`、`host`、`actors`、`camera`、`ambience`、`subtitles`、`navIndex`、`watermark`。
+角色與動作庫（20 個動作）詳見 `docs/actors.md`。
 俯仰推入（A6）用 scene 的 `camera: [{ "type": "tilt-push", ... }]`。

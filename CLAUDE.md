@@ -9,15 +9,16 @@ AI 的工作通常是：讀分鏡 + 使用者擺好的舞台 → 寫 `timelines/
 1. `docs/timeline.md`：時間軸 JSON 格式、座標、`"@詞"` 對齊規則。
 2. `docs/components.md`：所有可用組件、props、預設時長、對應的動效詞典編號。**只能用這裡列出的組件。**
 3. `docs/stage-for-ai.md`：怎麼讀 `stages/*.json`、用 `target` 指名物件、用 `PropFx` 讓物件動。
-4. `stages/*.json`：使用者用舞台編輯器擺好的場景。**只讀，不要改。**
-5. 範例：`timelines/demo.json`（正確寫法）、`timelines/errors-demo.json`（會報錯的寫法）。
+4. `docs/actors.md`：分鏡 `fx: ACT` → scene 的 `actors` + `Act` / `ActorState` 事件；20 個動作關鍵詞、換裝、mark。
+5. `stages/*.json`：使用者用舞台編輯器擺好的場景。**只讀，不要改。**
+6. 範例：`timelines/demo.json`（正確寫法）、`timelines/errors-demo.json`（會報錯的寫法）、`timelines/act-demo.json`（全部動作）。
 
 組件的參數規格以 `src/timeline/registry.tsx` 為準（文件和程式不一致時看程式）。
 
 ## 指令
 
 ```powershell
-npm run assets                                            # 新增素材或舞台後必跑：複製素材、註冊舞台
+npm run assets                                            # 新增素材、舞台、動作後必跑：複製素材、註冊舞台、建角色骨架與動作庫
 node scripts/stills.mjs Timeline 0 45 120 --props-file=timelines/<名稱>.json   # 截指定幀到 out/stills/，自檢用
 node scripts/render-timeline.mjs timelines/<名稱>.json    # 渲染成 out/<名稱>.mp4
 npm run typecheck

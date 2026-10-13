@@ -9,12 +9,13 @@ import { Sprite } from "../components/Sprite";
 import { Counter, CrowdGrid, LevelTitleCard, LevelTransition, Spotlight } from "../components/structure";
 import { LAYOUT, WORLD } from "../theme";
 import { PROP_FX_EFFECTS } from "./propfx";
+import { ACTION_NAMES, ACTIONS } from "../actor/actions";
 
 /**
  * 組件註冊表：時間軸 JSON 的 component 名稱 → React 組件 + 參數規格。
  * 參數規格用來在預覽中明顯報錯：未知組件、未知參數、缺必填、型別不對，都會顯示紅框，不會靜默略過。
  */
-export type PropType = "number" | "string" | "boolean" | "object" | "array" | "number|string";
+export type PropType = "number" | "string" | "boolean" | "object" | "array" | "number|string" | "string|object" | "number|boolean";
 
 export type PrepareContext = { camera: CameraState };
 
@@ -151,6 +152,32 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     check: (p) => (PROP_FX_EFFECTS.includes(p.effect) ? [] : [`effect「${p.effect}」不存在，可用：${PROP_FX_EFFECTS.join("、")}`]),
   },
 
+  // ── 角色動作（不畫東西，交給 scene.actors 宣告的角色；見 docs/actors.md）──
+  Act: {
+    component: () => null,
+    layer: "world",
+    code: "ACT",
+    props: { actor: "string", action: "string", view: "string", facing: "string", loop: "boolean", from: "string|object", to: "string|object", prop: "string", speed: "number" },
+    required: ["actor", "action"],
+    check: (p) => [
+      ...(p.action in ACTIONS ? [] : [`動作「${p.action}」不存在，可用：${ACTION_NAMES.join("、")}`]),
+      ...(p.view === undefined || ["front", "side"].includes(p.view) ? [] : [`view「${p.view}」不存在，可用：front、side`]),
+      ...(p.facing === undefined || ["left", "right"].includes(p.facing) ? [] : [`facing「${p.facing}」不存在，可用：left、right`]),
+    ],
+  },
+  ActorState: {
+    component: () => null,
+    layer: "world",
+    code: "ACT",
+    props: { actor: "string", costume: "string", silhouette: "boolean", dim: "number|boolean", scale: "number", visible: "boolean", view: "string", facing: "string", talk: "boolean", at: "string|object" },
+    required: ["actor"],
+    check: (p) => [
+      ...(p.scale === undefined || (Number.isInteger(p.scale) && p.scale > 0) ? [] : [`scale 必須是正整數，收到 ${p.scale}`]),
+      ...(p.view === undefined || ["front", "side"].includes(p.view) ? [] : [`view「${p.view}」不存在，可用：front、side`]),
+      ...(p.facing === undefined || ["left", "right"].includes(p.facing) ? [] : [`facing「${p.facing}」不存在，可用：left、right`]),
+    ],
+  },
+
   // ── 對話 ──
   DialogBox: { component: DialogBox, layer: "hud", code: "對話框", props: { speaker: "string", lines: "array", text: "string", typeStart: "number", typeEvery: "number", ...POS, w: "number", h: "number" } },
   ChoiceMenu: { component: ChoiceMenu, layer: "hud", code: "C6/C16", props: { options: "array", picks: "array", confirmAt: "number", ...POS, w: "number" }, required: ["options"] },
@@ -171,6 +198,10 @@ const typeOk = (v: unknown, t: PropType) => {
       return typeof v === "object" && v !== null && !Array.isArray(v);
     case "number|string":
       return typeof v === "number" || typeof v === "string";
+    case "string|object":
+      return typeof v === "string" || (typeof v === "object" && v !== null && !Array.isArray(v));
+    case "number|boolean":
+      return typeof v === "number" || typeof v === "boolean";
   }
 };
 

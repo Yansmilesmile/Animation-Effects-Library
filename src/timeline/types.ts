@@ -38,9 +38,32 @@ export type Scene = {
   ambience?: AmbienceInput[];
   subtitles?: { start: number; end: number; text: string; highlight?: Highlight[] }[];
   events?: TimelineEvent[];
+  /** 會做動作的角色（骨架 + 動作庫），用 Act / ActorState 事件驅動；見 docs/actors.md */
+  actors?: ActorDecl[];
   /** bloom / 暗角強度覆寫 */
   bloom?: number;
   vignette?: number;
+};
+
+/** scene.actors 的一個角色。id 寫 "host" = 取代 scene 的主持人（預設站在主持人的位置） */
+export type ActorDecl = {
+  id: string;
+  /** 用哪一套骨架（assets/actors/<rig>/），預設 = id，id 不是骨架名時用 "host" */
+  rig?: string;
+  /** 站位：舞台物件名稱（底部中心）或 {x, y}（世界座標，y 是腳底） */
+  anchor?: string | { x: number; y: number };
+  view?: "front" | "side";
+  facing?: "left" | "right";
+  costume?: string;
+  silhouette?: boolean;
+  /** 壓暗：true = 0.5，或 0..1 */
+  dim?: number | boolean;
+  /** 整數倍 */
+  scale?: number;
+  /** false = 一開始不出現（之後用 ActorState visible:true 出場） */
+  visible?: boolean;
+  /** true = 嘴巴一直開合（說話） */
+  talk?: boolean;
 };
 
 export type TimelineEvent = {

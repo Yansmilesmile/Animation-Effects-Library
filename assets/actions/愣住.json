@@ -1,0 +1,15 @@
+{
+  "name": "愣住",
+  "views": ["front", "side"],
+  "duration": 15,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": { "root": { "dy": 0 } } },
+    { "f": 2, "ease": "step", "pose": { "root": { "dy": -1 } } },
+    { "f": 4, "ease": "step", "pose": { "root": { "dy": 0 } } },
+    { "f": 5, "face": "blink" },
+    { "f": 7, "face": "normal" },
+    { "f": 10, "face": "blink" },
+    { "f": 12, "face": "normal" }
+  ]
+}
