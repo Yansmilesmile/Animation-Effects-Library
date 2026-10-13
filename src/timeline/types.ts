@@ -89,7 +89,7 @@ export type TimelineEvent = {
   /** 顯示多久（幀）；省略 = 到 scene 結束 */
   duration?: number;
   /** 覆寫預設圖層："world"（跟鏡頭走）| "hud"（固定在畫面） */
-  layer?: "world" | "hud";
+  layer?: "world" | "hud" | "back";
   /** 指名舞台上的物件（舞台編輯器裡的名稱、「主持人」、角色 id，或 "3d:<錨點>"）：自動帶入 x / y；PropFx 必填 */
   target?: string;
   /** target 的定位點：物件的 center（預設）/ top（頭頂）/ bottom（底部） */

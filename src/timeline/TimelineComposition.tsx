@@ -295,6 +295,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     if (s.error) errs.push(s.error);
     const start = s.frame ?? 0;
     // props 裡的 "@詞"（at / …At 欄位）→ 相對事件開始的幀；{ target: "名稱" } → { x, y }
+    const nested: { out: Record<string, unknown>; name: string }[] = [];
     const deep = (v: unknown, key: string): unknown => {
       if (typeof v === "string" && v.startsWith("@") && (key === "at" || /At$/.test(key))) {
         const q = resolveStart(v, scene);
@@ -314,6 +315,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
             const off = (o.offset ?? {}) as { x?: number; y?: number };
             out.x = Math.round(t.x + (off.x ?? 0));
             out.y = Math.round((o.anchor === "top" ? t.bottom - t.h : o.anchor === "bottom" ? t.bottom : t.bottom - t.h / 2) + (off.y ?? 0));
+            nested.push({ out, name: o.target as string });
           }
         }
         return out;
@@ -357,6 +359,22 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
         if (spec.x && props.x === undefined) props.x = Math.round(x);
         if (spec.y && props.y === undefined) props.y = Math.round(y);
         if (spec.groundY && props.groundY === undefined) props.groundY = Math.round(t.bottom);
+      }
+    }
+    // props 裡指名的物件若貼在別的 3D 錨點上：換算到這個事件的座標系（以事件開始那一幀對齊），
+    // 例如 CoinFlight 起點跟著角色、終點是跟著另一個錨點的塔
+    if (rt3d && nested.length) {
+      const shift = (fl: FollowSpec | undefined) => {
+        if (!fl) return { x: 0, y: 0 };
+        const a = anchorWorld(rt3d, fl.anchor, start, camera);
+        const b = anchorWorld(rt3d, fl.anchor, fl.refFrame, camera);
+        return a && b ? { x: a.x - b.x, y: a.y - b.y } : { x: 0, y: 0 };
+      };
+      const own = shift(follow);
+      for (const n of nested) {
+        const t = shift(idFollow.get(n.name) ?? actors.follow.get(n.name === "主持人" ? "host" : n.name));
+        n.out.x = Math.round((n.out.x as number) + t.x - own.x);
+        n.out.y = Math.round((n.out.y as number) + t.y - own.y);
       }
     }
     // 先用 target 帶入座標，再檢查參數（否則會被誤判成缺少 x / y）
@@ -417,6 +435,8 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   const layerOf = (r: Resolved) => r.ev.layer ?? REGISTRY[r.ev.component].layer;
   const world = ok.filter((r) => layerOf(r) === "world");
   const hud = ok.filter((r) => layerOf(r) === "hud");
+  // layer "back"：世界座標，畫在主持人 / 角色後面（例如整張背景圖、角色腳下的坑）
+  const back = ok.filter((r) => layerOf(r) === "back");
 
   const StageC = stage?.component;
   const hx = h?.x ?? 160;
@@ -428,6 +448,9 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   // 角色畫在主持人的位置（舞台的 main 物件之後、front 物件之前）
   const host = (
     <>
+      {back.map((r) => (
+        <EventView key={`back${r.i}`} r={r} scene={scene} camera={camera} />
+      ))}
       {staticHost}
       {actors.inits.map((a) => {
         const el = <FxTarget key={a.id} name={a.id === "host" ? "主持人" : a.id} x={a.x} y={a.y} render={() => <Actor init={a} events={actorEvents.get(a.id) ?? []} />} />;

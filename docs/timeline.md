@@ -50,7 +50,8 @@
 - **座標**：
   - `world` 圖層（跟鏡頭走）用世界座標：地面線 `y = 160`（預設取景下在畫面 80%），可見範圍 x 80–400、y 16–196。
   - `hud` 圖層（固定在畫面）用畫面座標 480×270，敘事重心 `y ≈ 108`，`y > 216` 是字幕區。
-  - 每個組件預設在哪一層見 `docs/components.md`；需要時用 event 的 `"layer": "world" | "hud"` 覆寫。
+  - 每個組件預設在哪一層見 `docs/components.md`；需要時用 event 的 `"layer": "world" | "hud" | "back"` 覆寫。
+    `back` = 世界座標、畫在主持人 / 角色**後面**（整張背景圖、角色腳下的坑；例如書頁特寫的書頁圖）。
 - **構圖**：人物和物品站在地面線上（腳底 / 底部 `y = 160`），字幕不擋人物。
 - **鏡頭**：`camera` 的 `type` 是 `push | pull | pan | tilt-push | cut`；zoom 建議 1、1.25、1.5、2、2.5（像素寬度才均勻）。
 - **素材**：`Sprite` / `BeamDrop` 的 `asset` 是相對素材庫根目錄的 path，必須先列進 `assets.list.json` 並執行 `npm run assets`。
