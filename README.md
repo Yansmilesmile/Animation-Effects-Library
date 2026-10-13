@@ -105,6 +105,16 @@ node scripts/stills.mjs Showcase4 50 440 700   # 一次打包，輸出指定幀�
 
 原稿是滑鼠 / 鍵盤互動，影片版改成時間表；字體改用專案的 Fusion Pixel（原稿的 DotGothic16 是日文字體，缺部分繁中字）。
 
+### 角色動作 ACT（`src/actor/`，說明：[`docs/actors.md`](docs/actors.md)）
+
+| 組件 / 檔案 | 用途 |
+|---|---|
+| `Actor` | 會做動作的角色：骨架每幀在原生解析度逐像素柵格化（肢體一格一格轉），整數倍放大；表情、說話嘴型、待機呼吸、道具、灰塵 |
+| `assets/actors/host/` | 主持人正面 / 側面分部位 SVG、骨架 `rig.json`、換裝 `costumes.json`（`tshirt_white`） |
+| `assets/actions/*.json` | 動作庫 20 個：走路、攤手、指、招手、介紹、抱胸、搖頭、愣住、驚嚇、思考、抬頭、張望、看衣服、看吊牌、遞錢、拿書、掰書、闔書、放下獎盃、摔倒 |
+
+時間軸：scene 寫 `actors` 宣告角色，`Act` / `ActorState` 事件驅動；範例 `timelines/act-demo.json`。
+
 ---
 
 ## JSON 驅動的總合成
@@ -113,7 +123,7 @@ node scripts/stills.mjs Showcase4 50 440 700   # 一次打包，輸出指定幀�
 
 - 格式說明：[`docs/timeline.md`](docs/timeline.md)；給分鏡 AI 的組件清單：[`docs/components.md`](docs/components.md)
 - 型別：`src/timeline/types.ts`；組件註冊表與參數檢查：`src/timeline/registry.tsx`；舞台預設：`src/timeline/stages.tsx`
-- event 的 `start` 可寫 `"@高亮詞"` / `"@高亮詞+5"`，對準字幕高亮詞的 `at`
+- event 的 `start` 可寫 `"@高亮詞"` / `"@高亮詞+5"`，對準字幕高亮詞的 `at`；`"@高亮詞+mark:release"` 對準同一個 @詞 的角色動作裡的時間點
 - 寫錯（未知組件、未知參數、缺必填、型別錯、`@詞` 找不到、舞台不存在…）時，該 event 不渲染，畫面左上角紅框列出錯誤
 - 換一份時間軸：改 `src/Root.tsx` 的 import，或在 Studio 右側直接編輯 `timeline` props
 
@@ -154,35 +164,6 @@ node scripts/render-timeline.mjs timelines/<名稱>.json        # 渲染任一�
 
 ---
 
-## 舞台編輯器（選素材、擺場景）
-
-```powershell
-npm run stage-editor          # = python tools/stage_editor/server.py，然後用瀏覽器打開 http://localhost:8765
-```
-
-- 左邊有兩種找素材的方式：
-  - **關鍵詞搜尋**：關鍵詞命中的全部列出，再加上 CLIP 畫面相似的前 N 名（50–1000 可選；相似度越後面越不準）。
-  - **瀏覽資料夾**：選一個資料夾（例如室內裝飾、FarmLife），列出裡面全部素材。挑同一套風格時很好用。
-  - 結果捲到底自動載入下一批，縮圖延遲載入，幾千筆也不會卡。可依來源、分類、尺寸、靜態 / 動畫篩選。
-- 把素材拖到中間的畫布（或點一下加到中央）。畫布就是影片的世界座標：
-  勾「影片取景」看到的就是影片畫面（1.5 倍）；金線 = 地面線（人物腳底）、紅區 = 字幕區；可以預覽主持人站位。
-- 選中素材後：拖曳 / 方向鍵移動、1–8 改倍數、F 翻轉、[ ] 調前後、深度（背景模糊 / 主體 / 前景）、Ctrl+Z 復原。
-- **旋轉**：拖素材上方的藍色把手（每 15° 吸附，按住 Shift 自由旋轉），或按 R / Shift+R 轉 ±90°，也能在右側輸入角度。
-  90° 的倍數像素完全清晰（例如把豎著的床轉成橫放）；其他角度像素邊緣會有鋸齒。
-  倍數選項：0.5、1、1.5、2、2.5、3、4、5、6、8。整數倍像素最一致；0.5 的倍數在影片裡仍是整數螢幕像素，但像素粗細和其他素材不同。
-- 主持人也是畫布上的物件：可以拖曳、翻轉、改倍數、刪除（「主持人」分頁點姿勢換造型或加回來）。
-  位置會存進舞台，成為預設站位；時間軸 scene 沒寫 `host` 時用舞台的，寫了以時間軸為準，寫 `null` 則不出現。
-- 搜尋結果只列 PNG（影片端只支援 PNG）。重複開啟伺服器時會提示埠已被佔用。
-- 牆面、地板、木紋、檯燈光在右側設定。按「存檔」寫進 `stages/<名稱>.json`。
-- **物件名稱**：加入時自動帶入素材名稱，可在右側改（例如「主角的床」）。AI 加動畫時用名稱指名物件。
-- **3D 場景背景**：把 3D 場景的 HTML 放進 `scenes3d/`，在「3D 場景」分頁按「截圖」，再拖到畫布或按「設為背景」。
-  截圖存在 `public/bg3d/`（預設 480×270、只截 3D 畫布、等 4 秒讓模型載入）；影片裡用這張圖，不跑 3D。
-  背景可以調整：點背景選取後拖曳移動、方向鍵微調、滾輪或 + / - 縮放；右側可輸入 X、Y、倍數，也能「鎖定背景」避免擺道具時誤拖。
-  放大超過 1 倍時，建議用 960×540 重新截圖，細節較清楚。
-- **給 AI**：AI 讀 `stages/*.json`，用時間軸的 `target` 和 `PropFx` 在場景上加動畫，說明在 `docs/stage-for-ai.md`。
-- 存檔後執行 `npm run assets`（會複製舞台用到的素材，並把舞台註冊進 Remotion），
-  在 Studio 的 `StagePreview` 填舞台名稱預覽，時間軸寫 `"stage": "<名稱>"` 就能用。
-- 伺服器只在本機（127.0.0.1）監聽；素材庫只讀，不會被修改。8765 被佔用時可用 `python tools/stage_editor/server.py --port 8766`。
 ## 素材
 
 - 素材庫 `D:/桌面/PixelSRPG-Forge-main`、索引 `D:/桌面/asset_index` **只讀**，不修改。
@@ -217,15 +198,20 @@ src/
     ending/            第四批片尾模板（含技能卡示範動畫 demos.tsx）
     dialog/            對話框、選項框
   timeline/            JSON 驅動的總合成（型別、註冊表、舞台、Composition）
+  actor/               角色骨架柵格化、動作補間、Actor 組件
   scenes/StudyRoom.tsx 試驗用的書房場景（用素材拼的臨時場景，不是正式舞台組件）
   showcase/            展示 Composition
   three/               3D 試驗場景
-  generated/           npm run assets 產生的素材資訊
+  generated/           npm run assets 產生的素材資訊、角色骨架、動作庫
   theme.ts             色彩 tokens、像素層、構圖常數
-timelines/             時間軸 JSON（demo.json、errors-demo.json）
-docs/                  時間軸格式、組件清單、對話框原稿 HTML
+assets/
+  actors/<id>/         角色：分部位 SVG、rig.json、costumes.json
+  actions/             動作庫（檔名 = 動作關鍵詞）
+timelines/             時間軸 JSON（demo.json、errors-demo.json、act-demo.json）
+docs/                  時間軸格式、組件清單、角色動作、對話框原稿 HTML
 scripts/
   copy-assets.mjs      素材複製
+  actors.mjs           建角色骨架與動作庫（npm run assets 自動執行）
   stills.mjs           批次截圖
 ```
 
@@ -239,3 +225,5 @@ scripts/
 - Node 22.9 在 Windows 上對含「【】」的路徑呼叫 `mkdirSync({ recursive: true })` 會崩潰，copy-assets 已改成逐層建立。
 - Camera 縮放倍率不是 0.25 的倍數時，像素寬度會略有不均；tilt-push 期間畫面會稍微柔化。
 - 字號小於 12 的文字（例如縮小後的技能卡）不再是像素清晰。
+- 角色骨架目前只有主持人一套；其他角色（例如剪影的雷軍）暫用 `"rig": "host"`，要長得不一樣需要該角色的分部位 SVG。
+- 主持人是大頭比例，側面「指」「遞錢」的手只能伸出臉前幾個像素。
