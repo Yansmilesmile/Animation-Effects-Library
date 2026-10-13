@@ -115,24 +115,26 @@ export const Actor: React.FC<{ init: ActorInit; events: ActorEv[] }> = ({ init, 
   const tagDeg = tagM ? Math.round((Math.atan2(tagM[1], tagM[0]) * 180) / Math.PI) : 0;
   // 吊牌翻過去（看吊牌）時字朝向主持人自己，不畫
   if (fr.tagText && tagBone && tagM && !fr.silhouette && Math.abs(tagDeg) <= 90) {
-    const [nx, ny] = apply(tagM, tagBone.pivot[0], tagBone.pivot[1] + 2);
+    // 牌子頂端貼在吊牌的位置（領口）；正面以吊牌為中心，側面往前伸出胸口（不蓋住身體）。牌子靠重力垂直掛著，不跟身體傾斜轉（斜的像素字會糊）
+    const [nx, ny] = apply(tagM, tagBone.pivot[0], tagBone.pivot[1] - 1.5);
     const at = p.toWorld(nx, ny);
-    const deg = tagDeg * (p.flip ? -1 : 1);
     const t = tinyPixels(fr.tagText);
-    const w = t.w + 4;
-    const h = t.h + 4;
+    const w = t.w + 2;
+    const h = t.h + 2;
+    const side = fr.view === "side";
+    const left = side ? (p.flip ? at.x - w * s + s : at.x - s) : at.x - (w * s) / 2;
     tagLabel = (
       <svg
         viewBox={`0 0 ${w} ${h}`}
         width={w * s}
         height={h * s}
         shapeRendering="crispEdges"
-        style={{ position: "absolute", left: Math.round(at.x - (w * s) / 2), top: Math.round(at.y), transformOrigin: "50% 0", transform: deg ? `rotate(${deg}deg)` : undefined, overflow: "visible" }}
+        style={{ position: "absolute", left: Math.round(left), top: Math.round(at.y), overflow: "visible" }}
       >
         <rect x={0} y={0} width={w} height={h} fill="#3b3a33" />
         <rect x={1} y={1} width={w - 2} height={h - 2} fill="#f6eccf" />
         {t.px.map(([x, y], i) => (
-          <rect key={i} x={2 + x} y={2 + y} width={1.02} height={1.02} fill="#d0453a" />
+          <rect key={i} x={1 + x} y={1 + y} width={1.02} height={1.02} fill="#d0453a" />
         ))}
       </svg>
     );

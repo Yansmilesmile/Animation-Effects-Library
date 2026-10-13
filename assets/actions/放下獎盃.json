@@ -5,8 +5,8 @@
   "end": "idle",
   "keys": [
     { "f": 0, "pose": {} },
-    { "f": 4, "ease": "out", "pose": { "arm_R_upper": 160, "arm_R_lower": 0 } },
-    { "f": 9, "pose": { "arm_R_upper": 160, "arm_R_lower": 0, "torso": 0 } },
+    { "f": 4, "ease": "out", "pose": { "arm_R_upper": 120, "arm_R_lower": -20 } },
+    { "f": 9, "pose": { "arm_R_upper": 120, "arm_R_lower": -20, "torso": 0 } },
     { "f": 15, "ease": "inout", "pose": { "torso": 25, "arm_R_upper": 55, "arm_R_lower": 15 } },
     { "f": 20, "pose": { "torso": 0, "arm_R_upper": 0, "arm_R_lower": 0 } },
     { "f": 22, "pose": { "arm_R_upper": 120, "arm_R_lower": 40 } },

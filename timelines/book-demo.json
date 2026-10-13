@@ -1,0 +1,31 @@
+{
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "book-unfold",
+      "duration": 120,
+      "stage": "void",
+      "background": "#141a30",
+      "subtitles": [
+        { "start": 0, "end": 40, "text": "翻開這本書", "highlight": [{ "word": "書", "at": 6 }] },
+        { "start": 40, "end": 120, "text": "把十年掰開來看", "highlight": [{ "word": "掰開", "at": 44 }] }
+      ],
+      "actors": [{ "id": "host", "anchor": { "x": 240, "y": 160 }, "costume": "tshirt_white", "tagText": "¥300" }],
+      "events": [
+        { "component": "Act", "start": "@書", "props": { "actor": "host", "action": "拿書" } },
+        { "component": "Act", "start": "@掰開", "props": { "actor": "host", "action": "掰書" } },
+        { "component": "BookUnfold", "start": "@掰開+mark:open", "target": "host", "anchor": "bottom", "offset": { "y": -15 }, "props": { "from": 2010, "to": 2020, "width": 240 } },
+        { "component": "RingPulse", "start": "@掰開+mark:open", "target": "host", "anchor": "bottom", "offset": { "y": -15 } }
+      ]
+    },
+    {
+      "id": "book-labels",
+      "duration": 70,
+      "stage": "void",
+      "background": "#141a30",
+      "events": [
+        { "component": "BookUnfold", "start": 4, "props": { "x": 240, "y": 100, "width": 200, "labels": ["創業", "", "上市", "", "十年"], "tickEvery": 5 } }
+      ]
+    }
+  ]
+}

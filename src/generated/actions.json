@@ -726,15 +726,15 @@
     "f": 4,
     "ease": "out",
     "pose": {
-     "arm_R_upper": 160,
-     "arm_R_lower": 0
+     "arm_R_upper": 120,
+     "arm_R_lower": -20
     }
    },
    {
     "f": 9,
     "pose": {
-     "arm_R_upper": 160,
-     "arm_R_lower": 0,
+     "arm_R_upper": 120,
+     "arm_R_lower": -20,
      "torso": 0
     }
    },

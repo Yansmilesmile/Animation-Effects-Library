@@ -4,7 +4,7 @@ import { CameraState, worldToScreen } from "../components/Camera";
 import { ChoiceDialog, ChoiceMenu, DialogBox } from "../components/dialog";
 import { BeamDrop, GlowText, MissPop, QuestionBubble, RingPulse, Stamp, SunBurst, Tag } from "../components/emphasis";
 import { Inventory, ProfileCard, QuestionCard } from "../components/panels";
-import { BigTag, CoinFlight, PriceTower, towerTargets } from "../components/data";
+import { BigTag, BookUnfold, CoinFlight, PriceTower, towerTargets } from "../components/data";
 import { DropStack, KeyDrop, PropSwap, SmokePop } from "../components/props";
 import { ICONS, TONES } from "../components/props/bitmaps";
 import { EASE_NAMES, MOVE_NAMES } from "../three/stage3d/runtime";
@@ -161,7 +161,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     code: "B13 大 / D4",
     props: { ...POS, w: "number", h: "number", text: "string", textSize: "number", tone: "string", asset: "string", assetScale: "number", ropeTop: "number", dropFrames: "number", swing: "number", flips: "array", swings: "array" },
     required: ["x", "y"],
-    check: (p) => [...oneOf("tone", p.tone, ["red", "gold"]), ...(p.text || p.asset ? [] : ["BigTag 需要 text 或 asset"])],
+    check: (p) => [...oneOf("tone", p.tone, ["plain", "red", "gold"]), ...(p.text || p.asset ? [] : ["BigTag 需要 text 或 asset"])],
     targets: (p) => ({ "": { x: p.x, bottom: p.y + (p.h ?? 120) - 4, h: p.h ?? 120 } }),
   },
   CoinFlight: {
@@ -174,6 +174,14 @@ export const REGISTRY: Record<string, RegistryEntry> = {
       ...oneOf("tone", p.tone, Object.keys(TONES)),
       ...(Array.isArray(p.to) ? p.to.flatMap((t: any, k: number) => (typeof t?.x === "number" && typeof t?.y === "number" ? [] : [`to[${k}] 要有 x / y 或 target`])) : []),
     ],
+  },
+  BookUnfold: {
+    component: BookUnfold,
+    layer: "world",
+    code: "NEW-1",
+    props: { ...POS, width: "number", from: "number", to: "number", step: "number", labelEvery: "number", labels: "array", openFrames: "number", tickEvery: "number", pageH: "number", cover: "string" },
+    required: ["x", "y"],
+    check: (p) => (p.labels === undefined && p.from !== undefined && p.to !== undefined && p.to < p.from ? ["to 要大於等於 from"] : []),
   },
 
   // ── 常駐 UI ──

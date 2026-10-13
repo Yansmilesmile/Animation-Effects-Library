@@ -56,7 +56,7 @@
       "background": "#141a30",
       "actors": [{ "id": "host", "anchor": { "x": 110, "y": 160 }, "costume": "tshirt_white", "tagText": "¥300" }],
       "events": [
-        { "component": "BigTag", "start": 0, "props": { "x": 200, "y": 30, "text": "¥300", "flips": [{ "at": 30, "text": "¥60", "tone": "gold" }, { "at": 70, "text": "¥300", "tone": "red" }], "swings": [{ "at": 70 }] } },
+        { "component": "BigTag", "start": 0, "props": { "x": 200, "y": 30, "text": "¥300", "tone": "plain", "flips": [{ "at": 30, "text": "¥60", "tone": "gold" }, { "at": 70, "text": "¥300", "tone": "plain" }], "swings": [{ "at": 70 }] } },
         { "component": "Act", "start": 20, "props": { "actor": "host", "action": "看吊牌" } },
         {
           "component": "QuestionCard", "start": 40,

@@ -7,7 +7,7 @@ import { clamp01 } from "../emphasis/common";
 /**
  * BigTag —— B13 放大版：巨大吊牌（價簽）。紅繩從上方垂下，吊牌掉下來後以繩頂為支點衰減擺動。
  * 像素層座標，(x, y) 是吊牌的繩孔（吊牌頂端中心）；繩子從 ropeTop 垂到繩孔。
- * 內容：text（大字）和 / 或 asset（素材）。
+ * 內容：text（大字）和 / 或 asset（素材）。tone：plain = 米白底黑字（中性，預設）/ red = 紅字 / gold = 金底金字發光。
  *
  * - flips：[{ at, text, tone, glow }] D4 數字翻牌：吊牌像翻面一樣橫向收窄再展開（6 幀），換字；tone gold = 金字 + 金色發光，red = 紅字。
  * - swings：[{ at, amount }] 再晃一次（被碰到、數字翻回時）。
@@ -21,7 +21,7 @@ export type BigTagProps = {
   text?: string;
   /** 字級倍數（12px 的倍數），預設 3 */
   textSize?: number;
-  tone?: "red" | "gold";
+  tone?: "plain" | "red" | "gold";
   asset?: string;
   assetScale?: number;
   /** 繩子頂端的 y，預設 y - 120（畫面外） */
@@ -30,7 +30,7 @@ export type BigTagProps = {
   dropFrames?: number;
   /** 擺動幅度（度），預設 5 */
   swing?: number;
-  flips?: { at: number; text?: string; tone?: "red" | "gold"; glow?: boolean }[];
+  flips?: { at: number; text?: string; tone?: "plain" | "red" | "gold"; glow?: boolean }[];
   swings?: { at: number; amount?: number }[];
 };
 
@@ -44,7 +44,7 @@ export const BigTag: React.FC<BigTagProps> = ({
   h = 120,
   text,
   textSize = 3,
-  tone = "red",
+  tone = "plain",
   asset,
   assetScale = 1,
   ropeTop,
@@ -80,7 +80,7 @@ export const BigTag: React.FC<BigTagProps> = ({
     if (t < 6) sx = Math.max(0.08, Math.abs(1 - t / 3));
   }
   const gold = cur.tone === "gold";
-  const ink = gold ? color.goldLight : color.red;
+  const ink = gold ? color.goldLight : cur.tone === "red" ? color.red : "#1A1A1A";
   const c = Math.round(w * 0.18); // 上方切角
 
   return (
@@ -129,7 +129,7 @@ export const BigTag: React.FC<BigTagProps> = ({
               lineHeight: 1,
               color: ink,
               whiteSpace: "nowrap",
-              textShadow: gold ? `0 0 3px ${color.goldLight}, 0 0 8px ${color.gold}` : `1px 1px 0 ${color.redDark}`,
+              textShadow: gold ? `0 0 3px ${color.goldLight}, 0 0 8px ${color.gold}` : cur.tone === "red" ? `1px 1px 0 ${color.redDark}` : undefined,
             }}
           >
             {cur.text}
