@@ -16,8 +16,10 @@ export const Follow3D: React.FC<{
   depthScale?: boolean;
   /** 依真實尺寸縮放：內容在 3D 裡有 height 單位高、畫出來是 basePx 像素高（角色用） */
   real?: { height: number; basePx: number };
+  /** 被 3D 物件擋住：這個錨點投影位置以下的部分不畫（例如坐在書桌後面，錨點 = 桌面前緣） */
+  clipBelow?: string;
   children: React.ReactNode;
-}> = ({ anchor, refFrame, from = 0, depthScale = false, real, children }) => {
+}> = ({ anchor, refFrame, from = 0, depthScale = false, real, clipBelow, children }) => {
   const rt = useStage3DRuntime();
   const f = useCurrentFrame() + from;
   if (!rt) return <>{children}</>;
@@ -28,7 +30,7 @@ export const Follow3D: React.FC<{
   const p = rt.project(f, a);
   if (!p.visible) return null;
   const s = real ? (p.unit * real.height) / real.basePx : depthScale && p0.unit > 0 ? p.unit / p0.unit : 1;
-  return (
+  const inner = (
     <div
       style={{
         position: "absolute",
@@ -40,4 +42,9 @@ export const Follow3D: React.FC<{
       {children}
     </div>
   );
+  const edge = clipBelow ? rt.anchorAt(clipBelow, f) : undefined;
+  if (!edge) return inner;
+  // 遮擋線在畫面上的高度（像素層座標）；外層不受縮放，直接裁掉這條線以下
+  const ey = rt.project(f, edge).y;
+  return <div style={{ position: "absolute", inset: 0, clipPath: `inset(0 0 calc(100% - ${Math.round(ey)}px) 0)` }}>{inner}</div>;
 };
