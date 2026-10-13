@@ -1,7 +1,10 @@
 import React from "react";
-import { AbsoluteFill, CalculateMetadataFunction, Sequence } from "remotion";
+import { AbsoluteFill, Audio, CalculateMetadataFunction, Sequence, staticFile } from "remotion";
 import { Ambience } from "../components/Ambience";
-import { Camera, CAMERA_HOME, CameraState, worldToScreen } from "../components/Camera";
+import { Camera, CAMERA_HOME, CAMERA_WIDE, CameraState, worldToScreen } from "../components/Camera";
+import { PIXEL } from "../theme";
+import { buildRuntime, Follow3D, Stage3DRuntime, Stage3DRuntimeContext, Stage3DView, STAGES_3D } from "../three/stage3d";
+import type { S3CameraEvent, S3FocusEvent, S3StateEvent } from "../three/stage3d";
 import { Host } from "../components/Host";
 import { PixelStage } from "../components/PixelStage";
 import { Subtitles } from "../components/Subtitle";
@@ -24,7 +27,54 @@ import { ActorEv, ActorInit, markFrame, Pt } from "../actor/timeline";
  * 名稱、參數、"@詞"、舞台寫錯時：該事件不渲染，並在畫面左上角列出紅色錯誤清單（不靜默略過）。
  */
 
-type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown> };
+/** 跟著 3D 錨點走：refFrame 時的畫面位置是座標基準 */
+type FollowSpec = { anchor: string; refFrame: number; depthScale: boolean; real?: { height: number; basePx: number } };
+type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown>; follow?: FollowSpec };
+
+const S3_EVENTS = new Set(["S3State", "S3Camera", "S3Focus"]);
+const is3d = (v: unknown): v is string => typeof v === "string" && v.startsWith("3d:");
+
+/** scene 的 3D 舞台：先解出 S3 事件的時間，建立執行期（狀態、機位、景深、錨點投影） */
+const build3d = (scene: Scene, errors: string[]): Stage3DRuntime | undefined => {
+  if (!scene.stage3d) return undefined;
+  const module = STAGES_3D[scene.stage3d];
+  if (!module) {
+    errors.push(`[${scene.id}] 3D 舞台「${scene.stage3d}」不存在，可用：${Object.keys(STAGES_3D).join("、") || "（沒有，請在入口檔 registerStage3D）"}`);
+    return undefined;
+  }
+  const states: S3StateEvent[] = [];
+  const cameras: S3CameraEvent[] = [];
+  const focus: S3FocusEvent[] = [];
+  for (const ev of scene.events ?? []) {
+    if (!S3_EVENTS.has(ev.component)) continue;
+    const s = resolveStart(ev.start, scene);
+    if (s.frame === undefined || validateEvent(ev.component, ev.props ?? {}).length) continue; // 錯誤在一般流程裡回報
+    const p = (ev.props ?? {}) as Record<string, any>;
+    if (ev.component === "S3State") states.push({ start: s.frame, object: p.object, to: p.to, duration: ev.duration, ease: p.ease });
+    else if (ev.component === "S3Camera") cameras.push({ start: s.frame, to: p.to, duration: ev.duration, move: p.move, ease: p.ease });
+    else focus.push({ start: s.frame, anchor: p.anchor, off: p.off, blur: p.blur, duration: ev.duration });
+  }
+  const rt = buildRuntime(module, { states, cameras, focus });
+  for (const e of rt.errors) errors.push(`[${scene.id}] ${e}`);
+  return rt;
+};
+
+/** 3D 錨點在某一幀的位置，換成 2D 世界座標（scene 的 2D 鏡頭固定） */
+const anchorWorld = (rt: Stage3DRuntime, id: string, f: number, cam: CameraState) => {
+  const a = rt.anchorAt(id, f);
+  if (!a) return undefined;
+  const p = rt.project(f, a);
+  return { x: cam.x + (p.x - PIXEL.width / 2) / cam.zoom, y: cam.y + (p.y - PIXEL.height / 2) / cam.zoom, visible: p.visible };
+};
+
+/** 第一個看得到這個錨點的幀（角色站位的基準幀） */
+const firstVisible = (rt: Stage3DRuntime, id: string, duration: number) => {
+  for (let f = 0; f < duration; f += 3) {
+    const a = rt.anchorAt(id, f);
+    if (a && rt.project(f, a).visible) return f;
+  }
+  return 0;
+};
 
 // ── target：用名稱指名舞台上的物件 ─────────────────
 type TargetBox = { x: number; bottom: number; h: number };
@@ -93,10 +143,32 @@ const resolvePt = (v: PtIn, targets: Map<string, TargetBox>): { pt?: Pt; error?:
   return { pt: { x: v.x, y: v.y } };
 };
 
-const buildActors = (decls: ActorDecl[], targets: Map<string, TargetBox>, host: { pose: string; x?: number; y?: number; scale?: number; flipX?: boolean } | null) => {
+const buildActors = (
+  decls: ActorDecl[],
+  targets: Map<string, TargetBox>,
+  host: { pose: string; x?: number; y?: number; scale?: number; flipX?: boolean } | null,
+  three?: { rt: Stage3DRuntime; cam: CameraState; duration: number },
+) => {
   const errors: string[] = [];
   const inits: ActorInit[] = [];
-  for (const d of decls) {
+  const follow = new Map<string, FollowSpec>();
+  for (let d of decls) {
+    // 站在 3D 錨點上：在第一個看得到錨點的幀算出畫面位置，之後由 Follow3D 跟著鏡頭走
+    if (is3d(d.anchor)) {
+      const id = d.anchor.slice(3);
+      if (!three) errors.push(`角色 ${d.id}：站位「${d.anchor}」需要 scene 有 stage3d`);
+      else if (!three.rt.hasAnchor(id)) errors.push(`角色 ${d.id}：3D 錨點「${id}」不存在，可用：${Object.keys(three.rt.module.anchors).join("、")}`);
+      else {
+        const ref = firstVisible(three.rt, id, three.duration);
+        const w = anchorWorld(three.rt, id, ref, three.cam)!;
+        targets.set(`__actor3d_${d.id}`, { x: w.x, bottom: w.y, h: 0 });
+        // 畫面大小 = 真實身高在該距離的投影（角色骨架原生高度 × 整數倍 當作基準像素）
+        const rigDef = ACTORS[d.rig ?? (d.id in ACTORS ? d.id : "host")];
+        const basePx = (rigDef?.views[d.view ?? "front"]?.h ?? 51) * (d.scale ?? 1);
+        follow.set(d.id, { anchor: id, refFrame: ref, depthScale: d.depthScale ?? true, real: d.depthScale === false ? undefined : { height: d.height3d ?? 1.8, basePx } });
+        d = { ...d, anchor: `__actor3d_${d.id}` };
+      }
+    }
     const rig = d.rig ?? (d.id in ACTORS ? d.id : "host");
     const def = ACTORS[rig];
     if (!def) {
@@ -127,7 +199,7 @@ const buildActors = (decls: ActorDecl[], targets: Map<string, TargetBox>, host: 
       talk: d.talk ?? false,
     });
   }
-  return { inits, errors };
+  return { inits, errors, follow };
 };
 
 const ErrorPanel: React.FC<{ errors: string[] }> = ({ errors }) =>
@@ -163,7 +235,13 @@ const EventView: React.FC<{ r: Resolved; scene: Scene; camera: CameraState }> = 
   const dur = r.ev.duration ?? Math.max(1, scene.duration - r.start);
   return (
     <Sequence from={r.start} durationInFrames={dur} layout="none">
-      <C {...props} />
+      {r.follow ? (
+        <Follow3D anchor={r.follow.anchor} refFrame={r.follow.refFrame} from={r.start} depthScale={r.follow.depthScale}>
+          <C {...props} />
+        </Follow3D>
+      ) : (
+        <C {...props} />
+      )}
     </Sequence>
   );
 };
@@ -172,14 +250,16 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   const errors: string[] = [];
   const stage = STAGES[scene.stage ?? "void"];
   if (!stage) errors.push(`[${scene.id}] 舞台「${scene.stage}」不存在，可用：${Object.keys(STAGES).join("、")}`);
-  const camera: CameraState = { ...CAMERA_HOME, ...scene.cameraInitial };
+  const rt3d = build3d(scene, errors);
+  // 3D scene 的 2D 鏡頭預設固定在廣角（世界座標 = 畫面座標，2D 像素和 3D 像素一樣大）；鏡頭運動交給 S3Camera
+  const camera: CameraState = { ...(rt3d ? CAMERA_WIDE : CAMERA_HOME), ...scene.cameraInitial };
 
-  // scene 沒寫 host（undefined）時用舞台存的預設站位；寫 null 表示不出現
-  const h = scene.host !== undefined ? scene.host : stage?.defaultHost ?? null;
-  const targets = buildTargets(stage?.spec, h);
+  // scene 沒寫 host（undefined）時用舞台存的預設站位；寫 null 表示不出現（3D scene 預設不出現）
+  const h = scene.host !== undefined ? scene.host : rt3d ? null : stage?.defaultHost ?? null;
+  const targets = buildTargets(rt3d ? undefined : stage?.spec, h);
 
   // 角色：站位要用舞台物件，所以在 targets 之後；角色本身也可以被 target 指名（id；host 同時是「主持人」）
-  const actors = buildActors(scene.actors ?? [], targets, h);
+  const actors = buildActors(scene.actors ?? [], targets, h, rt3d ? { rt: rt3d, cam: camera, duration: scene.duration } : undefined);
   for (const e of actors.errors) errors.push(`[${scene.id}] ${e}`);
   const replacesHost = actors.inits.some((a) => a.id === "host");
   for (const a of actors.inits) {
@@ -194,8 +274,24 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     if (s.error) errs.push(s.error);
     const props: Record<string, unknown> = { ...ev.props };
     if (ev.component === "PropFx" && !ev.target) errs.push("PropFx 需要 target（要動的物件名稱）");
+    let follow: FollowSpec | undefined;
     if (ev.target) {
-      const t = targets.get(ev.target);
+      let t = targets.get(ev.target);
+      if (is3d(ev.target)) {
+        // 3D 錨點：以事件開始那一幀的畫面位置帶入座標，之後跟著鏡頭走
+        const id = ev.target.slice(3);
+        const w = rt3d && s.frame !== undefined ? anchorWorld(rt3d, id, s.frame, camera) : undefined;
+        if (!rt3d) errs.push(`target「${ev.target}」需要 scene 有 stage3d`);
+        else if (!w) errs.push(`3D 錨點「${id}」不存在，可用：${Object.keys(rt3d.module.anchors).join("、")}`);
+        else {
+          t = { x: w.x, bottom: w.y, h: 0 };
+          follow = { anchor: id, refFrame: s.frame!, depthScale: ev.depthScale ?? false };
+        }
+        if (!t) t = { x: 0, bottom: 0, h: 0 };
+      } else if (actors.follow.has(ev.target === "主持人" ? "host" : ev.target)) {
+        // 指名站在 3D 錨點上的角色：跟著角色的錨點走
+        follow = { ...actors.follow.get(ev.target === "主持人" ? "host" : ev.target)!, depthScale: ev.depthScale ?? false };
+      }
       if (!t) {
         errs.push(`找不到物件「${ev.target}」。這個舞台可指名的物件：${[...targets.keys()].join("、") || "（沒有，請在舞台編輯器裡為物件命名）"}`);
       } else if (ev.component !== "PropFx" && REGISTRY[ev.component]) {
@@ -215,7 +311,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     if (ACTOR_EVENTS.has(ev.component) && typeof props.actor === "string" && !actors.inits.some((a) => a.id === props.actor)) {
       errs.push(`角色「${props.actor}」沒有在這個 scene 的 actors 宣告。已宣告：${actors.inits.map((a) => a.id).join("、") || "（沒有，請在 scene 加 \"actors\"）"}`);
     }
-    return { ev, i, start: s.frame ?? 0, errors: errs, props };
+    return { ev, i, start: s.frame ?? 0, errors: errs, props, follow };
   });
 
   // Act / ActorState → 每個角色的事件（站位名稱換成座標）
@@ -225,6 +321,15 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     const p = r.props as Record<string, any>;
     const pts: Record<string, Pt | undefined> = {};
     for (const k of r.ev.component === "Act" ? ["from", "to"] : ["at"]) {
+      if (is3d(p[k])) {
+        // 3D 錨點：用角色站位的基準幀換算，和角色的 Follow3D 同一個座標系
+        const id = p[k].slice(3);
+        const ref = actors.follow.get(p.actor)?.refFrame ?? r.start;
+        const w = rt3d ? anchorWorld(rt3d, id, ref, camera) : undefined;
+        if (!w) r.errors.push(`${k}：3D 錨點「${id}」不存在或 scene 沒有 stage3d`);
+        pts[k] = w ? { x: w.x, y: w.y } : undefined;
+        continue;
+      }
       const q = resolvePt(p[k], targets);
       if (q.error) r.errors.push(`${k}：${q.error}`);
       pts[k] = q.pt;
@@ -240,7 +345,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   }
 
   for (const r of resolved) for (const e of r.errors) errors.push(`[${scene.id}] 事件 #${r.i + 1} ${r.ev.component}：${e}`);
-  const ok = resolved.filter((r) => r.errors.length === 0 && r.ev.component !== "PropFx" && !ACTOR_EVENTS.has(r.ev.component));
+  const ok = resolved.filter((r) => r.errors.length === 0 && r.ev.component !== "PropFx" && !ACTOR_EVENTS.has(r.ev.component) && !S3_EVENTS.has(r.ev.component));
   // PropFx：交給舞台物件自己套用（晃動、發光、消失…）
   const fx: PropFxEntry[] = resolved
     .filter((r) => r.errors.length === 0 && r.ev.component === "PropFx")
@@ -260,9 +365,17 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   const host = (
     <>
       {staticHost}
-      {actors.inits.map((a) => (
-        <FxTarget key={a.id} name={a.id === "host" ? "主持人" : a.id} x={a.x} y={a.y} render={() => <Actor init={a} events={actorEvents.get(a.id) ?? []} />} />
-      ))}
+      {actors.inits.map((a) => {
+        const el = <FxTarget key={a.id} name={a.id === "host" ? "主持人" : a.id} x={a.x} y={a.y} render={() => <Actor init={a} events={actorEvents.get(a.id) ?? []} />} />;
+        const fl = actors.follow.get(a.id);
+        return fl ? (
+          <Follow3D key={a.id} anchor={fl.anchor} refFrame={fl.refFrame} depthScale={fl.depthScale} real={fl.real}>
+            {el}
+          </Follow3D>
+        ) : (
+          el
+        );
+      })}
     </>
   );
   const worldContent = (
@@ -275,8 +388,9 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   );
 
   return (
+    <Stage3DRuntimeContext.Provider value={rt3d ?? null}>
     <PixelStage
-      background={scene.background ?? stage?.background}
+      background={scene.background ?? rt3d?.module.background ?? stage?.background}
       bloom={scene.bloom}
       vignette={scene.vignette}
       hud={hud.map((r) => (
@@ -291,7 +405,8 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
         </>
       }
     >
-      <Camera initial={scene.cameraInitial} moves={scene.camera}>
+      {rt3d ? <Stage3DView runtime={rt3d} /> : null}
+      <Camera initial={camera} moves={scene.camera}>
         <PropFxContext.Provider value={fx}>
           {StageC ? (
             <StageC host={host}>{worldContent}</StageC>
@@ -304,6 +419,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
         </PropFxContext.Provider>
       </Camera>
     </PixelStage>
+    </Stage3DRuntimeContext.Provider>
   );
 };
 
@@ -313,6 +429,9 @@ export const TimelineComposition: React.FC<TimelineProps> = ({ timeline }) => {
   let t = 0;
   return (
     <AbsoluteFill style={{ background: "#000" }}>
+      {timeline.audio ? (
+        <Audio src={staticFile(timeline.audio.src)} startFrom={Math.round((timeline.audio.startFrom ?? 0) * (timeline.fps ?? 30))} volume={timeline.audio.volume ?? 1} />
+      ) : null}
       {timeline.scenes.map((scene, i) => {
         const from = t;
         t += scene.duration;

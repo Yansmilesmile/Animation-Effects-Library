@@ -16,6 +16,8 @@ export type Timeline = {
   nav?: { chapters: string[] };
   /** 右上角浮水印：「超級人機・<watermark>」 */
   watermark?: string;
+  /** 配音 / 音樂：src 是 public 下的路徑；startFrom = 從音檔第幾秒開始播（對應時間軸第 0 幀） */
+  audio?: { src: string; startFrom?: number; volume?: number };
   scenes: Scene[];
 };
 
@@ -24,6 +26,11 @@ export type Scene = {
   duration: number;
   /** 舞台預設："study-room" | "night-snow" | "void"（只有底色），預設 "void" */
   stage?: string;
+  /**
+   * 3D 舞台模組 id（registerStage3D 註冊的）。有寫時 3D 場景逐幀渲染在最底層，
+   * 用 S3State / S3Camera / S3Focus 事件控制，target / 角色站位可寫 "3d:<錨點>"。見 docs/stage3d.md
+   */
+  stage3d?: string;
   /** 像素層底色（CSS background） */
   background?: string;
   /** 主持人：pose 與站位（世界座標，y 預設地面線）。省略 = 用舞台存的預設站位（舞台編輯器擺的）；null = 不出現 */
@@ -50,8 +57,12 @@ export type ActorDecl = {
   id: string;
   /** 用哪一套骨架（assets/actors/<rig>/），預設 = id，id 不是骨架名時用 "host" */
   rig?: string;
-  /** 站位：舞台物件名稱（底部中心）或 {x, y}（世界座標，y 是腳底） */
+  /** 站位：舞台物件名稱（底部中心）、"3d:<錨點>"（跟著 3D 鏡頭走）或 {x, y}（世界座標，y 是腳底） */
   anchor?: string | { x: number; y: number };
+  /** 站在 3D 錨點上時依深度縮放（鏡頭推近就變大），預設 true */
+  depthScale?: boolean;
+  /** 站在 3D 錨點上時角色的真實身高（3D 單位），預設 1.8；畫面大小 = 這個身高在該距離投影出來的大小 */
+  height3d?: number;
   view?: "front" | "side";
   facing?: "left" | "right";
   costume?: string;
@@ -75,11 +86,13 @@ export type TimelineEvent = {
   duration?: number;
   /** 覆寫預設圖層："world"（跟鏡頭走）| "hud"（固定在畫面） */
   layer?: "world" | "hud";
-  /** 指名舞台上的物件（舞台編輯器裡的名稱，或「主持人」）：自動帶入 x / y；PropFx 必填 */
+  /** 指名舞台上的物件（舞台編輯器裡的名稱、「主持人」、角色 id，或 "3d:<錨點>"）：自動帶入 x / y；PropFx 必填 */
   target?: string;
   /** target 的定位點：物件的 center（預設）/ top（頭頂）/ bottom（底部） */
   anchor?: "center" | "top" | "bottom";
   /** 在定位點上再偏移（像素） */
   offset?: { x?: number; y?: number };
+  /** target 是 "3d:<錨點>" 時，依錨點深度縮放（道具類用；標籤、文字不要開） */
+  depthScale?: boolean;
   props?: Record<string, unknown>;
 };

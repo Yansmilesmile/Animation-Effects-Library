@@ -65,10 +65,49 @@ function collect(file) {
 
 const listJson = (dir) => (fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".json")).map((f) => path.join(dir, f)) : []);
 const STAGE_FILES = listJson(path.join(PROJECT, "stages"));
+
+// ── 外部專案（例如影片專案 pixel_Apply）──
+// projects.local.json（本機設定，不進 git）：{ "projects": ["D:/桌面/pixel_Apply"] }
+// 每個專案根目錄放 superbot.project.json：{ "name": "pixel_Apply", "lists": ["videos/*/*/timeline.json", "videos/*/assets.list.json"] }
+// 素材 path 寫 "@<name>/<專案內相對路徑>" 指向專案裡自製的素材（例如 assets/generated/ 的圖），會複製到 public/lib/@<name>/…
+const PROJECTS = {};
+const projectsFile = path.join(PROJECT, "projects.local.json");
+const globFiles = (root, pattern) => {
+  // 只支援「*」代表一層資料夾或檔名的一部分
+  const parts = pattern.split("/");
+  let cur = [root];
+  for (const [i, part] of parts.entries()) {
+    const re = new RegExp("^" + part.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*") + "$");
+    const next = [];
+    for (const dir of cur) {
+      if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) continue;
+      for (const name of fs.readdirSync(dir)) if (re.test(name)) next.push(path.join(dir, name));
+    }
+    cur = i === parts.length - 1 ? next.filter((f) => fs.statSync(f).isFile()) : next;
+  }
+  return cur;
+};
+const externalInputs = [];
+if (fs.existsSync(projectsFile)) {
+  for (const root of JSON.parse(fs.readFileSync(projectsFile, "utf8")).projects ?? []) {
+    const cfgFile = path.join(root, "superbot.project.json");
+    if (!fs.existsSync(cfgFile)) { console.warn(`外部專案沒有 superbot.project.json：${root}`); continue; }
+    const cfg = JSON.parse(fs.readFileSync(cfgFile, "utf8"));
+    PROJECTS[cfg.name] = root;
+    for (const pat of cfg.lists ?? []) externalInputs.push(...globFiles(root, pat));
+  }
+  if (Object.keys(PROJECTS).length) console.log(`外部專案：${Object.entries(PROJECTS).map(([n, r]) => `${n}（${r}）`).join("、")}，清單 ${externalInputs.length} 份`);
+}
+const sourceOf = (rel) => {
+  const m = /^@([^/]+)\/(.+)$/.exec(rel);
+  if (!m) return path.join(LIB_ROOT, rel);
+  return PROJECTS[m[1]] ? path.join(PROJECTS[m[1]], m[2]) : null;
+};
+
 const inputs = process.argv.slice(2);
 if (!inputs.length) {
-  // 預設：素材清單 + 舞台編輯器存的舞台 + 時間軸 + 動作庫（道具），用到的素材都複製
-  inputs.push(path.join(PROJECT, "assets.list.json"), ...STAGE_FILES, ...listJson(path.join(PROJECT, "timelines")), ...listJson(path.join(PROJECT, "assets", "actions")));
+  // 預設：素材清單 + 舞台編輯器存的舞台 + 時間軸 + 動作庫（道具）+ 外部專案的清單，用到的素材都複製
+  inputs.push(path.join(PROJECT, "assets.list.json"), ...STAGE_FILES, ...listJson(path.join(PROJECT, "timelines")), ...listJson(path.join(PROJECT, "assets", "actions")), ...externalInputs);
 }
 const wanted = new Set();
 for (const f of inputs) collect(f).forEach((p) => wanted.add(p));
@@ -80,7 +119,8 @@ const inv = new Map(parseCsv(fs.readFileSync(INVENTORY, "utf8")).map((r) => [r.p
 const meta = {};
 const errors = [];
 for (const rel of wanted) {
-  const src = path.join(LIB_ROOT, rel);
+  const src = sourceOf(rel);
+  if (!src) { errors.push(`素材「${rel}」指向未登記的外部專案（projects.local.json）`); continue; }
   if (!fs.existsSync(src)) { errors.push(`找不到素材：${rel}`); continue; }
   const r = inv.get(rel);
   if (r && r.keep === "0") console.warn(`警告：inventory 標記為不保留（keep=0）：${rel}`);

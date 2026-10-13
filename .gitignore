@@ -7,3 +7,6 @@ public/lib/
 *.log
 .DS_Store
 Thumbs.db
+
+# 本機設定：外部專案（影片專案）的位置
+projects.local.json

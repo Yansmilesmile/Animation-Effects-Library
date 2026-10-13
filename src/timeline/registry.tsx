@@ -6,6 +6,7 @@ import { BeamDrop, GlowText, MissPop, QuestionBubble, RingPulse, Stamp, SunBurst
 import { Inventory, ProfileCard } from "../components/panels";
 import { DropStack, KeyDrop, PropSwap, SmokePop } from "../components/props";
 import { ICONS, TONES } from "../components/props/bitmaps";
+import { EASE_NAMES, MOVE_NAMES } from "../three/stage3d/runtime";
 import { ChestDeal, chestFanPosition, GamePopup, NextTeaser, SkillCard, SkillSummary, SKILL_DEMOS } from "../components/ending";
 import { Host } from "../components/Host";
 import { Sprite } from "../components/Sprite";
@@ -242,10 +243,46 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     ],
   },
 
+  // ── 3D 舞台（不畫東西，交給 scene.stage3d 的執行期；見 docs/stage3d.md）──
+  S3State: {
+    component: () => null,
+    layer: "world",
+    code: "3D 物件狀態",
+    props: { object: "string", to: "string", ease: "string" },
+    required: ["object", "to"],
+    check: (p) => oneOf("ease", p.ease, EASE_NAMES),
+  },
+  S3Camera: {
+    component: () => null,
+    layer: "world",
+    code: "3D 鏡頭",
+    props: { to: "string|object", move: "string", ease: "string" },
+    required: ["to"],
+    check: (p) => [...oneOf("move", p.move, MOVE_NAMES), ...oneOf("ease", p.ease, EASE_NAMES)],
+  },
+  S3Focus: {
+    component: () => null,
+    layer: "world",
+    code: "A20 景深",
+    props: { anchor: "string", off: "boolean", blur: "number" },
+    check: (p) => (p.anchor || p.off ? [] : ["S3Focus 需要 anchor（對焦的錨點）或 off: true"]),
+  },
+
   // ── 對話 ──
   DialogBox: { component: DialogBox, layer: "hud", code: "對話框", props: { speaker: "string", lines: "array", text: "string", typeStart: "number", typeEvery: "number", ...POS, w: "number", h: "number" } },
   ChoiceMenu: { component: ChoiceMenu, layer: "hud", code: "C6/C16", props: { options: "array", picks: "array", confirmAt: "number", ...POS, w: "number" }, required: ["options"] },
   ChoiceDialog: { component: ChoiceDialog, layer: "hud", code: "C6/C16", props: { speaker: "string", text: "string", options: "array", picks: "array", confirmAt: "number", typeEvery: "number", dialog: "object", menu: "object" }, required: ["text", "options"] },
+};
+
+/**
+ * 外部專案（影片資料夾）註冊只有這支片用的組件，例如特製的過場。
+ * 在影片的入口檔呼叫一次；名稱不能和引擎的組件重複。
+ */
+export const registerComponents = (entries: Record<string, RegistryEntry>) => {
+  for (const [name, entry] of Object.entries(entries)) {
+    if (REGISTRY[name] && REGISTRY[name] !== entry) throw new Error(`組件名稱「${name}」已經存在，請換一個名字`);
+    REGISTRY[name] = entry;
+  }
 };
 
 const typeOk = (v: unknown, t: PropType) => {
