@@ -18,6 +18,7 @@
     "Weapons_武器装备/武器装备-冒险岛/206.png",
     "Skill_Icons_技能图标/技能图标/0267.png",
     "Characters_角色人物/monster/Plant/Idle (44x42).png",
-    "Characters_角色人物/monster/Slime/Idle-Run (44x30).png"
+    "Characters_角色人物/monster/Slime/Idle-Run (44x30).png",
+    "@engine/assets/generated/leijun_avatar.png"
   ]
 }

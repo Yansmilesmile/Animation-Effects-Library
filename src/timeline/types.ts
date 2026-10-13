@@ -63,6 +63,8 @@ export type ActorDecl = {
   depthScale?: boolean;
   /** 站在 3D 錨點上時角色的真實身高（3D 單位），預設 1.8；畫面大小 = 這個身高在該距離投影出來的大小 */
   height3d?: number;
+  /** 被 3D 物件擋住："3d:<錨點>" 投影位置以下不畫（坐在書桌後：錨點寫桌面前緣） */
+  clipBelow?: string;
   view?: "front" | "side";
   facing?: "left" | "right";
   costume?: string;
@@ -75,6 +77,8 @@ export type ActorDecl = {
   visible?: boolean;
   /** true = 嘴巴一直開合（說話） */
   talk?: boolean;
+  /** 吊牌上的字（換裝有吊牌 tag 時顯示，例如 "¥300"） */
+  tagText?: string;
 };
 
 export type TimelineEvent = {
@@ -94,5 +98,9 @@ export type TimelineEvent = {
   offset?: { x?: number; y?: number };
   /** target 是 "3d:<錨點>" 時，依錨點深度縮放（道具類用；標籤、文字不要開） */
   depthScale?: boolean;
+  /** 這個事件的名字：組件有可指名的部分（例如 PriceTower 的各層）時，其他事件可以用 target "<id>.<部分>" 指名；要寫在指名它的事件之前 */
+  id?: string;
+  /** 壓暗 / 模糊（A20 前景虛焦）：[{ at, dim: 0..1, blur: 像素, frames }]，at 是觸發後的相對幀或 "@詞"，frames 幀內漸變 */
+  focus?: { at: number | string; dim?: number; blur?: number; frames?: number }[];
   props?: Record<string, unknown>;
 };

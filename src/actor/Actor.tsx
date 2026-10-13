@@ -2,6 +2,7 @@ import React from "react";
 import { useCurrentFrame } from "remotion";
 import { ErrorBox } from "../components/ErrorBox";
 import { Sprite } from "../components/Sprite";
+import { tinyPixels } from "../components/tinyFont";
 import { apply, buildRig, boneMatrices, rasterize, toPaths } from "./rig";
 import { ActorEv, actorFrame, ActorFrame, ActorInit } from "./timeline";
 
@@ -107,6 +108,36 @@ export const Actor: React.FC<{ init: ActorInit; events: ActorEv[] }> = ({ init, 
     );
   });
 
+  // 吊牌上的字：換裝有 tag 骨頭時，在吊牌下方掛一張米色小牌（3×5 像素字），跟著 tag 骨頭轉
+  let tagLabel: React.ReactNode = null;
+  const tagBone = rig.bones.get("tag");
+  const tagM = mats.get("tag");
+  const tagDeg = tagM ? Math.round((Math.atan2(tagM[1], tagM[0]) * 180) / Math.PI) : 0;
+  // 吊牌翻過去（看吊牌）時字朝向主持人自己，不畫
+  if (fr.tagText && tagBone && tagM && !fr.silhouette && Math.abs(tagDeg) <= 90) {
+    const [nx, ny] = apply(tagM, tagBone.pivot[0], tagBone.pivot[1] + 2);
+    const at = p.toWorld(nx, ny);
+    const deg = tagDeg * (p.flip ? -1 : 1);
+    const t = tinyPixels(fr.tagText);
+    const w = t.w + 4;
+    const h = t.h + 4;
+    tagLabel = (
+      <svg
+        viewBox={`0 0 ${w} ${h}`}
+        width={w * s}
+        height={h * s}
+        shapeRendering="crispEdges"
+        style={{ position: "absolute", left: Math.round(at.x - (w * s) / 2), top: Math.round(at.y), transformOrigin: "50% 0", transform: deg ? `rotate(${deg}deg)` : undefined, overflow: "visible" }}
+      >
+        <rect x={0} y={0} width={w} height={h} fill="#3b3a33" />
+        <rect x={1} y={1} width={w - 2} height={h - 2} fill="#f6eccf" />
+        {t.px.map(([x, y], i) => (
+          <rect key={i} x={2 + x} y={2 + y} width={1.02} height={1.02} fill="#d0453a" />
+        ))}
+      </svg>
+    );
+  }
+
   return (
     <div style={{ position: "absolute", inset: 0, opacity: fr.opacity, filter: fr.dim ? `brightness(${1 - fr.dim})` : undefined }}>
       {box ? (
@@ -122,6 +153,7 @@ export const Actor: React.FC<{ init: ActorInit; events: ActorEv[] }> = ({ init, 
           ))}
         </svg>
       ) : null}
+      {tagLabel}
       {props}
       {dust}
     </div>

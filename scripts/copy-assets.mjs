@@ -70,6 +70,7 @@ const STAGE_FILES = listJson(path.join(PROJECT, "stages"));
 // projects.local.json（本機設定，不進 git）：{ "projects": ["D:/桌面/pixel_Apply"] }
 // 每個專案根目錄放 superbot.project.json：{ "name": "pixel_Apply", "lists": ["videos/*/*/timeline.json", "videos/*/assets.list.json"] }
 // 素材 path 寫 "@<name>/<專案內相對路徑>" 指向專案裡自製的素材（例如 assets/generated/ 的圖），會複製到 public/lib/@<name>/…
+// "@engine/<相對路徑>" 指向 superbot-motion 自己的素材（引擎內建角色的頭像等）。
 const PROJECTS = {};
 const projectsFile = path.join(PROJECT, "projects.local.json");
 const globFiles = (root, pattern) => {
@@ -101,6 +102,8 @@ if (fs.existsSync(projectsFile)) {
 const sourceOf = (rel) => {
   const m = /^@([^/]+)\/(.+)$/.exec(rel);
   if (!m) return path.join(LIB_ROOT, rel);
+  // "@engine/…" = 這個專案自己的素材（例如 assets/generated/leijun_avatar.png）
+  if (m[1] === "engine") return path.join(PROJECT, m[2]);
   return PROJECTS[m[1]] ? path.join(PROJECTS[m[1]], m[2]) : null;
 };
 

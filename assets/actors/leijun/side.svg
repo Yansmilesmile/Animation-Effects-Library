@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 62" width="184" height="496" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>leijun_full_side_right parts</title>
+  <desc>leijun_full_side_right（全身右側面站姿） ｜ 23×62 px ｜ 部位: 頭髮(hair)、臉部(face)、五官細節(face_detail)、白襯衫(shirt)、領帶(tie)、西裝外套(jacket)、左袖(sleeve_left)、右袖(sleeve_right)、左手(hand_left)、右手(hand_right)、左腿(leg_left)、右腿(leg_right)、左鞋(shoe_left)、右鞋(shoe_right) ｜ 左/右以畫面視角為準，1 單位 = 1 原始像素</desc>
+  <g id="hair" data-name-zh="頭髮" data-name-en="hair">
+    <path fill="#1a1a1a" d="M9 0H17V1H9ZM4 1H9V2H4ZM13 1H14V7H13ZM17 1H20V2H17ZM3 2H4V3H3ZM7 2H13V5H7ZM14 2H15V7H14ZM19 2H21V3H19ZM2 3H3V19H2ZM5 3H7V7H5ZM15 3H17V6H15ZM21 3H22V7H21ZM4 4H5V5H4ZM17 4H20V7H17ZM22 4H23V8H22ZM1 5H2V17H1ZM3 5H4V7H3ZM7 5H11V7H7ZM12 5H13V7H12ZM20 5H21V7H20ZM15 6H16V7H15ZM0 7H1V14H0ZM4 7H6V21H4ZM7 7H8V8H7ZM3 8H4V9H3ZM6 8H7V23H6ZM7 9H8V25H7ZM3 10H4V20H3ZM22 17H23V19H22ZM5 21H6V22H5Z"/>
+    <path fill="#3c3c3c" d="M9 1H13V2H9ZM14 1H17V2H14ZM4 2H7V3H4ZM15 2H19V3H15ZM3 3H5V4H3ZM17 3H21V4H17ZM3 4H4V5H3ZM20 4H21V5H20ZM4 5H5V7H4ZM11 5H12V7H11ZM16 6H17V7H16ZM3 7H4V8H3ZM6 7H7V8H6ZM7 8H8V9H7ZM3 9H4V10H3Z"/>
+    <path fill="#b6b7c0" d="M8 24H9V25H8Z"/>
+  </g>
+  <g id="face" data-name-zh="臉部" data-name-en="face">
+    <path fill="#f7cb9c" d="M17 9H21V11H17ZM20 11H21V21H20ZM16 12H17V20H16ZM17 13H20V14H17ZM15 14H16V21H15ZM10 15H11V19H10ZM14 16H15V24H14ZM17 16H19V21H17ZM19 17H20V21H19ZM21 17H22V19H21ZM11 18H14V19H11ZM12 19H14V23H12ZM11 20H12V23H11ZM16 21H17V25H16ZM9 22H11V23H9ZM15 22H16V24H15ZM17 22H19V25H17ZM20 22H21V23H20ZM19 23H20V24H19Z"/>
+    <path fill="#e8b286" d="M17 8H20V9H17ZM16 9H17V12H16ZM17 11H18V12H17ZM15 12H16V14H15ZM10 14H11V15H10ZM14 14H15V16H14ZM11 15H12V18H11ZM19 16H20V17H19ZM13 17H14V18H13ZM9 20H11V22H9ZM16 20H17V21H16ZM15 21H16V22H15ZM17 21H18V22H17ZM19 22H20V23H19ZM15 24H16V25H15Z"/>
+    <path fill="#d28a64" d="M17 7H20V8H17ZM20 8H21V9H20ZM12 17H13V18H12ZM11 19H12V20H11ZM18 21H21V22H18ZM8 22H9V23H8ZM9 23H13V24H9ZM19 24H20V25H19Z"/>
+    <path fill="#8b715a" d="M15 11H16V12H15ZM9 14H10V18H9ZM12 24H13V25H12Z"/>
+    <path fill="#b6826e" d="M17 12H20V13H17ZM13 16H14V17H13Z"/>
+    <path fill="#c79a83" d="M18 11H20V12H18ZM14 24H15V25H14Z"/>
+    <path fill="#84563f" d="M12 16H13V17H12ZM13 24H14V25H13Z"/>
+    <path fill="#b67754" d="M8 23H9V24H8Z"/>
+    <path fill="#cca45e" d="M13 23H14V24H13Z"/>
+  </g>
+  <g id="face_detail" data-name-zh="五官細節" data-name-en="face detail">
+    <path fill="#1a1a1a" d="M11 7H14V8H11ZM16 7H17V9H16ZM20 7H22V8H20ZM8 8H13V10H8ZM15 8H16V11H15ZM21 8H22V17H21ZM8 10H12V14H8ZM14 10H15V14H14ZM12 12H14V16H12ZM8 14H9V22H8ZM11 14H12V15H11ZM17 14H20V15H17ZM19 15H20V16H19ZM9 19H11V20H9ZM21 19H22V23H21ZM20 23H21V25H20Z"/>
+    <path fill="#3c3c3c" d="M8 7H11V8H8ZM14 7H16V8H14ZM13 8H15V10H13ZM12 10H14V12H12Z"/>
+    <path fill="#e8e8e6" d="M9 24H12V25H9Z"/>
+    <path fill="#ffffff" d="M17 15H19V16H17Z"/>
+    <path fill="#493124" d="M9 18H10V19H9Z"/>
+  </g>
+  <g id="shirt" data-name-zh="白襯衫" data-name-en="shirt">
+    <path fill="#e8e8e6" d="M12 25H13V26H12ZM13 26H14V27H13Z"/>
+  </g>
+  <g id="tie" data-name-zh="領帶" data-name-en="tie">
+    <path fill="#2e395a" d="M14 28H15V29H14Z"/>
+    <path fill="#3d3a79" d="M14 29H15V30H14Z"/>
+  </g>
+  <g id="jacket" data-name-zh="西裝外套" data-name-en="jacket body">
+    <path fill="#3c3c3c" d="M7 26H13V29H7ZM13 27H14V38H13ZM7 29H12V34H7ZM7 34H11V41H7ZM12 34H13V36H12ZM11 36H12V43H11ZM12 38H13V43H12ZM8 41H11V42H8ZM9 42H11V43H9ZM7 43H8V45H7ZM8 46H9V54H8ZM13 46H14V53H13ZM9 47H13V54H9Z"/>
+    <path fill="#1a1a1a" d="M7 25H11V26H7ZM12 29H13V34H12ZM11 34H12V36H11ZM12 36H13V38H12ZM13 38H14V43H13ZM7 41H8V43H7ZM8 42H9V43H8ZM7 45H8V54H7ZM13 53H14V54H13Z"/>
+    <path fill="#7d7b7e" d="M11 25H12V26H11Z"/>
+    <path fill="#cfcdce" d="M13 25H14V26H13Z"/>
+  </g>
+  <g id="sleeve_left" data-name-zh="左袖" data-name-en="left sleeve">
+    <path fill="#1a1a1a" d="M6 25H7V27H6ZM5 26H6V46H5ZM6 39H7V41H6ZM6 45H7V46H6Z"/>
+    <path fill="#3c3c3c" d="M6 27H7V39H6ZM6 41H7V45H6Z"/>
+  </g>
+  <g id="sleeve_right" data-name-zh="右袖" data-name-en="right sleeve">
+    <path fill="#1a1a1a" d="M14 25H20V26H14ZM14 26H15V28H14ZM15 28H16V32H15ZM16 32H17V46H16ZM15 44H16V47H15ZM14 45H15V46H14ZM14 47H15V53H14Z"/>
+    <path fill="#3c3c3c" d="M14 30H15V45H14ZM15 32H16V44H15ZM14 46H15V47H14Z"/>
+  </g>
+  <g id="hand_left" data-name-zh="左手" data-name-en="left hand">
+    <path fill="#f7cb9c" d="M9 43H12V46H9Z"/>
+    <path fill="#d28a64" d="M8 43H9V45H8ZM9 46H12V47H9Z"/>
+    <path fill="#b67754" d="M8 45H9V46H8Z"/>
+  </g>
+  <g id="hand_right" data-name-zh="右手" data-name-en="right hand">
+    <path fill="#f7cb9c" d="M12 43H13V46H12Z"/>
+    <path fill="#e8b286" d="M13 43H14V45H13Z"/>
+    <path fill="#b67754" d="M13 45H14V46H13Z"/>
+    <path fill="#d28a64" d="M12 46H13V47H12Z"/>
+  </g>
+  <g id="leg_left" data-name-zh="左腿" data-name-en="left leg">
+    <path fill="#3c3c3c" d="M8 54H12V56H8Z"/>
+    <path fill="#1a1a1a" d="M7 54H8V56H7Z"/>
+  </g>
+  <g id="leg_right" data-name-zh="右腿" data-name-en="right leg">
+    <path fill="#3c3c3c" d="M12 54H13V56H12Z"/>
+    <path fill="#1a1a1a" d="M13 54H14V56H13Z"/>
+  </g>
+  <g id="shoe_left" data-name-zh="左鞋" data-name-en="left shoe">
+    <path fill="#1a1a1a" d="M7 56H8V62H7ZM8 58H12V59H8ZM8 60H12V62H8Z"/>
+    <path fill="#3c3c3c" d="M8 56H12V58H8ZM8 59H12V60H8Z"/>
+  </g>
+  <g id="shoe_right" data-name-zh="右鞋" data-name-en="right shoe">
+    <path fill="#1a1a1a" d="M13 56H14V58H13ZM14 58H15V59H14ZM12 60H17V62H12Z"/>
+    <path fill="#3c3c3c" d="M12 56H13V60H12ZM13 58H14V60H13ZM14 59H16V60H14Z"/>
+  </g>
+</svg>

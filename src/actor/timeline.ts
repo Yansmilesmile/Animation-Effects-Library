@@ -20,6 +20,8 @@ export type ActorInit = {
   scale: number;
   visible: boolean;
   talk: boolean;
+  /** 吊牌上的字（換裝有 tag 骨頭時顯示） */
+  tagText?: string;
 };
 export type ActEv = {
   kind: "act";
@@ -46,6 +48,7 @@ export type StateEv = {
   facing?: "left" | "right";
   talk?: boolean;
   at?: Pt;
+  tagText?: string | null;
 };
 export type ActorEv = ActEv | StateEv;
 
@@ -70,6 +73,7 @@ export type ActorFrame = {
   hide: Set<string>;
   props: PropDraw[];
   dust: { age: number; x: number; y: number }[];
+  tagText?: string;
 };
 
 const FADE = 6;
@@ -119,7 +123,7 @@ const plan = (init: ActorInit, evs: ActorEv[]) => {
 
 export const actorFrame = (init: ActorInit, evs: ActorEv[], f: number): ActorFrame => {
   const { sorted, spans } = plan(init, evs);
-  const st = { x: init.x, y: init.y, view: init.view, facing: init.facing, costume: init.costume, silhouette: init.silhouette, dim: init.dim, scale: init.scale, talk: init.talk };
+  const st = { x: init.x, y: init.y, view: init.view, facing: init.facing, costume: init.costume, silhouette: init.silhouette, dim: init.dim, scale: init.scale, talk: init.talk, tagText: init.tagText };
   let visible = init.visible;
   let visibleSince = -Infinity;
   for (const ev of sorted) {
@@ -132,6 +136,7 @@ export const actorFrame = (init: ActorInit, evs: ActorEv[], f: number): ActorFra
       if (ev.view) st.view = ev.view;
       if (ev.facing) st.facing = ev.facing;
       if (ev.talk !== undefined) st.talk = ev.talk;
+      if (ev.tagText !== undefined) st.tagText = ev.tagText ?? undefined;
       if (ev.at) ({ x: st.x, y: st.y } = ev.at);
       if (ev.visible !== undefined && ev.visible !== visible) {
         visible = ev.visible;
@@ -248,6 +253,7 @@ export const actorFrame = (init: ActorInit, evs: ActorEv[], f: number): ActorFra
     hide,
     props,
     dust,
+    tagText: st.tagText,
   };
 };
 

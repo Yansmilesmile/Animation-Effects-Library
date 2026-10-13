@@ -9,14 +9,14 @@
 ```jsonc
 "actors": [
   { "id": "host", "talk": true },                                              // id 寫 host = 取代 scene 的主持人，站在主持人的位置
-  { "id": "leijun", "rig": "host", "anchor": "木箱（無蓋） 2", "view": "side", "facing": "left", "silhouette": true }
+  { "id": "leijun", "anchor": "木箱（無蓋） 2", "view": "side", "facing": "left", "silhouette": true }   // id 是骨架名 → 用雷軍骨架
 ]
 ```
 
 | 參數 | 說明 | 預設 |
 |---|---|---|
 | `id` | 角色 id，`Act` 的 `actor` 用它；也能當 `target` 指名（`host` 同時是「主持人」） | 必填 |
-| `rig` | 用哪一套骨架（`assets/actors/<rig>/`）。目前只有 `host`（超級人機） | id 是骨架名就用 id，否則 `host` |
+| `rig` | 用哪一套骨架（`assets/actors/<rig>/`）：`host`（超級人機，27×51）、`leijun`（雷軍，西裝，21×64） | id 是骨架名就用 id，否則 `host` |
 | `anchor` | 站位：舞台物件名稱（取底部中心）或 `{ "x": 200, "y": 160 }`（y = 腳底） | host：主持人站位；其他：(240, 160) |
 | `view` | `front` 正面 / `side` 側面 | `front` |
 | `facing` | `right` / `left`（水平翻轉；側面圖本身朝右） | `right`（host 沿用舞台的 flipX） |
@@ -26,6 +26,7 @@
 | `scale` | 整數倍 | 1（host 沿用主持人的 scale） |
 | `visible` | false = 一開始不出現 | true |
 | `talk` | 嘴巴一直開合（說話）；表情動作進行中暫停 | false |
+| `tagText` | 吊牌上的字（換裝 `tshirt_white` 的領口吊牌下面掛一張米色小牌，3×5 像素字，支援數字 ¥ $ % . , - +）；「看吊牌」翻過去時不顯示 | — |
 
 ## 2. 事件
 
@@ -51,7 +52,7 @@
 
 event 的 `duration`：只對 loop 動作有用（循環多久）；不寫 = 循環到這個角色的下一個動作。
 
-**ActorState** props：`costume`、`silhouette`、`dim`、`scale`、`visible`（出場 / 退場，6 幀淡入淡出）、`view`、`facing`、`talk`、`at`（瞬移到站位）。
+**ActorState** props：`costume`、`silhouette`、`dim`、`scale`、`visible`（出場 / 退場，6 幀淡入淡出）、`view`、`facing`、`talk`、`at`（瞬移到站位）、`tagText`（換吊牌上的字，`""` 清掉）。
 
 規則：
 - 新動作從角色**目前的姿勢**接過去（拿著書再掰書，手不會先放下）；新動作沒提到的部位 6 幀內回到立正。
@@ -128,8 +129,15 @@ event 的 `duration`：只對 loop 動作有用（循環多久）；不寫 = 循
 
 | 檔案 | 內容 |
 |---|---|
-| `front.svg`、`side.svg` | 分部位 SVG（`D:\桌面\asset\svgAll\svg_host\svg\full_front_parts.svg`、`full_side_right_parts.svg`） |
+| `front.svg`、`side.svg` | 分部位 SVG。host：`public/svgAll/svg_host/svg/full_front_parts.svg`、`full_side_right_parts.svg`；leijun：`public/svgAll/svg_leijun/svg/leijun_full_front_parts.svg`、`leijun_full_side_right_parts.svg` |
 | `rig.json` | 骨頭：認領哪些部位的像素（可限範圍）、父子關係、樞紐、圖層順序、道具 slot、表情與嘴型的像素替換 |
 | `costumes.json` | 換裝：換色（可限範圍）、加骨頭 |
 
 `npm run assets` 會跑 `scripts/actors.mjs` 產生 `src/generated/actors.json`、`actions.json`；有部位像素沒被骨頭認領、骨頭名稱寫錯都會報錯。
+
+## 7. 雷軍（`leijun`）
+
+- 西裝版，正面 21×64、側面 23×62，比主持人高、手腳比例正常；動作檔共用（角度一樣，手臂比較長）。
+- 分鏡要的 8 個動作都驗過：抱胸、搖頭、走路、指、招手、介紹、放下獎盃、摔倒（`timelines/leijun-demo.json`）。其他動作也能跑，但沒逐一調過。
+- 剪影 / 壓暗：`silhouette`、`dim`（同 host）。沒有換裝。
+- 資料卡頭像：`@engine/assets/generated/leijun_avatar.png`（21×36，同一套 SVG 柵格化），ProfileCard 寫 `avatar` + `avatarScale: 1`。

@@ -3,7 +3,8 @@ import { Ambience } from "../components/Ambience";
 import { CameraState, worldToScreen } from "../components/Camera";
 import { ChoiceDialog, ChoiceMenu, DialogBox } from "../components/dialog";
 import { BeamDrop, GlowText, MissPop, QuestionBubble, RingPulse, Stamp, SunBurst, Tag } from "../components/emphasis";
-import { Inventory, ProfileCard } from "../components/panels";
+import { Inventory, ProfileCard, QuestionCard } from "../components/panels";
+import { BigTag, CoinFlight, PriceTower, towerTargets } from "../components/data";
 import { DropStack, KeyDrop, PropSwap, SmokePop } from "../components/props";
 import { ICONS, TONES } from "../components/props/bitmaps";
 import { EASE_NAMES, MOVE_NAMES } from "../three/stage3d/runtime";
@@ -19,7 +20,7 @@ import { ACTION_NAMES, ACTIONS } from "../actor/actions";
  * 組件註冊表：時間軸 JSON 的 component 名稱 → React 組件 + 參數規格。
  * 參數規格用來在預覽中明顯報錯：未知組件、未知參數、缺必填、型別不對，都會顯示紅框，不會靜默略過。
  */
-export type PropType = "number" | "string" | "boolean" | "object" | "array" | "number|string" | "string|object" | "number|boolean";
+export type PropType = "number" | "string" | "boolean" | "object" | "array" | "number|string" | "string|object" | "number|boolean" | "number|array";
 
 export type PrepareContext = { camera: CameraState };
 
@@ -35,6 +36,8 @@ export type RegistryEntry = {
   check?: (p: Record<string, any>) => string[];
   /** 把 JSON 參數轉成組件參數（預設值、名稱 → 函式） */
   prepare?: (p: Record<string, any>, ctx: PrepareContext) => Record<string, any>;
+  /** 事件寫了 id 時，組件的各部分可以被 target 指名為 "<id>.<部分>"（"" = 整個）；世界座標，bottom = 底部 y */
+  targets?: (p: Record<string, any>) => Record<string, { x: number; bottom: number; h: number }>;
 };
 
 const POS = { x: "number", y: "number" } as const;
@@ -133,6 +136,44 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     props: { ...POS, name: "string", title: "string", badge: "string", stat: "string", avatar: "string", avatarScale: "number", avatarDx: "number", avatarDy: "number", avatarBox: "number", layout: "string", from: "string", w: "number" },
     required: ["name"],
     check: (p) => [...oneOf("layout", p.layout, ["row", "column"]), ...oneOf("from", p.from, ["left", "right", "bottom", "none"])],
+  },
+
+  QuestionCard: {
+    component: QuestionCard,
+    layer: "hud",
+    code: "B5 卡片",
+    props: { ...POS, title: "string", asset: "string", assetScale: "number", text: "string", w: "number", h: "number", from: "object", openFrames: "number", hangers: "array", shrinkAt: "number", shrinkTo: "object", shrinkFrames: "number" },
+    check: (p) => (Array.isArray(p.hangers) ? p.hangers.flatMap((hg: any, k: number) => (hg?.asset ? [] : [`hangers[${k}] 缺少 asset`])) : []),
+  },
+
+  // ── 數據 / 大型道具 ──
+  PriceTower: {
+    component: PriceTower,
+    layer: "world",
+    code: "D2",
+    props: { ...POS, width: "number", base: "object", floors: "array", floorHeight: "number", gap: "number", rise: "boolean", riseFrames: "number", splitAt: "number", mergeAt: "number", splitFrames: "number", highlight: "array", redGlow: "array", crackAt: "number|array", collapse: "array", dust: "boolean" },
+    required: ["x", "y", "floors"],
+    targets: (p) => towerTargets(p as any),
+  },
+  BigTag: {
+    component: BigTag,
+    layer: "world",
+    code: "B13 大 / D4",
+    props: { ...POS, w: "number", h: "number", text: "string", textSize: "number", tone: "string", asset: "string", assetScale: "number", ropeTop: "number", dropFrames: "number", swing: "number", flips: "array", swings: "array" },
+    required: ["x", "y"],
+    check: (p) => [...oneOf("tone", p.tone, ["red", "gold"]), ...(p.text || p.asset ? [] : ["BigTag 需要 text 或 asset"])],
+    targets: (p) => ({ "": { x: p.x, bottom: p.y + (p.h ?? 120) - 4, h: p.h ?? 120 } }),
+  },
+  CoinFlight: {
+    component: CoinFlight,
+    layer: "world",
+    code: "C39",
+    props: { ...POS, to: "array", count: "number", every: "number", flyFrames: "number", arc: "number", spread: "number", asset: "string", scale: "number", tone: "string", trail: "boolean", seed: "number" },
+    required: ["x", "y", "to"],
+    check: (p) => [
+      ...oneOf("tone", p.tone, Object.keys(TONES)),
+      ...(Array.isArray(p.to) ? p.to.flatMap((t: any, k: number) => (typeof t?.x === "number" && typeof t?.y === "number" ? [] : [`to[${k}] 要有 x / y 或 target`])) : []),
+    ],
   },
 
   // ── 常駐 UI ──
@@ -234,7 +275,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     component: () => null,
     layer: "world",
     code: "ACT",
-    props: { actor: "string", costume: "string", silhouette: "boolean", dim: "number|boolean", scale: "number", visible: "boolean", view: "string", facing: "string", talk: "boolean", at: "string|object" },
+    props: { actor: "string", costume: "string", silhouette: "boolean", dim: "number|boolean", scale: "number", visible: "boolean", view: "string", facing: "string", talk: "boolean", at: "string|object", tagText: "string" },
     required: ["actor"],
     check: (p) => [
       ...(p.scale === undefined || (Number.isInteger(p.scale) && p.scale > 0) ? [] : [`scale 必須是正整數，收到 ${p.scale}`]),
@@ -303,6 +344,8 @@ const typeOk = (v: unknown, t: PropType) => {
       return typeof v === "string" || (typeof v === "object" && v !== null && !Array.isArray(v));
     case "number|boolean":
       return typeof v === "number" || typeof v === "boolean";
+    case "number|array":
+      return typeof v === "number" || Array.isArray(v);
   }
 };
 

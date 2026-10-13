@@ -1,0 +1,76 @@
+{
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "tower",
+      "duration": 140,
+      "stage": "void",
+      "background": "#141a30",
+      "subtitles": [
+        { "start": 0, "end": 70, "text": "一件衣服的價格裡", "highlight": [{ "word": "價格", "at": 40 }] },
+        { "start": 70, "end": 140, "text": "東西本身只有六十", "highlight": [{ "word": "東西本身", "at": 75 }] }
+      ],
+      "events": [
+        {
+          "component": "PriceTower", "id": "tower", "start": 0,
+          "focus": [{ "at": 120, "dim": 0.5, "blur": 1.5, "frames": 10 }],
+          "props": {
+            "x": 240, "y": 160,
+            "base": { "label": "60" },
+            "floors": [{ "label": "倉庫" }, { "label": "店租" }, { "label": "廣告" }, { "label": "利潤" }],
+            "splitAt": "@價格",
+            "highlight": [{ "at": "@東西本身", "part": "base", "frames": 40 }],
+            "redGlow": [{ "at": 60, "level": 1, "frames": 15 }],
+            "crackAt": [92, 100],
+            "collapse": [{ "at": 106, "floor": "利潤" }]
+          }
+        },
+        { "component": "Tag", "target": "tower.倉庫", "anchor": "bottom", "offset": { "x": 40, "y": -4 }, "start": "@價格+10", "duration": 60, "props": { "text": "倉庫", "variant": "dark" } },
+        { "component": "Tag", "target": "tower.店租", "anchor": "bottom", "offset": { "x": 40, "y": -4 }, "start": "@價格+13", "duration": 60, "props": { "text": "店租", "variant": "dark" } },
+        { "component": "Tag", "target": "tower.廣告", "anchor": "bottom", "offset": { "x": 40, "y": -4 }, "start": "@價格+16", "duration": 60, "props": { "text": "廣告", "variant": "dark" } },
+        { "component": "Tag", "target": "tower.利潤", "anchor": "bottom", "offset": { "x": 40, "y": -4 }, "start": "@價格+19", "duration": 60, "props": { "text": "利潤", "variant": "dark" } },
+        { "component": "Tag", "target": "tower.red", "anchor": "top", "offset": { "y": -8 }, "start": 18, "duration": 22, "props": { "text": "240" } },
+        { "component": "RingPulse", "target": "tower.base", "start": "@東西本身", "props": { "color": "#FFD978" } }
+      ]
+    },
+    {
+      "id": "coins",
+      "duration": 80,
+      "stage": "void",
+      "background": "#141a30",
+      "subtitles": [{ "start": 0, "end": 80, "text": "你每次付的錢", "highlight": [{ "word": "每次", "at": 8 }] }],
+      "actors": [{ "id": "host", "anchor": { "x": 150, "y": 160 }, "view": "side", "costume": "tshirt_white", "tagText": "¥300" }],
+      "events": [
+        { "component": "PriceTower", "id": "t2", "start": 0, "props": { "x": 330, "y": 160, "rise": false, "base": { "label": "60" }, "floors": [{}, {}, {}, {}] } },
+        { "component": "Act", "start": "@每次", "props": { "actor": "host", "action": "遞錢" } },
+        {
+          "component": "CoinFlight", "start": "@每次+mark:release", "target": "host", "offset": { "x": 12, "y": 0 },
+          "props": { "to": [{ "target": "t2.red", "share": 0.8 }, { "target": "t2.base", "share": 0.2 }], "count": 14 }
+        }
+      ]
+    },
+    {
+      "id": "tag-card",
+      "duration": 110,
+      "stage": "void",
+      "background": "#141a30",
+      "actors": [{ "id": "host", "anchor": { "x": 110, "y": 160 }, "costume": "tshirt_white", "tagText": "¥300" }],
+      "events": [
+        { "component": "BigTag", "start": 0, "props": { "x": 200, "y": 30, "text": "¥300", "flips": [{ "at": 30, "text": "¥60", "tone": "gold" }, { "at": 70, "text": "¥300", "tone": "red" }], "swings": [{ "at": 70 }] } },
+        { "component": "Act", "start": 20, "props": { "actor": "host", "action": "看吊牌" } },
+        {
+          "component": "QuestionCard", "start": 40,
+          "props": {
+            "x": 350, "y": 100, "from": { "x": 300, "y": 60 }, "title": "怎樣才算便宜？",
+            "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合1_png/369.png",
+            "hangers": [
+              { "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (30)_png/374.png", "side": "left", "at": 14 },
+              { "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合1_png/369.png", "side": "right", "at": 18 }
+            ],
+            "shrinkAt": 50
+          }
+        }
+      ]
+    }
+  ]
+}

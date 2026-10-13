@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Audio, CalculateMetadataFunction, Sequence, staticFile } from "remotion";
+import { AbsoluteFill, Audio, CalculateMetadataFunction, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { Ambience } from "../components/Ambience";
 import { Camera, CAMERA_HOME, CAMERA_WIDE, CameraState, worldToScreen } from "../components/Camera";
 import { PIXEL } from "../theme";
@@ -28,8 +28,9 @@ import { ActorEv, ActorInit, markFrame, Pt } from "../actor/timeline";
  */
 
 /** 跟著 3D 錨點走：refFrame 時的畫面位置是座標基準 */
-type FollowSpec = { anchor: string; refFrame: number; depthScale: boolean; real?: { height: number; basePx: number } };
-type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown>; follow?: FollowSpec };
+type FollowSpec = { anchor: string; refFrame: number; depthScale: boolean; real?: { height: number; basePx: number }; clipBelow?: string };
+type Focus = { at: number; dim?: number; blur?: number; frames?: number };
+type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown>; follow?: FollowSpec; focus?: Focus[] };
 
 const S3_EVENTS = new Set(["S3State", "S3Camera", "S3Focus"]);
 const is3d = (v: unknown): v is string => typeof v === "string" && v.startsWith("3d:");
@@ -165,7 +166,9 @@ const buildActors = (
         // 畫面大小 = 真實身高在該距離的投影（角色骨架原生高度 × 整數倍 當作基準像素）
         const rigDef = ACTORS[d.rig ?? (d.id in ACTORS ? d.id : "host")];
         const basePx = (rigDef?.views[d.view ?? "front"]?.h ?? 51) * (d.scale ?? 1);
-        follow.set(d.id, { anchor: id, refFrame: ref, depthScale: d.depthScale ?? true, real: d.depthScale === false ? undefined : { height: d.height3d ?? 1.8, basePx } });
+        const clip = is3d(d.clipBelow) ? d.clipBelow.slice(3) : undefined;
+        if (clip && !three.rt.hasAnchor(clip)) errors.push(`角色 ${d.id}：clipBelow 的 3D 錨點「${clip}」不存在`);
+        follow.set(d.id, { anchor: id, refFrame: ref, depthScale: d.depthScale ?? true, real: d.depthScale === false ? undefined : { height: d.height3d ?? 1.8, basePx }, clipBelow: clip });
         d = { ...d, anchor: `__actor3d_${d.id}` };
       }
     }
@@ -197,6 +200,7 @@ const buildActors = (
       scale: d.scale ?? (isHost ? host?.scale : undefined) ?? 1,
       visible: d.visible ?? true,
       talk: d.talk ?? false,
+      tagText: d.tagText,
     });
   }
   return { inits, errors, follow };
@@ -233,17 +237,33 @@ const EventView: React.FC<{ r: Resolved; scene: Scene; camera: CameraState }> = 
   const props = entry.prepare ? entry.prepare(raw as Record<string, any>, { camera }) : raw;
   const C = entry.component;
   const dur = r.ev.duration ?? Math.max(1, scene.duration - r.start);
+  const body = r.follow ? (
+    <Follow3D anchor={r.follow.anchor} refFrame={r.follow.refFrame} from={r.start} depthScale={r.follow.depthScale}>
+      <C {...props} />
+    </Follow3D>
+  ) : (
+    <C {...props} />
+  );
   return (
     <Sequence from={r.start} durationInFrames={dur} layout="none">
-      {r.follow ? (
-        <Follow3D anchor={r.follow.anchor} refFrame={r.follow.refFrame} from={r.start} depthScale={r.follow.depthScale}>
-          <C {...props} />
-        </Follow3D>
-      ) : (
-        <C {...props} />
-      )}
+      {r.focus?.length ? <FocusWrap focus={r.focus}>{body}</FocusWrap> : body}
     </Sequence>
   );
+};
+
+/** 事件的 focus：壓暗 / 模糊依關鍵幀漸變（A20 前景虛焦時讓組件一起虛化） */
+const FocusWrap: React.FC<{ focus: Focus[]; children: React.ReactNode }> = ({ focus, children }) => {
+  const f = useCurrentFrame();
+  let dim = 0;
+  let blur = 0;
+  for (const k of [...focus].sort((a, b) => a.at - b.at)) {
+    if (f < k.at) break;
+    const p = Math.min(1, (f - k.at) / Math.max(1, k.frames ?? 12));
+    if (k.dim !== undefined) dim += (k.dim - dim) * p;
+    if (k.blur !== undefined) blur += (k.blur - blur) * p;
+  }
+  const filter = [dim > 0.001 ? `brightness(${(1 - dim).toFixed(3)})` : "", blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : ""].join(" ").trim();
+  return <div style={{ position: "absolute", inset: 0, filter: filter || undefined }}>{children}</div>;
 };
 
 export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt: number }> = ({ scene, timeline, navEnterAt }) => {
@@ -263,16 +283,46 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   for (const e of actors.errors) errors.push(`[${scene.id}] ${e}`);
   const replacesHost = actors.inits.some((a) => a.id === "host");
   for (const a of actors.inits) {
-    const box = { x: a.x, bottom: a.y, h: 51 * a.scale };
+    const box = { x: a.x, bottom: a.y, h: (ACTORS[a.rig]?.views[a.view]?.h ?? 51) * a.scale };
     targets.set(a.id, box);
     if (a.id === "host") targets.set("主持人", box);
   }
 
+  const idFollow = new Map<string, FollowSpec>();
   const resolved: Resolved[] = (scene.events ?? []).map((ev, i) => {
     const errs: string[] = [];
     const s = resolveStart(ev.start, scene);
     if (s.error) errs.push(s.error);
-    const props: Record<string, unknown> = { ...ev.props };
+    const start = s.frame ?? 0;
+    // props 裡的 "@詞"（at / …At 欄位）→ 相對事件開始的幀；{ target: "名稱" } → { x, y }
+    const deep = (v: unknown, key: string): unknown => {
+      if (typeof v === "string" && v.startsWith("@") && (key === "at" || /At$/.test(key))) {
+        const q = resolveStart(v, scene);
+        if (q.error) errs.push(`${key}：${q.error}`);
+        return (q.frame ?? start) - start;
+      }
+      if (Array.isArray(v)) return v.map((x) => deep(x, key));
+      if (v && typeof v === "object") {
+        const o = v as Record<string, unknown>;
+        const named = typeof o.target === "string";
+        const out: Record<string, unknown> = {};
+        for (const [k, x] of Object.entries(o)) if (!(named && (k === "target" || k === "anchor" || k === "offset"))) out[k] = deep(x, k);
+        if (named) {
+          const t = targets.get(o.target as string);
+          if (!t) errs.push(`找不到物件「${o.target}」（${key}）。可指名：${[...targets.keys()].join("、")}`);
+          else {
+            const off = (o.offset ?? {}) as { x?: number; y?: number };
+            out.x = Math.round(t.x + (off.x ?? 0));
+            out.y = Math.round((o.anchor === "top" ? t.bottom - t.h : o.anchor === "bottom" ? t.bottom : t.bottom - t.h / 2) + (off.y ?? 0));
+          }
+        }
+        return out;
+      }
+      return v;
+    };
+    const props: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(ev.props ?? {})) props[k] = deep(v, k);
+    const focus = ev.focus?.map((q) => ({ ...q, at: deep(q.at, "at") as number }));
     if (ev.component === "PropFx" && !ev.target) errs.push("PropFx 需要 target（要動的物件名稱）");
     let follow: FollowSpec | undefined;
     if (ev.target) {
@@ -288,6 +338,9 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
           follow = { anchor: id, refFrame: s.frame!, depthScale: ev.depthScale ?? false };
         }
         if (!t) t = { x: 0, bottom: 0, h: 0 };
+      } else if (idFollow.has(ev.target)) {
+        // 指名貼在 3D 錨點上的組件的某部分：跟著那個組件走
+        follow = { ...idFollow.get(ev.target)!, depthScale: ev.depthScale ?? false };
       } else if (actors.follow.has(ev.target === "主持人" ? "host" : ev.target)) {
         // 指名站在 3D 錨點上的角色：跟著角色的錨點走
         follow = { ...actors.follow.get(ev.target === "主持人" ? "host" : ev.target)!, depthScale: ev.depthScale ?? false };
@@ -308,10 +361,21 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     }
     // 先用 target 帶入座標，再檢查參數（否則會被誤判成缺少 x / y）
     errs.unshift(...validateEvent(ev.component, props));
+    // 有 id 的事件：組件的各部分登記成 target（"<id>"、"<id>.<部分>"），之後的事件可以指名
+    if (ev.id) {
+      if (targets.has(ev.id)) errs.push(`id「${ev.id}」和其他物件重名`);
+      const entry = REGISTRY[ev.component];
+      const parts = entry?.targets && errs.length === 0 ? entry.targets(props) : { "": { x: Number(props.x ?? 0), bottom: Number(props.y ?? 0), h: 0 } };
+      for (const [k, box] of Object.entries(parts)) {
+        const name = k ? `${ev.id}.${k}` : ev.id;
+        targets.set(name, box);
+        if (follow) idFollow.set(name, follow);
+      }
+    }
     if (ACTOR_EVENTS.has(ev.component) && typeof props.actor === "string" && !actors.inits.some((a) => a.id === props.actor)) {
       errs.push(`角色「${props.actor}」沒有在這個 scene 的 actors 宣告。已宣告：${actors.inits.map((a) => a.id).join("、") || "（沒有，請在 scene 加 \"actors\"）"}`);
     }
-    return { ev, i, start: s.frame ?? 0, errors: errs, props, follow };
+    return { ev, i, start, errors: errs, props, follow, focus };
   });
 
   // Act / ActorState → 每個角色的事件（站位名稱換成座標）
@@ -341,7 +405,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     if (r.errors.length) continue;
     const list = actorEvents.get(p.actor)!;
     if (r.ev.component === "Act") list.push({ kind: "act", start: r.start, duration: r.ev.duration, action: p.action, view: p.view, facing: p.facing, loop: p.loop, from: pts.from, to: pts.to, prop: p.prop, speed: p.speed });
-    else list.push({ kind: "state", start: r.start, costume: p.costume, silhouette: p.silhouette, dim: p.dim, scale: p.scale, visible: p.visible, view: p.view, facing: p.facing, talk: p.talk, at: pts.at });
+    else list.push({ kind: "state", start: r.start, costume: p.costume, silhouette: p.silhouette, dim: p.dim, scale: p.scale, visible: p.visible, view: p.view, facing: p.facing, talk: p.talk, at: pts.at, tagText: p.tagText });
   }
 
   for (const r of resolved) for (const e of r.errors) errors.push(`[${scene.id}] 事件 #${r.i + 1} ${r.ev.component}：${e}`);
@@ -369,7 +433,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
         const el = <FxTarget key={a.id} name={a.id === "host" ? "主持人" : a.id} x={a.x} y={a.y} render={() => <Actor init={a} events={actorEvents.get(a.id) ?? []} />} />;
         const fl = actors.follow.get(a.id);
         return fl ? (
-          <Follow3D key={a.id} anchor={fl.anchor} refFrame={fl.refFrame} depthScale={fl.depthScale} real={fl.real}>
+          <Follow3D key={a.id} anchor={fl.anchor} refFrame={fl.refFrame} depthScale={fl.depthScale} real={fl.real} clipBelow={fl.clipBelow}>
             {el}
           </Follow3D>
         ) : (

@@ -1,0 +1,87 @@
+{
+  "_comment": "雷軍的骨架（西裝版，21×64 正面 / 23×62 側面）。SVG 來自 public/svgAll/svg_leijun/svg/leijun_full_front_parts.svg、leijun_full_side_right_parts.svg。褲子在 SVG 裡算 jacket，用 rect 分給 leg_L / leg_R；正面 hand_right 裡的紅色胸針歸 torso；側面手臂沒有獨立部位，從 jacket 用 rect 切出來。規則同 host/rig.json。",
+  "name": "雷軍",
+  "views": {
+    "front": {
+      "svg": "front.svg",
+      "root": [10.5, 64],
+      "bones": [
+        { "id": "torso", "parent": "root", "pivot": [10.5, 47], "take": [{ "parts": ["hair", "face", "face_detail"], "rect": [0, 27, 20, 27] }, { "parts": ["hand_right"], "rect": [14, 31, 14, 31] }, { "parts": ["jacket"], "rect": [0, 0, 20, 46] }, { "parts": ["shirt", "tie"] }] },
+        { "id": "head", "parent": "torso", "pivot": [10.5, 27], "take": [{ "parts": ["hair", "face", "face_detail"] }] },
+        { "id": "arm_L_upper", "parent": "torso", "pivot": [2.5, 30], "sign": 1, "take": [{ "parts": ["sleeve_left"], "rect": [0, 28, 4, 37] }] },
+        { "id": "arm_L_lower", "parent": "arm_L_upper", "pivot": [2, 38], "sign": 1, "take": [{ "parts": ["sleeve_left"] }] },
+        { "id": "hand_L", "parent": "arm_L_lower", "pivot": [2, 44.5], "sign": 1, "take": [{ "parts": ["hand_left"] }] },
+        { "id": "arm_R_upper", "parent": "torso", "pivot": [18.5, 30], "sign": -1, "take": [{ "parts": ["sleeve_right"], "rect": [16, 28, 20, 37] }] },
+        { "id": "arm_R_lower", "parent": "arm_R_upper", "pivot": [19, 38], "sign": -1, "take": [{ "parts": ["sleeve_right"], "rect": [16, 38, 20, 48] }] },
+        { "id": "hand_R", "parent": "arm_R_lower", "pivot": [18.5, 44.5], "sign": -1, "take": [{ "parts": ["hand_right"] }] },
+        { "id": "leg_L", "parent": "root", "pivot": [7.5, 47], "take": [{ "parts": ["jacket"], "rect": [0, 47, 10, 55] }, { "parts": ["leg_left"] }] },
+        { "id": "foot_L", "parent": "leg_L", "pivot": [7.5, 58], "take": [{ "parts": ["shoe_left"] }] },
+        { "id": "leg_R", "parent": "root", "pivot": [13, 47], "take": [{ "parts": ["jacket"], "rect": [11, 47, 20, 55] }, { "parts": ["sleeve_right", "leg_right"] }] },
+        { "id": "foot_R", "parent": "leg_R", "pivot": [13.5, 58], "take": [{ "parts": ["shoe_right"] }] }
+      ],
+      "z": ["leg_L", "foot_L", "leg_R", "foot_R", "torso", "head", "arm_L_upper", "arm_L_lower", "hand_L", "arm_R_upper", "arm_R_lower", "hand_R"],
+      "slots": {
+        "hand_L": { "bone": "hand_L", "at": [2, 46] },
+        "hand_R": { "bone": "hand_R", "at": [18.5, 46] },
+        "chest": { "bone": "torso", "at": [10.5, 40] },
+        "head": { "bone": "head", "at": [10.5, 0] }
+      },
+      "faces": {
+        "blink": [[5, 16, "#f7cb9c"], [6, 16, "#f7cb9c"], [7, 16, "#f7cb9c"], [13, 16, "#f7cb9c"], [14, 16, "#f7cb9c"], [15, 16, "#f7cb9c"]],
+        "smile": [[5, 15, "#f7cb9c"], [7, 15, "#f7cb9c"], [5, 16, "#1a1a1a"], [6, 16, "#f7cb9c"], [7, 16, "#1a1a1a"],
+                  [13, 15, "#f7cb9c"], [15, 15, "#f7cb9c"], [13, 16, "#1a1a1a"], [14, 16, "#f7cb9c"], [15, 16, "#1a1a1a"]],
+        "surprise": [[5, 14, "#1a1a1a"], [6, 14, "#1a1a1a"], [7, 14, "#1a1a1a"], [5, 15, "#ffffff"], [6, 15, "#1a1a1a"], [7, 15, "#ffffff"],
+                     [13, 14, "#1a1a1a"], [14, 14, "#1a1a1a"], [15, 14, "#1a1a1a"], [13, 15, "#ffffff"], [14, 15, "#1a1a1a"], [15, 15, "#ffffff"],
+                     [9, 23, "#5a2b26"], [10, 23, "#3b1a17"], [11, 23, "#5a2b26"]],
+        "lookup": [[6, 16, "#ffffff"], [14, 16, "#ffffff"]],
+        "lookdown": [[5, 15, "#f7cb9c"], [7, 15, "#f7cb9c"], [13, 15, "#f7cb9c"], [15, 15, "#f7cb9c"]]
+      },
+      "mouths": [
+        [],
+        [[9, 23, "#5a2b26"], [10, 23, "#5a2b26"], [11, 23, "#5a2b26"]],
+        [[9, 23, "#3b1a17"], [10, 23, "#3b1a17"], [11, 23, "#3b1a17"], [9, 24, "#5a2b26"], [10, 24, "#c96f63"], [11, 24, "#5a2b26"]]
+      ]
+    },
+    "side": {
+      "svg": "side.svg",
+      "root": [11, 62],
+      "bones": [
+        { "id": "hand_R", "parent": "arm_R_lower", "pivot": [10.5, 43], "sign": -1, "take": [{ "parts": ["hand_left", "hand_right"] }] },
+        { "id": "arm_R_upper", "parent": "torso", "pivot": [10, 27.5], "sign": -1, "take": [{ "parts": ["jacket"], "rect": [8, 26, 12, 35] }] },
+        { "id": "arm_R_lower", "parent": "arm_R_upper", "pivot": [10, 36], "sign": -1, "take": [{ "parts": ["jacket"], "rect": [8, 36, 12, 42] }] },
+        { "id": "finger_R", "parent": "hand_R", "pivot": [10.5, 43], "hidden": true, "pixels": [[11, 47, "#f7cb9c"], [11, 48, "#d28a64"]] },
+        { "id": "torso", "parent": "root", "pivot": [10.5, 46],
+          "take": [{ "parts": ["hair", "face_detail"], "rect": [7, 24, 11, 24] }, { "parts": ["jacket"], "rect": [0, 0, 99, 45] }, { "parts": ["shirt", "tie", "sleeve_left"] }, { "parts": ["sleeve_right"], "rect": [0, 0, 99, 46] }],
+          "fill": [[8, 26, 12, 42, "#2c2c2c"], [8, 43, 13, 46, "#2c2c2c"]] },
+        { "id": "head", "parent": "torso", "pivot": [11, 24.5], "take": [{ "parts": ["hair", "face", "face_detail"] }] },
+        { "id": "arm_L_upper", "parent": "torso", "pivot": [10, 27.5], "sign": -1, "clone": "arm_R_upper", "shade": 0.62 },
+        { "id": "arm_L_lower", "parent": "arm_L_upper", "pivot": [10, 36], "sign": -1, "clone": "arm_R_lower", "shade": 0.62 },
+        { "id": "hand_L", "parent": "arm_L_lower", "pivot": [10.5, 43], "sign": -1, "clone": "hand_R", "shade": 0.62 },
+        { "id": "leg_L", "parent": "root", "pivot": [9, 46], "take": [{ "parts": ["jacket"], "rect": [0, 46, 10, 55] }, { "parts": ["leg_left"] }] },
+        { "id": "foot_L", "parent": "leg_L", "pivot": [9.5, 56], "take": [{ "parts": ["shoe_left"] }] },
+        { "id": "leg_R", "parent": "root", "pivot": [12, 46], "take": [{ "parts": ["jacket"], "rect": [11, 46, 99, 55] }, { "parts": ["sleeve_right", "leg_right"] }] },
+        { "id": "foot_R", "parent": "leg_R", "pivot": [12.5, 56], "take": [{ "parts": ["shoe_right"] }] }
+      ],
+      "z": ["arm_L_upper", "arm_L_lower", "hand_L", "leg_L", "foot_L", "leg_R", "foot_R", "torso", "head", "arm_R_upper", "arm_R_lower", "hand_R", "finger_R"],
+      "slots": {
+        "hand_R": { "bone": "hand_R", "at": [11, 45] },
+        "hand_L": { "bone": "hand_L", "at": [11, 45] },
+        "chest": { "bone": "torso", "at": [13, 36] },
+        "head": { "bone": "head", "at": [12, 0] }
+      },
+      "faces": {
+        "blink": [[17, 15, "#f7cb9c"], [18, 15, "#f7cb9c"], [19, 15, "#f7cb9c"]],
+        "smile": [[17, 14, "#f7cb9c"], [19, 14, "#f7cb9c"], [17, 15, "#1a1a1a"], [18, 15, "#f7cb9c"], [19, 15, "#1a1a1a"]],
+        "surprise": [[17, 13, "#1a1a1a"], [18, 13, "#1a1a1a"], [19, 13, "#1a1a1a"], [17, 14, "#ffffff"], [18, 14, "#ffffff"], [19, 14, "#1a1a1a"],
+                     [19, 21, "#3b1a17"], [20, 21, "#3b1a17"]],
+        "lookup": [[19, 15, "#ffffff"]],
+        "lookdown": [[17, 15, "#1a1a1a"]]
+      },
+      "mouths": [
+        [],
+        [[19, 21, "#5a2b26"], [20, 21, "#5a2b26"]],
+        [[18, 21, "#3b1a17"], [19, 21, "#3b1a17"], [20, 21, "#3b1a17"], [19, 22, "#c96f63"]]
+      ]
+    }
+  }
+}

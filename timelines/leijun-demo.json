@@ -1,0 +1,59 @@
+{
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "leijun-front",
+      "duration": 80,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "actors": [
+        { "id": "leijun", "anchor": { "x": 90, "y": 150 } },
+        { "id": "l2", "rig": "leijun", "anchor": { "x": 150, "y": 150 } },
+        { "id": "l3", "rig": "leijun", "anchor": { "x": 210, "y": 150 } },
+        { "id": "l4", "rig": "leijun", "anchor": { "x": 270, "y": 150 } },
+        { "id": "l5", "rig": "leijun", "anchor": { "x": 330, "y": 150 }, "silhouette": true },
+        { "id": "l6", "rig": "leijun", "anchor": { "x": 390, "y": 150 }, "dim": true, "talk": true }
+      ],
+      "events": [
+        { "component": "Act", "start": 10, "props": { "actor": "l2", "action": "招手" } },
+        { "component": "Act", "start": 10, "props": { "actor": "l3", "action": "介紹" } },
+        { "component": "Act", "start": 10, "props": { "actor": "l4", "action": "抱胸" } },
+        { "component": "Act", "start": 30, "props": { "actor": "l4", "action": "搖頭" } },
+        { "component": "ActorState", "start": 50, "props": { "actor": "l5", "silhouette": false } }
+      ]
+    },
+    {
+      "id": "leijun-side",
+      "duration": 90,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "actors": [
+        { "id": "walker", "rig": "leijun", "anchor": { "x": 60, "y": 150 }, "view": "side" },
+        { "id": "pointer", "rig": "leijun", "anchor": { "x": 180, "y": 150 }, "view": "side" },
+        { "id": "crossed", "rig": "leijun", "anchor": { "x": 230, "y": 150 }, "view": "side", "facing": "left" },
+        { "id": "trophy", "rig": "leijun", "anchor": { "x": 290, "y": 150 }, "view": "side" },
+        { "id": "faller", "rig": "leijun", "anchor": { "x": 370, "y": 150 }, "view": "side" }
+      ],
+      "events": [
+        { "component": "Act", "start": 5, "props": { "actor": "walker", "action": "走路", "to": { "x": 140, "y": 150 } } },
+        { "component": "Act", "start": 10, "props": { "actor": "pointer", "action": "指" } },
+        { "component": "Act", "start": 10, "props": { "actor": "crossed", "action": "抱胸" } },
+        { "component": "Act", "start": 30, "props": { "actor": "crossed", "action": "搖頭" } },
+        { "component": "Act", "start": 10, "props": { "actor": "trophy", "action": "放下獎盃" } },
+        { "component": "Act", "start": 10, "props": { "actor": "faller", "action": "摔倒" } }
+      ]
+    },
+    {
+      "id": "leijun-card",
+      "duration": 60,
+      "stage": "void",
+      "background": "#141a30",
+      "actors": [{ "id": "leijun", "anchor": { "x": 170, "y": 160 } }],
+      "events": [
+        { "component": "Act", "start": 4, "props": { "actor": "leijun", "action": "招手" } },
+        { "component": "RingPulse", "target": "leijun", "anchor": "top", "start": 4 },
+        { "component": "ProfileCard", "start": 8, "props": { "x": 330, "y": 70, "name": "雷軍", "title": "小米創辦人", "avatar": "@engine/assets/generated/leijun_avatar.png", "avatarScale": 1, "avatarBox": 40, "avatarDy": -2 } }
+      ]
+    }
+  ]
+}
