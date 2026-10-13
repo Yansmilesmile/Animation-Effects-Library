@@ -5,3 +5,4 @@ export { SunBurst } from "./SunBurst";
 export { GlowText } from "./GlowText";
 export { BeamDrop } from "./BeamDrop";
 export { MissPop } from "./MissPop";
+export { QuestionBubble } from "./QuestionBubble";

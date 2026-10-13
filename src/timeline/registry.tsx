@@ -2,7 +2,10 @@ import React from "react";
 import { Ambience } from "../components/Ambience";
 import { CameraState, worldToScreen } from "../components/Camera";
 import { ChoiceDialog, ChoiceMenu, DialogBox } from "../components/dialog";
-import { BeamDrop, GlowText, MissPop, RingPulse, Stamp, SunBurst, Tag } from "../components/emphasis";
+import { BeamDrop, GlowText, MissPop, QuestionBubble, RingPulse, Stamp, SunBurst, Tag } from "../components/emphasis";
+import { Inventory, ProfileCard } from "../components/panels";
+import { DropStack, KeyDrop, PropSwap, SmokePop } from "../components/props";
+import { ICONS, TONES } from "../components/props/bitmaps";
 import { ChestDeal, chestFanPosition, GamePopup, NextTeaser, SkillCard, SkillSummary, SKILL_DEMOS } from "../components/ending";
 import { Host } from "../components/Host";
 import { Sprite } from "../components/Sprite";
@@ -36,6 +39,9 @@ export type RegistryEntry = {
 const POS = { x: "number", y: "number" } as const;
 const SPRITE_LOOK = { anchor: "string", scale: "number", flipX: "boolean", rotate: "number", tint: "string", tintAmount: "number", glow: "string", opacity: "number", bloom: "boolean" } as const;
 
+const oneOf = (key: string, v: unknown, allowed: string[]) => (v === undefined || allowed.includes(String(v)) ? [] : [`${key}「${v}」不存在，可用：${allowed.join("、")}`]);
+const iconCheck = (icon: unknown, tone: unknown) => [...oneOf("icon", icon, Object.keys(ICONS)), ...oneOf("tone", tone, Object.keys(TONES))];
+
 const demoCheck = (name: unknown) => (name !== undefined && !(String(name) in SKILL_DEMOS) ? [`demo「${name}」不存在，可用：${Object.keys(SKILL_DEMOS).join("、")}`] : []);
 
 export const REGISTRY: Record<string, RegistryEntry> = {
@@ -65,6 +71,40 @@ export const REGISTRY: Record<string, RegistryEntry> = {
   },
   BeamDrop: { component: BeamDrop, layer: "world", code: "B12+B4", props: { asset: "string", x: "number", groundY: "number", scale: "number", landAt: "number", beamWidth: "number", darken: "boolean", glow: "string" }, required: ["asset"] },
   MissPop: { component: MissPop, layer: "world", code: "B10", props: { ...POS, text: "string", floatText: "string", floatX: "number", floatY: "number", sweat: "boolean", floatAt: "number" }, required: ["x", "y"] },
+  QuestionBubble: { component: QuestionBubble, layer: "world", code: "B14", props: { ...POS, text: "string", question: "string", size: "number", ink: "string" }, required: ["x", "y"] },
+
+  // ── 道具 ──
+  DropStack: {
+    component: DropStack,
+    layer: "world",
+    code: "C1",
+    props: { ...POS, asset: "string", icon: "string", tone: "string", count: "number", every: "number", fall: "number", fallFrames: "number", step: "number", jitter: "number", layout: "string", scale: "number", dust: "boolean" },
+    required: ["x", "y"],
+    check: (p) => [...iconCheck(p.icon, p.tone), ...oneOf("layout", p.layout, ["stack", "row"])],
+  },
+  PropSwap: {
+    component: PropSwap,
+    layer: "world",
+    code: "C2",
+    props: { ...POS, from: "string", to: "string", at: "number", scale: "number", toScale: "number", dust: "boolean", dustMode: "string", shrinkTo: "object", shrinkFrames: "number" },
+    required: ["x", "y"],
+    check: (p) => [...oneOf("dustMode", p.dustMode, ["dust", "smoke"]), ...(p.shrinkTo && !p.from ? ["shrinkTo 需要 from（要放到一邊的道具）"] : [])],
+  },
+  SmokePop: {
+    component: SmokePop,
+    layer: "world",
+    code: "C38",
+    props: { ...POS, asset: "string", scale: "number", flipX: "boolean", label: "string", tag: "string", tagAt: "number", tagVariant: "string", smoke: "string" },
+    required: ["x", "y", "asset"],
+  },
+  KeyDrop: {
+    component: KeyDrop,
+    layer: "world",
+    code: "C43",
+    props: { ...POS, fromX: "number", fromY: "number", flyFrames: "number", asset: "string", scale: "number", hover: "number", ring: "boolean", ringColor: "string", label: "string", labelAt: "number", labelVariant: "string", morphTo: "string", morphAt: "number" },
+    required: ["x", "y"],
+    check: (p) => (p.morphTo !== undefined && p.morphAt === undefined ? ["morphTo 需要 morphAt（第幾幀變形）"] : []),
+  },
 
   // ── 結構 ──
   LevelTitleCard: { component: LevelTitleCard, layer: "hud", code: "C8", props: { level: "number|string", title: "string", hold: "number", ...POS }, required: ["level", "title"] },
@@ -85,6 +125,30 @@ export const REGISTRY: Record<string, RegistryEntry> = {
   },
   CrowdGrid: { component: CrowdGrid, layer: "hud", code: "A1/A18/A2", props: { cols: "number", rows: "number", hero: "object", heroPose: "string", assets: "array", mode: "string", start: "number", duration: "number", flashAt: "number", label: "string", labelAt: "number", seed: "number" } },
   Spotlight: { component: Spotlight, layer: "world", code: "A13", props: { ...POS, from: "number", to: "number", duration: "number", darkness: "number", soft: "number", stretch: "number" }, required: ["x", "y"] },
+  ProfileCard: {
+    component: ProfileCard,
+    layer: "hud",
+    code: "C36",
+    props: { ...POS, name: "string", title: "string", badge: "string", stat: "string", avatar: "string", avatarScale: "number", avatarDx: "number", avatarDy: "number", avatarBox: "number", layout: "string", from: "string", w: "number" },
+    required: ["name"],
+    check: (p) => [...oneOf("layout", p.layout, ["row", "column"]), ...oneOf("from", p.from, ["left", "right", "bottom", "none"])],
+  },
+
+  // ── 常駐 UI ──
+  Inventory: {
+    component: Inventory,
+    layer: "hud",
+    code: "F7",
+    props: { ...POS, slots: "number", items: "array", size: "number", gap: "number", enter: "boolean" },
+    required: ["slots"],
+    check: (p) =>
+      Array.isArray(p.items)
+        ? p.items.flatMap((it: any, k: number) => [
+            ...(typeof it?.at === "number" ? [] : [`items[${k}] 缺少 at（第幾幀放進格子）`]),
+            ...(it?.asset ? [] : iconCheck(it?.icon, it?.tone).map((e) => `items[${k}] ${e}`)),
+          ])
+        : [],
+  },
 
   // ── 片尾 ──
   ChestDeal: { component: ChestDeal, layer: "world", code: "C24", props: { x: "number", groundY: "number", cards: "number", pace: "number", scale: "number", takeAt: "array" } },

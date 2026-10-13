@@ -24,6 +24,13 @@
 | SkillSummary | C59 | hud | 已習得 N/N | cards*: [{title, desc, demo}] | 12 幀 |
 | GamePopup | C29/C30/B9 | hud | 片尾行動呼籲 | variant*: follow{clickAt,exitAt} / input{question*,answer,title} / achievement{name*,exitAt} / ending{text,exitAt} | follow 約 56 幀 |
 | NextTeaser | C32 | hud | ??? 下集預告框 | x(418), y(58), label | 持續 |
+| QuestionBubble | B14 | world | 頭頂白底「?」泡泡，可帶一句反問 | x*, y*(泡泡尾巴尖，放頭頂上方), text("?"), question, size(2), ink | 3 幀回彈後輕浮動 |
+| DropStack | C1 | world | 物件一個個掉下、彈跳、揚塵、堆高；count 1 = 單一道具帶彈跳落下 | x*, y*(第一個落地的底部), asset 或 icon: coin / key, tone: gold / red / silver, count(5), every(6), fall(70), fallFrames(9), step, jitter, layout: stack / row, scale, dust | 每個 9 幀落地 + 4 幀彈跳 |
+| PropSwap | C2 | world | 道具替換：舊的瞬間消失、新的出現 + 一小團灰；也可只冒灰、或把道具縮小壓暗放到一邊 | x*, y*(底部), from, to, at(0), scale, toScale, dust, dustMode: dust / smoke, shrinkTo{x,y,scale,dim}, shrinkFrames(10) | 灰塵 14 幀 |
+| SmokePop | C38 | world | 人物在煙霧中登場 + 頭上名牌，之後頭頂彈小標籤；多人寫多個事件錯開 | x*, y*(腳底), asset*, scale, flipX, label, tag, tagAt(14), tagVariant, smoke | 第 4 幀現身，煙 20 幀 |
+| KeyDrop | C43 | world | 金鑰匙閃現 → 弧線飛到落點 → 光環 + 地面光圈常亮；可冒標籤、變成象徵物 | x*, y*(落點地面), fromX, fromY, flyFrames(12), asset, scale, hover(6), ring, ringColor, label, labelAt, labelVariant, morphTo, morphAt | 第 16 幀落地 |
+| ProfileCard | C36 | hud | 人物資料卡：頭像 + 名字 + 紅頭銜 + 金標籤 + 大數字，滑入後欄位依序彈出；放射光用 SunBurst 另加 | name*, title, badge, stat, avatar, avatarScale(2), avatarDx, avatarDy, avatarBox(40), layout: row / column, from: left / right / bottom / none, x(240), y(60)(卡片頂邊中點), w | 滑入 8 幀，欄位每 4 幀 |
+| Inventory | F7 | hud | 左上角道具欄：空格依次彈出，道具在 at 幀放進格子 + 光環 + 下方小標籤 | slots*, items[{at*, slot, icon / asset, tone, label}], x(8), y(8), size(20), gap(3), enter(true；從上個 scene 接過來寫 false) | 空格每 3 幀；標籤 45 幀 |
 | PropFx | 道具動畫 | （舞台物件） | 讓舞台上已擺好的物件本身動：必須有 event 的 target | effect*: shake / bounce / pulse / glow / tint / hide / show / move；amount, height, times, period, color, dx, dy | 依 effect |
 | Act | ACT | （角色） | 讓 scene.actors 宣告的角色做動作（分鏡 `fx: ACT`） | actor*, action*(動作關鍵詞，見 docs/actors.md), view, facing, loop, from, to, prop, speed | 依動作 |
 | ActorState | ACT | （角色） | 角色狀態：換裝、剪影、壓暗、出場 / 退場、說話 | actor*, costume, silhouette, dim, scale(整數), visible, view, facing, talk, at | 出退場 6 幀 |
