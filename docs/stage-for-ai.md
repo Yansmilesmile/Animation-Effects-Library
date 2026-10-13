@@ -70,7 +70,17 @@
 
 同一個物件可以同時套多個 PropFx（例如 bounce + glow）。`target: "主持人"` 也可以用。
 
-## 4. 寫錯會報錯
+## 4. 讓人物做動作（ACT）
+
+分鏡的 `fx: ACT` 用角色系統，不是 PropFx：scene 寫 `"actors": [{ "id": "host" }]`（取代舞台的主持人、站在同一個位置），
+再用 `Act` 事件做動作（攤手、遞錢、走路…），站位和走路的 `to` 可以寫舞台物件名稱。詳見 `docs/actors.md`。
+
+```jsonc
+"actors": [{ "id": "host", "talk": true }],
+"events": [{ "component": "Act", "start": "@每次", "props": { "actor": "host", "action": "遞錢" } }]
+```
+
+## 5. 寫錯會報錯
 
 target 找不到時，畫面左上角紅框會列出「這個舞台可指名的物件」。PropFx 沒寫 target、effect 拼錯也會報錯。
 
