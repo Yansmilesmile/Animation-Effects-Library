@@ -1,0 +1,16 @@
+{
+  "name": "插旗",
+  "_comment": "側面：右手把旗子舉過頭 → 往前下方用力插 → 放手（旗子消失，時間軸在 mark plant 換成 Sprite 循環旗）→ 直起身",
+  "views": ["side"],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "pose": { "arm_R_upper": 150, "arm_R_lower": 10, "torso": { "r": -3, "dx": 0 } } },
+    { "f": 12, "ease": "in", "pose": { "arm_R_upper": 55, "arm_R_lower": 0, "torso": { "r": 12, "dx": 1 } } },
+    { "f": 20, "pose": { "arm_R_upper": 0, "arm_R_lower": 0, "torso": { "r": 0, "dx": 0 } } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "Seamless Loop/Flag_Red/Frames/Flag_red1.png", "from": 0, "to": 12 }],
+  "marks": [{ "f": 12, "name": "plant" }],
+  "fx": [{ "f": 12, "type": "dust" }]
+}

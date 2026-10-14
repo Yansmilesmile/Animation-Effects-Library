@@ -1,0 +1,16 @@
+{
+  "name": "拋鑰匙",
+  "_comment": "側面：手往後拉、身體後仰蓄力 → 往前上方甩出、鑰匙離手（mark throw）→ 回到待機。鑰匙飛行用 KeyDrop 接（start 對 @詞+mark:throw）",
+  "views": ["side"],
+  "duration": 26,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "pose": { "arm_R_upper": -45, "arm_R_lower": 25, "torso": { "r": -4, "dx": -1 } } },
+    { "f": 10, "pose": { "arm_R_upper": 20, "arm_R_lower": 10, "torso": { "r": 0, "dx": 0 } } },
+    { "f": 13, "ease": "out", "pose": { "arm_R_upper": 130, "arm_R_lower": 0, "torso": { "r": 6, "dx": 1 } } },
+    { "f": 20, "pose": { "arm_R_upper": 120, "arm_R_lower": 0, "torso": { "r": 5, "dx": 1 } } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "小素材/鑰匙/橙色.png", "from": 2, "to": 13 }],
+  "marks": [{ "f": 13, "name": "throw" }]
+}
