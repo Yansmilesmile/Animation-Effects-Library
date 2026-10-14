@@ -1,0 +1,14 @@
+{
+  "name": "看袖口吊牌",
+  "_comment": "換裝 tshirt_heart（吊牌掛右袖口）用：右手往外抬起、手肘彎、頭歪向右邊低頭看袖口；吊牌保持下垂不翻面（字朝鏡頭）。mark show = 手抬到位",
+  "views": ["front"],
+  "duration": 30,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 4, "face": "lookdown" },
+    { "f": 10, "ease": "out", "pose": { "arm_R_upper": 55, "arm_R_lower": 70, "head": { "r": 8, "dx": 0, "dy": 0 }, "tag": { "r": 55, "dy": 0 } } },
+    { "f": 30, "pose": { "arm_R_upper": 55, "arm_R_lower": 70, "head": { "r": 8, "dx": 0, "dy": 0 }, "tag": { "r": 55, "dy": 0 } } }
+  ],
+  "marks": [{ "f": 10, "name": "show" }]
+}
