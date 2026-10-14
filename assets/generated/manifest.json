@@ -1,3 +1,6 @@
 ﻿[
-  { "file": "leijun_avatar.png", "for": "C36 人物資料卡的雷軍頭像（素材 path：@engine/assets/generated/leijun_avatar.png）", "method": "public/svgAll/svg_leijun/svg/leijun_full_front.svg 原生像素柵格化，裁上方 21×36（頭到胸）", "source": null, "license": null }
+  { "file": "leijun_avatar.png", "for": "C36 人物資料卡的雷軍頭像（素材 path：@engine/assets/generated/leijun_avatar.png）", "method": "public/svgAll/svg_leijun/svg/leijun_full_front.svg 原生像素柵格化，裁上方 21×36（頭到胸）", "source": null, "license": null },
+  { "file": "flashing_particles/1.png … 8.png", "for": "素材清單例外：Sprite Sheet/粒子特效/Flashing particles.png（時間軸照寫原路徑，copy-assets 自動換成這組）", "method": "scripts/fix-exceptions.py：原圖是 177×36 放大約 11.57 倍、帶雜訊 → 取每格中心 3×3 中位數縮回原生尺寸；深底 #181818 用反 screen 轉透明度（4 階）；照清單實測 X 範圍切 8 顆星，各自置中到 31×29 畫布", "source": "素材庫 Sprite Sheet/粒子特效/Flashing particles.png", "license": null },
+  { "file": "food_103.png", "for": "素材清單例外：小素材/食物/103.png 白底（照寫原路徑）", "method": "scripts/fix-exceptions.py：從四邊往內填色，去掉白色底", "source": "素材庫 小素材/食物/103.png", "license": null },
+  { "file": "skill_speed_up.png", "for": "素材清單例外：技能圖標/加速_提升_跑步.png 無透明（照寫原路徑）", "method": "scripts/fix-exceptions.py：RGB → RGBA，黑色圓角外框以外的四角改透明，圖示本體不動", "source": "素材庫 技能圖標/加速_提升_跑步.png", "license": null }
 ]

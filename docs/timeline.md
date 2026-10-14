@@ -54,8 +54,12 @@
     `back` = 世界座標、畫在主持人 / 角色**後面**（整張背景圖、角色腳下的坑；例如書頁特寫的書頁圖）。
 - **構圖**：人物和物品站在地面線上（腳底 / 底部 `y = 160`），字幕不擋人物。
 - **鏡頭**：`camera` 的 `type` 是 `push | pull | pan | tilt-push | cut`；zoom 建議 1、1.25、1.5、2、2.5（像素寬度才均勻）。
-- **素材**：`Sprite` / `BeamDrop` 的 `asset` 是相對素材庫根目錄的 path，必須先列進 `assets.list.json` 並執行 `npm run assets`。
+- **素材**：`Sprite` / `BeamDrop` 的 `asset` 是相對素材庫根目錄（`D:/桌面/素材庫/PixelSRPG-Forge-main`）的 path，必須先列進 `assets.list.json` 並執行 `npm run assets`。
   `assetQuery` 還沒有自動解析，寫了會報錯提醒。
+  - 單張圖 / 動畫條（`Sprite Sheet/…png`，檔名帶「(寬x高)」自動切格）：寫檔案路徑。
+  - **Seamless Loop、氣泡**（一格一張 PNG）：寫**資料夾**路徑，例如 `"Seamless Loop/轉動金幣"`、`"氣泡_心情表示_數字/氣泡/問號氣泡"`。影格自動按檔名數字排序；`Flag_Blue` / `Flag_Red` 寫到資料夾即可（會自己找 `Frames/`）。
+  - 動畫速度、循環 / 播一次的預設值照素材清單，不用自己寫；要改才寫 `animFps`、`play`（見 `docs/components.md` 的 Sprite）。
+  - 清單裡的例外照寫原路徑，引擎會換成處理過的版本：`Sprite Sheet/粒子特效/Flashing particles.png`（8 顆星、已去深底）、`小素材/食物/103.png`、`技能圖標/加速_提升_跑步.png`（已去背）。`小素材/金幣.jfif` 是照片，會報錯，不要用。
 
 ## 報錯
 

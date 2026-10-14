@@ -10,7 +10,7 @@ import { ICONS, TONES } from "../components/props/bitmaps";
 import { EASE_NAMES, MOVE_NAMES } from "../three/stage3d/runtime";
 import { ChestDeal, chestFanPosition, GamePopup, NextTeaser, SkillCard, SkillSummary, SKILL_DEMOS } from "../components/ending";
 import { Host } from "../components/Host";
-import { Sprite } from "../components/Sprite";
+import { PLAY_MODES, Sprite } from "../components/Sprite";
 import { Counter, CrowdGrid, LevelTitleCard, LevelTransition, Spotlight } from "../components/structure";
 import { LAYOUT, WORLD } from "../theme";
 import { PROP_FX_EFFECTS } from "./propfx";
@@ -54,8 +54,11 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     component: Sprite,
     layer: "world",
     code: "素材",
-    props: { asset: "string", assetQuery: "string", ...POS, ...SPRITE_LOOK, animFps: "number", row: "number", frameIndex: "number" },
-    check: (p) => (p.asset ? [] : p.assetQuery ? [`assetQuery「${p.assetQuery}」尚未解析成 asset，請先執行解析並使用鎖定版 JSON`] : ["缺少 asset"]),
+    props: { asset: "string", assetQuery: "string", ...POS, ...SPRITE_LOOK, animFps: "number", play: "string", row: "number", frameIndex: "number" },
+    check: (p) => [
+      ...(p.asset ? [] : p.assetQuery ? [`assetQuery「${p.assetQuery}」尚未解析成 asset，請先執行解析並使用鎖定版 JSON`] : ["缺少 asset"]),
+      ...oneOf("play", p.play, PLAY_MODES),
+    ],
   },
   Host: { component: Host, layer: "world", code: "主持人", props: { pose: "string", talk: "boolean", ...POS, ...SPRITE_LOOK }, required: ["pose"] },
   Ambience: { component: Ambience, layer: "world", code: "G", props: { layers: "array" }, required: ["layers"] },

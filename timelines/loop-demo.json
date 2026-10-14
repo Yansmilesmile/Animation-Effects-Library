@@ -1,0 +1,61 @@
+{
+  "fps": 30,
+  "watermark": "動畫素材展示",
+  "scenes": [
+    {
+      "id": "seamless-loop",
+      "duration": 120,
+      "stage": "void",
+      "watermark": false,
+      "cameraInitial": { "x": 240, "y": 135, "zoom": 1 },
+      "events": [
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/flag", "x": 40, "y": 80, "scale": 3 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/Flag_Blue", "x": 120, "y": 80, "scale": 3 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/Flag_Red/Frames", "x": 200, "y": 80, "scale": 3 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/rotationalCoin", "x": 280, "y": 80, "scale": 3 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/轉動金幣", "x": 360, "y": 80, "scale": 3 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/向日葵", "x": 440, "y": 80, "scale": 3 } },
+
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/果樹", "x": 40, "y": 165, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/棕色書翻頁", "x": 120, "y": 165, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/灰色書翻頁", "x": 200, "y": 165, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/紅寶石", "x": 265, "y": 165, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/黃寶石", "x": 315, "y": 165, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/紫寶石", "x": 365, "y": 165, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/透明寶石", "x": 415, "y": 165, "scale": 2 } },
+
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/紅色寶箱", "x": 60, "y": 245, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/紅色寶箱", "x": 130, "y": 245, "scale": 2, "play": "loop" } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/胡蘿蔔_紅色", "x": 200, "y": 245, "scale": 4 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/胡蘿蔔_金色", "x": 270, "y": 245, "scale": 4 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/進度條", "x": 350, "y": 245, "scale": 4 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/進度條", "x": 430, "y": 245, "scale": 4, "play": "once", "animFps": 4 } }
+      ]
+    },
+    {
+      "id": "sprite-sheet",
+      "duration": 120,
+      "stage": "void",
+      "watermark": false,
+      "cameraInitial": { "x": 240, "y": 135, "zoom": 1 },
+      "events": [
+        { "component": "Sprite", "start": 0, "props": { "asset": "Sprite Sheet/獎杯/End (Pressed) (64x64).png", "x": 55, "y": 120, "scale": 1 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Sprite Sheet/飄動的旗子/Checkpoint (Flag Idle)(64x64).png", "x": 145, "y": 120, "scale": 1 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Sprite Sheet/木頭石塊障礙物/Blink (54x52).png", "x": 235, "y": 120, "scale": 1 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Sprite Sheet/石塊障礙物/Blink (42x42).png", "x": 315, "y": 120, "scale": 1 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "Sprite Sheet/粒子特效/Flashing particles.png", "x": 410, "y": 100, "anchor": "center", "scale": 2 } },
+
+        { "component": "Sprite", "start": 0, "props": { "asset": "小素材/食物/103.png", "x": 60, "y": 230, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "技能圖標/加速_提升_跑步.png", "x": 125, "y": 230, "scale": 2 } },
+
+        { "component": "Sprite", "start": 0, "props": { "asset": "氣泡_心情表示_數字/氣泡/問號氣泡", "x": 190, "y": 230, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "氣泡_心情表示_數字/氣泡/感歎號說話氣泡", "x": 230, "y": 230, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "氣泡_心情表示_數字/氣泡/流汗尷尬氣泡", "x": 270, "y": 230, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "氣泡_心情表示_數字/氣泡/五角星點子氣泡", "x": 310, "y": 230, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "氣泡_心情表示_數字/氣泡/愛心氣泡", "x": 350, "y": 230, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "氣泡_心情表示_數字/氣泡/感歎號氣泡", "x": 390, "y": 230, "scale": 2 } },
+        { "component": "Sprite", "start": 0, "props": { "asset": "氣泡_心情表示_數字/氣泡/拒絕不行X放棄氣泡", "x": 430, "y": 230, "scale": 2, "play": "once" } }
+      ]
+    }
+  ]
+}

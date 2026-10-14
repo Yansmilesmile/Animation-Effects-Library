@@ -139,6 +139,867 @@
   "h": 16,
   "kind": "single"
  },
+ "Seamless Loop/flag": {
+  "w": 16,
+  "h": 16,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/flag/flag_1.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/flag/flag_2.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/flag/flag_3.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/flag/flag_4.png",
+    "w": 16,
+    "h": 16
+   }
+  ],
+  "fps": 10
+ },
+ "Seamless Loop/Flag_Blue": {
+  "w": 16,
+  "h": 16,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue1.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue2.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue3.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue4.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue5.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue6.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue7.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue8.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue9.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Blue/Frames/Flag_blue10.png",
+    "w": 16,
+    "h": 16
+   }
+  ],
+  "fps": 10
+ },
+ "Seamless Loop/Flag_Red/Frames": {
+  "w": 16,
+  "h": 16,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red1.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red2.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red3.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red4.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red5.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red6.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red7.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red8.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red9.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red10.png",
+    "w": 16,
+    "h": 16
+   }
+  ],
+  "fps": 10
+ },
+ "Seamless Loop/rotationalCoin": {
+  "w": 16,
+  "h": 16,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/rotationalCoin/coin_1.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/rotationalCoin/coin_2.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/rotationalCoin/coin_3.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/rotationalCoin/coin_4.png",
+    "w": 16,
+    "h": 16
+   }
+  ],
+  "fps": 8
+ },
+ "Seamless Loop/轉動金幣": {
+  "w": 13,
+  "h": 13,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/轉動金幣/38.png",
+    "w": 13,
+    "h": 13
+   },
+   {
+    "src": "Seamless Loop/轉動金幣/39.png",
+    "w": 13,
+    "h": 13
+   }
+  ],
+  "fps": 6
+ },
+ "Seamless Loop/向日葵": {
+  "w": 13,
+  "h": 19,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/向日葵/sunflower_04.png",
+    "w": 13,
+    "h": 19
+   },
+   {
+    "src": "Seamless Loop/向日葵/sunflower_05.png",
+    "w": 13,
+    "h": 16
+   }
+  ],
+  "fps": 2
+ },
+ "Seamless Loop/果樹": {
+  "w": 26,
+  "h": 34,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/果樹/枯樹.png",
+    "w": 26,
+    "h": 34
+   },
+   {
+    "src": "Seamless Loop/果樹/結滿果實.png",
+    "w": 26,
+    "h": 34
+   }
+  ],
+  "fps": 1
+ },
+ "Seamless Loop/棕色書翻頁": {
+  "w": 34,
+  "h": 33,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/棕色書翻頁/0.png",
+    "w": 30,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/棕色書翻頁/6.png",
+    "w": 34,
+    "h": 25
+   },
+   {
+    "src": "Seamless Loop/棕色書翻頁/12.png",
+    "w": 34,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/棕色書翻頁/14.png",
+    "w": 34,
+    "h": 30
+   },
+   {
+    "src": "Seamless Loop/棕色書翻頁/16.png",
+    "w": 34,
+    "h": 29
+   },
+   {
+    "src": "Seamless Loop/棕色書翻頁/18.png",
+    "w": 34,
+    "h": 27
+   },
+   {
+    "src": "Seamless Loop/棕色書翻頁/22.png",
+    "w": 34,
+    "h": 33
+   },
+   {
+    "src": "Seamless Loop/棕色書翻頁/24.png",
+    "w": 34,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/棕色書翻頁/25.png",
+    "w": 34,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/棕色書翻頁/28.png",
+    "w": 34,
+    "h": 30
+   }
+  ],
+  "fps": 12
+ },
+ "Seamless Loop/灰色書翻頁": {
+  "w": 34,
+  "h": 33,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/灰色書翻頁/36.png",
+    "w": 34,
+    "h": 25
+   },
+   {
+    "src": "Seamless Loop/灰色書翻頁/42.png",
+    "w": 34,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/灰色書翻頁/44.png",
+    "w": 34,
+    "h": 30
+   },
+   {
+    "src": "Seamless Loop/灰色書翻頁/46.png",
+    "w": 34,
+    "h": 29
+   },
+   {
+    "src": "Seamless Loop/灰色書翻頁/48.png",
+    "w": 34,
+    "h": 27
+   },
+   {
+    "src": "Seamless Loop/灰色書翻頁/52.png",
+    "w": 34,
+    "h": 33
+   },
+   {
+    "src": "Seamless Loop/灰色書翻頁/54.png",
+    "w": 34,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/灰色書翻頁/55.png",
+    "w": 34,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/灰色書翻頁/58.png",
+    "w": 34,
+    "h": 30
+   }
+  ],
+  "fps": 12
+ },
+ "Seamless Loop/紅寶石": {
+  "w": 14,
+  "h": 32,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/紅寶石/1.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/紅寶石/2.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/紅寶石/3.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/紅寶石/4.png",
+    "w": 14,
+    "h": 32
+   }
+  ],
+  "fps": 6
+ },
+ "Seamless Loop/黃寶石": {
+  "w": 14,
+  "h": 32,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/黃寶石/1.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/黃寶石/2.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/黃寶石/3.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/黃寶石/4.png",
+    "w": 14,
+    "h": 32
+   }
+  ],
+  "fps": 6
+ },
+ "Seamless Loop/紫寶石": {
+  "w": 14,
+  "h": 32,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/紫寶石/1.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/紫寶石/2.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/紫寶石/3.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/紫寶石/4.png",
+    "w": 14,
+    "h": 32
+   }
+  ],
+  "fps": 6
+ },
+ "Seamless Loop/透明寶石": {
+  "w": 14,
+  "h": 32,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/透明寶石/1.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/透明寶石/2.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/透明寶石/3.png",
+    "w": 14,
+    "h": 32
+   },
+   {
+    "src": "Seamless Loop/透明寶石/4.png",
+    "w": 14,
+    "h": 32
+   }
+  ],
+  "fps": 6
+ },
+ "Seamless Loop/紅色寶箱": {
+  "w": 30,
+  "h": 32,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/紅色寶箱/1.png",
+    "w": 30,
+    "h": 30
+   },
+   {
+    "src": "Seamless Loop/紅色寶箱/2.png",
+    "w": 30,
+    "h": 31
+   },
+   {
+    "src": "Seamless Loop/紅色寶箱/3.png",
+    "w": 30,
+    "h": 32
+   }
+  ],
+  "fps": 8,
+  "play": "once"
+ },
+ "Seamless Loop/胡蘿蔔_紅色": {
+  "w": 12,
+  "h": 14,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/胡蘿蔔_紅色/beetroot_01.png",
+    "w": 6,
+    "h": 5
+   },
+   {
+    "src": "Seamless Loop/胡蘿蔔_紅色/beetroot_02.png",
+    "w": 8,
+    "h": 6
+   },
+   {
+    "src": "Seamless Loop/胡蘿蔔_紅色/beetroot_03.png",
+    "w": 8,
+    "h": 11
+   },
+   {
+    "src": "Seamless Loop/胡蘿蔔_紅色/beetroot_04.png",
+    "w": 12,
+    "h": 14
+   }
+  ],
+  "fps": 4
+ },
+ "Seamless Loop/胡蘿蔔_金色": {
+  "w": 10,
+  "h": 14,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/胡蘿蔔_金色/parsnip_01.png",
+    "w": 6,
+    "h": 6
+   },
+   {
+    "src": "Seamless Loop/胡蘿蔔_金色/parsnip_02.png",
+    "w": 8,
+    "h": 7
+   },
+   {
+    "src": "Seamless Loop/胡蘿蔔_金色/parsnip_03.png",
+    "w": 8,
+    "h": 8
+   },
+   {
+    "src": "Seamless Loop/胡蘿蔔_金色/parsnip_04.png",
+    "w": 10,
+    "h": 14
+   }
+  ],
+  "fps": 4
+ },
+ "Seamless Loop/進度條": {
+  "w": 15,
+  "h": 7,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/進度條/redbar_00.png",
+    "w": 15,
+    "h": 7
+   },
+   {
+    "src": "Seamless Loop/進度條/redbar_01.png",
+    "w": 15,
+    "h": 7
+   },
+   {
+    "src": "Seamless Loop/進度條/redbar_02.png",
+    "w": 15,
+    "h": 7
+   },
+   {
+    "src": "Seamless Loop/進度條/redbar_03.png",
+    "w": 15,
+    "h": 7
+   },
+   {
+    "src": "Seamless Loop/進度條/redbar_04.png",
+    "w": 15,
+    "h": 7
+   },
+   {
+    "src": "Seamless Loop/進度條/redbar_05.png",
+    "w": 15,
+    "h": 7
+   },
+   {
+    "src": "Seamless Loop/進度條/redbar_06.png",
+    "w": 15,
+    "h": 7
+   }
+  ],
+  "fps": 8
+ },
+ "Sprite Sheet/獎杯/End (Pressed) (64x64).png": {
+  "w": 512,
+  "h": 64,
+  "kind": "anim",
+  "fps": 12,
+  "play": "once",
+  "cols": 8,
+  "rows": 1,
+  "frameW": 64,
+  "frameH": 64,
+  "frames": 8
+ },
+ "Sprite Sheet/飄動的旗子/Checkpoint (Flag Idle)(64x64).png": {
+  "w": 640,
+  "h": 64,
+  "kind": "anim",
+  "fps": 10,
+  "cols": 10,
+  "rows": 1,
+  "frameW": 64,
+  "frameH": 64,
+  "frames": 10
+ },
+ "Sprite Sheet/木頭石塊障礙物/Blink (54x52).png": {
+  "w": 216,
+  "h": 52,
+  "kind": "anim",
+  "fps": 5,
+  "cols": 4,
+  "rows": 1,
+  "frameW": 54,
+  "frameH": 52,
+  "frames": 4
+ },
+ "Sprite Sheet/石塊障礙物/Blink (42x42).png": {
+  "w": 168,
+  "h": 42,
+  "kind": "anim",
+  "fps": 5,
+  "cols": 4,
+  "rows": 1,
+  "frameW": 42,
+  "frameH": 42,
+  "frames": 4
+ },
+ "Sprite Sheet/粒子特效/Flashing particles.png": {
+  "w": 31,
+  "h": 29,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Sprite Sheet/粒子特效/Flashing particles.png.frames/1.png",
+    "w": 31,
+    "h": 29
+   },
+   {
+    "src": "Sprite Sheet/粒子特效/Flashing particles.png.frames/2.png",
+    "w": 31,
+    "h": 29
+   },
+   {
+    "src": "Sprite Sheet/粒子特效/Flashing particles.png.frames/3.png",
+    "w": 31,
+    "h": 29
+   },
+   {
+    "src": "Sprite Sheet/粒子特效/Flashing particles.png.frames/4.png",
+    "w": 31,
+    "h": 29
+   },
+   {
+    "src": "Sprite Sheet/粒子特效/Flashing particles.png.frames/5.png",
+    "w": 31,
+    "h": 29
+   },
+   {
+    "src": "Sprite Sheet/粒子特效/Flashing particles.png.frames/6.png",
+    "w": 31,
+    "h": 29
+   },
+   {
+    "src": "Sprite Sheet/粒子特效/Flashing particles.png.frames/7.png",
+    "w": 31,
+    "h": 29
+   },
+   {
+    "src": "Sprite Sheet/粒子特效/Flashing particles.png.frames/8.png",
+    "w": 31,
+    "h": 29
+   }
+  ],
+  "fps": 12
+ },
+ "小素材/食物/103.png": {
+  "w": 25,
+  "h": 25,
+  "kind": "single"
+ },
+ "技能圖標/加速_提升_跑步.png": {
+  "w": 32,
+  "h": 32,
+  "kind": "single"
+ },
+ "氣泡_心情表示_數字/氣泡/問號氣泡": {
+  "w": 16,
+  "h": 15,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "氣泡_心情表示_數字/氣泡/問號氣泡/1.png",
+    "w": 16,
+    "h": 15
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/問號氣泡/9.png",
+    "w": 16,
+    "h": 15
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/問號氣泡/18.png",
+    "w": 16,
+    "h": 15
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/問號氣泡/27.png",
+    "w": 16,
+    "h": 15
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/問號氣泡/36.png",
+    "w": 16,
+    "h": 15
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/問號氣泡/45.png",
+    "w": 16,
+    "h": 15
+   }
+  ],
+  "fps": 8
+ },
+ "氣泡_心情表示_數字/氣泡/感歎號說話氣泡": {
+  "w": 16,
+  "h": 14,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "氣泡_心情表示_數字/氣泡/感歎號說話氣泡/62.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/感歎號說話氣泡/63.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/感歎號說話氣泡/70.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/感歎號說話氣泡/79.png",
+    "w": 16,
+    "h": 14
+   }
+  ],
+  "fps": 8
+ },
+ "氣泡_心情表示_數字/氣泡/流汗尷尬氣泡": {
+  "w": 16,
+  "h": 14,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "氣泡_心情表示_數字/氣泡/流汗尷尬氣泡/1.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/流汗尷尬氣泡/2.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/流汗尷尬氣泡/3.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/流汗尷尬氣泡/4.png",
+    "w": 16,
+    "h": 14
+   }
+  ],
+  "fps": 8
+ },
+ "氣泡_心情表示_數字/氣泡/五角星點子氣泡": {
+  "w": 16,
+  "h": 14,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "氣泡_心情表示_數字/氣泡/五角星點子氣泡/62.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/五角星點子氣泡/66.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/五角星點子氣泡/73.png",
+    "w": 16,
+    "h": 14
+   }
+  ],
+  "fps": 8
+ },
+ "氣泡_心情表示_數字/氣泡/愛心氣泡": {
+  "w": 16,
+  "h": 14,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "氣泡_心情表示_數字/氣泡/愛心氣泡/65.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/愛心氣泡/72.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/愛心氣泡/80.png",
+    "w": 16,
+    "h": 14
+   }
+  ],
+  "fps": 8
+ },
+ "氣泡_心情表示_數字/氣泡/感歎號氣泡": {
+  "w": 16,
+  "h": 15,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "氣泡_心情表示_數字/氣泡/感歎號氣泡/64.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/感歎號氣泡/71.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/感歎號氣泡/77.png",
+    "w": 16,
+    "h": 15
+   }
+  ],
+  "fps": 8
+ },
+ "氣泡_心情表示_數字/氣泡/拒絕不行X放棄氣泡": {
+  "w": 16,
+  "h": 14,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "氣泡_心情表示_數字/氣泡/拒絕不行X放棄氣泡/68.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/拒絕不行X放棄氣泡/75.png",
+    "w": 16,
+    "h": 14
+   },
+   {
+    "src": "氣泡_心情表示_數字/氣泡/拒絕不行X放棄氣泡/82.png",
+    "w": 16,
+    "h": 14
+   }
+  ],
+  "fps": 8
+ },
  "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/19.png": {
   "w": 11,
   "h": 14,

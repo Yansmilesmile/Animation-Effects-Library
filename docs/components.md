@@ -4,7 +4,7 @@
 
 | 組件 | 詞典 | 層 | 用途 | 主要 props | 自身節奏 |
 |---|---|---|---|---|---|
-| Sprite | 素材 | world | 顯示素材 / 動畫條 | asset*, x, y, anchor(bottom/center/top-left), scale(整數), flipX, tint(red/gray/gold/#hex), glow, animFps | 動畫 10fps |
+| Sprite | 素材 | world | 顯示素材 / 動畫條 / Seamless Loop 資料夾（見文末） | asset*(檔案或資料夾), x, y, anchor(bottom/center/top-left), scale(整數), flipX, tint(red/gray/gold/#hex), glow, animFps, play: loop / once, frameIndex | 照素材清單的速度，沒列的 10fps |
 | Host | 主持人 | world | 額外的主持人（scene.host 之外） | pose*, x, y, flipX, tint, talk | — |
 | Ambience | G | world | 氛圍層 | layers*: dust / snow / lamp{x,y} / stars / beam{x} / confetti / zzz{x,y} | 持續 |
 | RingPulse | B1 | world | 光環脈衝，對準高亮詞 | x*, y*, radius(34), color | 15 幀 |
@@ -55,3 +55,19 @@ F2 頂部導航 / F6 浮水印不是事件：timeline 寫 `"nav": { "chapters": 
 scene 層級（不是 event）：`stage`、`host`、`actors`、`camera`、`ambience`、`subtitles`、`navIndex`、`watermark`。
 角色與動作庫（20 個動作）詳見 `docs/actors.md`。
 俯仰推入（A6）用 scene 的 `camera: [{ "type": "tilt-push", ... }]`。
+
+## Sprite：動畫素材怎麼寫
+
+```json
+{ "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/轉動金幣", "x": 120, "y": 160, "scale": 3 } }
+{ "component": "Sprite", "start": "@拿到", "props": { "asset": "Sprite Sheet/獎杯/End (Pressed) (64x64).png", "x": 240, "y": 160 } }
+{ "component": "Sprite", "start": 0, "props": { "asset": "Seamless Loop/進度條", "x": 240, "y": 120, "scale": 4, "play": "once", "animFps": 4 } }
+```
+
+- `asset` 寫資料夾 = Seamless Loop / 氣泡（一格一張 PNG）；寫 PNG = 單張圖或動畫條。完整範例：`timelines/loop-demo.json`。
+- 播放一律硬切換格、不補間；`loop` 播完接回第 0 格，`once` 從事件開始播一輪、停在最後一格。
+- 預設速度和方式照素材清單：例如棕色 / 灰色書翻頁 12、旗子 10、rotationalCoin 8、轉動金幣 6、寶石 6、胡蘿蔔 4、向日葵 2、果樹 1、氣泡 8 fps。
+  **預設 `once`**：`Sprite Sheet/獎杯/`、`Seamless Loop/紅色寶箱`（要一直開關就寫 `"play": "loop"`）。其餘預設 `loop`。
+- `animFps` 覆蓋速度；`frameIndex` 固定顯示某一格（0 起算，例如進度條停在滿格寫 6）。
+- 影格大小不同的組（向日葵、胡蘿蔔、寶箱、書）自動在框內**底部置中**，`anchor: "bottom"` 的 y 就是地面，不會抖。播放框 = 最大那一格。
+- `Sprite Sheet/粒子特效/Flashing particles.png` 會播 8 顆不等大的星（31×29 框、置中），建議 `anchor: "center"`。

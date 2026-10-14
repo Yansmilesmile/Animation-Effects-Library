@@ -12,8 +12,10 @@ import { ErrorBox } from "./ErrorBox";
  * - 放在 PixelStage 的像素層（480×270）裡，x / y 是像素層座標，會取整數。
  * - 以原生尺寸繪製，整個像素層一起放大 4 倍，所以所有素材的「一個像素」一樣大。
  *   scale 建議整數（主角級物件可用 2、3）；也接受 0.5 的倍數（仍是整數螢幕像素，但像素粗細和其他素材不同）。
- * - 動畫條：整張圖保留、用位移切格（不先切成單幀），8–12fps 逐格播放、不補間。
- *   rows > 1 時用 row 選列。格子資訊來自 inventory.csv（copy-assets 產生的 asset-meta.json）。
+ * - 動畫條：整張圖保留、用位移切格（不先切成單幀），逐格播放、不補間。
+ *   rows > 1 時用 row 選列。格子資訊來自檔名的「(寬x高)」（copy-assets 產生的 asset-meta.json）。
+ * - 資料夾（Seamless Loop、氣泡）：一格一張 PNG，照檔名數字順序硬切播放；影格大小不同時在框內底部置中，不會上下抖。
+ * - 速度預設照素材清單（asset-meta.json 的 fps，沒有就 10）；play: "once" 播一次停在最後一格。
  * - tint：把素材染色（"red" = 壞掉、"gray" = 未解鎖，或任意 #hex）；glow：發光外框。
  */
 export type SpriteProps = {
@@ -34,8 +36,10 @@ export type SpriteProps = {
   tintAmount?: number;
   /** 發光外框顏色，例如 theme 的 gold */
   glow?: string;
-  /** 動畫播放速度（幀/秒），預設 10 */
+  /** 動畫播放速度（幀/秒），預設照素材清單的建議速度（沒有就 10） */
   animFps?: number;
+  /** "loop" = 循環（預設）；"once" = 從事件開始播一次、停在最後一格（獎杯、紅色寶箱預設 once） */
+  play?: "loop" | "once";
   /** 動畫表選哪一列，預設 0 */
   row?: number;
   /** 固定顯示某一格（覆蓋自動播放） */
@@ -58,8 +62,12 @@ type Meta = {
   rows?: number;
   frameW?: number;
   frameH?: number;
-  frames?: number;
+  frames?: number | { src: string; w: number; h: number }[];
+  fps?: number;
+  play?: "loop" | "once";
 };
+
+export const PLAY_MODES = ["loop", "once"];
 
 const META = assetMeta as Record<string, Meta>;
 
@@ -91,7 +99,8 @@ export const Sprite: React.FC<SpriteProps> = ({
   tint,
   tintAmount = 0.85,
   glow,
-  animFps = 10,
+  animFps,
+  play,
   row = 0,
   frameIndex,
   opacity = 1,
@@ -104,7 +113,7 @@ export const Sprite: React.FC<SpriteProps> = ({
   const inBloomPass = useBloomPass();
   const { fps } = useVideoConfig();
   const filterId = "tint" + useId().replace(/:/g, "");
-  const meta = META[asset];
+  const meta = META[asset] ?? META[asset.replace(/\/+$/, "")];
 
   if (!meta) {
     return (
@@ -121,17 +130,25 @@ export const Sprite: React.FC<SpriteProps> = ({
     return <ErrorBox pixel x={px(x)} y={px(y)} message={`Sprite：scale 必須是 0.5 的倍數（建議整數），收到 ${scale}`} />;
   }
 
+  const loopFrames = meta.kind === "loop" && Array.isArray(meta.frames) ? meta.frames : null;
   const isAnim = meta.kind === "anim" && meta.cols && meta.frameW && meta.frameH;
   const fw = isAnim ? meta.frameW! : meta.w;
   const fh = isAnim ? meta.frameH! : meta.h;
   const w = fw * scale;
   const h = fh * scale;
 
+  // 目前第幾格：硬切、不補間；loop 播完接回第 0 格，once 停在最後一格
+  const pick = (n: number) => {
+    if (frameIndex !== undefined) return Math.min(Math.max(0, Math.floor(frameIndex)), n - 1);
+    const i = Math.floor((frame / fps) * (animFps ?? meta.fps ?? 10));
+    return (play ?? meta.play) === "once" ? Math.min(i, n - 1) : i % n;
+  };
   let col = 0;
   if (isAnim) {
-    const perRow = meta.rows === 1 ? Math.min(meta.cols!, meta.frames || meta.cols!) : meta.cols!;
-    col = frameIndex ?? Math.floor((frame / fps) * animFps) % perRow;
+    const perRow = meta.rows === 1 ? Math.min(meta.cols!, (meta.frames as number) || meta.cols!) : meta.cols!;
+    col = pick(perRow);
   }
+  const cur = loopFrames ? loopFrames[pick(loopFrames.length)] : null;
 
   const left = px(anchor === "top-left" ? x : x - w / 2);
   const top = px(anchor === "top-left" ? y : anchor === "center" ? y - h / 2 : y - h);
@@ -146,7 +163,7 @@ export const Sprite: React.FC<SpriteProps> = ({
     );
   }
 
-  const src = staticFile(`lib/${asset}`);
+  const src = staticFile(`lib/${cur ? cur.src : asset}`);
 
   return (
     <div
@@ -173,7 +190,20 @@ export const Sprite: React.FC<SpriteProps> = ({
         </svg>
       ) : null}
       <div style={{ width: w, height: h, overflow: "hidden", position: "relative" }}>
-        {hideImage ? null : (
+        {hideImage ? null : cur ? (
+          // 資料夾影格：框 = 最大影格，這一格底部置中（水平取整，不落在半個像素上）
+          <Img
+            src={src}
+            style={{
+              position: "absolute",
+              left: Math.floor((meta.w - cur.w) / 2) * scale,
+              top: (meta.h - cur.h) * scale,
+              width: cur.w * scale,
+              height: cur.h * scale,
+              imageRendering: "pixelated",
+            }}
+          />
+        ) : (
           <Img
             src={src}
             style={{
