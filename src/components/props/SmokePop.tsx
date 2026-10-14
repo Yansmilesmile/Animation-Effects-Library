@@ -1,6 +1,6 @@
 import React from "react";
 import { Sequence, useCurrentFrame } from "remotion";
-import assetMeta from "../../generated/asset-meta.json";
+import { useAssets } from "../../lib/assets";
 import { color, FONT_PIXEL } from "../../theme";
 import { popScale } from "../emphasis/common";
 import { Tag } from "../emphasis/Tag";
@@ -28,13 +28,12 @@ export type SmokePopProps = {
   smoke?: string;
 };
 
-const META = assetMeta as Record<string, { w: number; h: number; frameW?: number; frameH?: number }>;
-
 // 人物在煙霧最濃的那一幀出現
 const REVEAL = 4;
 
 export const SmokePop: React.FC<SmokePopProps> = ({ x, y, asset, scale = 1, flipX, label, tag, tagAt = 14, tagVariant = "dark", smoke = "#E6DFCF" }) => {
   const f = useCurrentFrame();
+  const META = useAssets().meta;
   if (f < 0) return null;
   const m = META[asset];
   const h = (m ? m.frameH ?? m.h : 32) * scale;

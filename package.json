@@ -3,8 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "description": "超級人機 像素動效組件（Remotion）",
+  "main": "src/lib/index.ts",
+  "types": "src/lib/index.ts",
+  "exports": {
+    ".": "./src/lib/index.ts",
+    "./webpack": "./webpack.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "superbot-assets": "bin/superbot-assets.mjs"
+  },
   "scripts": {
-    "assets": "node scripts/copy-assets.mjs && node scripts/actors.mjs",
+    "assets": "node scripts/copy-assets.mjs && node scripts/actors.mjs && node scripts/builtin-assets.mjs",
     "stage-editor": "python tools/stage_editor/server.py",
     "studio": "npm run assets && remotion studio",
     "render:showcase": "remotion render Showcase1 out/showcase1.mp4",

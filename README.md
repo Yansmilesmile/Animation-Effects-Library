@@ -23,6 +23,28 @@ npx remotion render Showcase4 out/showcase4.mp4
 node scripts/stills.mjs Showcase4 50 440 700   # 一次打包，輸出指定幀的截圖到 out/stills/
 ```
 
+## 在別的影片專案裡當組件庫用
+
+影片專案的 `package.json` 寫 `"superbot-motion": "file:../superbot-motion"`（另外裝 react、remotion、three 等，版本同本專案），`npm install` 後：
+
+```tsx
+// remotion.config.ts（打包腳本的 webpackOverride 也要套）：讓 react / remotion 只有一份
+import { withSuperbot } from "superbot-motion/webpack";
+Config.overrideWebpackConfig((c) => withSuperbot(c));
+
+// src/Root.tsx
+import { TimelinePlayer, timelinePlayerMetadata, AssetProvider, Sprite, VIDEO } from "superbot-motion";
+import assetMeta from "./asset-meta.json"; // npx superbot-assets 產生
+<Composition id="demo" component={TimelinePlayer} defaultProps={{ timeline, assetMeta }}
+  calculateMetadata={timelinePlayerMetadata} durationInFrames={1} fps={VIDEO.fps} width={VIDEO.width} height={VIDEO.height} />
+// 不用時間軸、直接寫組件：<AssetProvider meta={assetMeta}>…</AssetProvider>
+```
+
+- 庫入口：`src/lib/index.ts`（2D 組件、Host / Actor、Sprite、theme、字型、`TimelinePlayer`、`AssetProvider`）。
+- 素材歸影片專案：在專案根目錄跑 `npx superbot-assets`，掃專案裡的 JSON / TSX 找素材 path，從素材庫複製到專案的 `public/lib/`，產生 `src/asset-meta.json`（設定見 `bin/superbot-assets.mjs` 開頭）。
+- 庫自帶的主持人姿勢 SVG、`@engine/…` 圖、字型用 import 打包，不必複製；`npm run assets` 會重產 `src/generated/builtin-assets.ts`。
+- 舊做法（`projects.local.json` + junction、引擎內 `npm run assets`）暫時保留。
+
 ## 展示 Composition
 
 | ID | 內容 |

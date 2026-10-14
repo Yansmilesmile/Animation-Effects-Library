@@ -1,6 +1,6 @@
 import React from "react";
 import { useCurrentFrame } from "remotion";
-import assetMeta from "../../generated/asset-meta.json";
+import { useAssets } from "../../lib/assets";
 import { color, FONT_PIXEL, LAYOUT } from "../../theme";
 import { easeCamera } from "../../lib/util";
 import { DLG, PixelFrame } from "../dialog/PixelFrame";
@@ -36,7 +36,6 @@ export type ProfileCardProps = {
   w?: number;
 };
 
-const META = assetMeta as Record<string, { w: number; h: number; frameW?: number; frameH?: number }>;
 const SLIDE = 8;
 const STEP = 4;
 
@@ -44,6 +43,7 @@ const Pop: React.FC<{ g: number; origin?: string; children: React.ReactNode }> =
   g < 0 ? null : <div style={{ transform: `scale(${popScale(g)})`, transformOrigin: origin }}>{children}</div>;
 
 const Avatar: React.FC<{ asset?: string; box: number; scale: number; dx: number; dy: number }> = ({ asset, box, scale, dx, dy }) => {
+  const META = useAssets().meta;
   const m = asset ? META[asset] : undefined;
   const h = m ? (m.frameH ?? m.h) * scale : 0;
   return (

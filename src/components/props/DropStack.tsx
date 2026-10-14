@@ -1,6 +1,6 @@
 import React from "react";
 import { Sequence, useCurrentFrame } from "remotion";
-import assetMeta from "../../generated/asset-meta.json";
+import { AssetMeta, useAssets } from "../../lib/assets";
 import { PixelBitmap } from "../PixelBitmap";
 import { Sprite } from "../Sprite";
 import { ICONS, TONES } from "./bitmaps";
@@ -37,9 +37,7 @@ export type DropStackProps = {
   dust?: boolean;
 };
 
-const META = assetMeta as Record<string, { w: number; h: number; frameW?: number; frameH?: number }>;
-
-const sizeOf = (asset: string | undefined, icon: string, scale: number) => {
+const sizeOf = (META: Record<string, AssetMeta>, asset: string | undefined, icon: string, scale: number) => {
   if (asset) {
     const m = META[asset];
     return m ? { w: (m.frameW ?? m.w) * scale, h: (m.frameH ?? m.h) * scale } : { w: 16 * scale, h: 16 * scale };
@@ -65,8 +63,9 @@ export const DropStack: React.FC<DropStackProps> = ({
   dust = true,
 }) => {
   const f = useCurrentFrame();
+  const META = useAssets().meta;
   if (f < 0) return null;
-  const { w, h } = sizeOf(asset, icon, scale);
+  const { w, h } = sizeOf(META, asset, icon, scale);
   const items = [];
   for (let i = 0; i < count; i++) {
     const start = i * every;

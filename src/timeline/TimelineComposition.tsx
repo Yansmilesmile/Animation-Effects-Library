@@ -15,8 +15,8 @@ import { REGISTRY, validateEvent } from "./registry";
 import { STAGES } from "./stages";
 import { FxTarget, PropFxContext, PropFxEntry } from "./propfx";
 import type { StageSpec } from "../scenes/LayoutStage";
-import assetMeta from "../generated/asset-meta.json";
 import character from "../generated/character.json";
+import { AssetMeta, useAssets } from "../lib/assets";
 import type { ActorDecl, Scene, Timeline, TimelineEvent } from "./types";
 import { Actor } from "../actor/Actor";
 import { ACTORS } from "../actor/rig";
@@ -79,11 +79,10 @@ const firstVisible = (rt: Stage3DRuntime, id: string, duration: number) => {
 
 // ── target：用名稱指名舞台上的物件 ─────────────────
 type TargetBox = { x: number; bottom: number; h: number };
-const META = assetMeta as Record<string, { w: number; h: number; frameW?: number; frameH?: number }>;
 const POSES = (character as { poses: { name: string; width: number; height: number }[] }).poses;
 
 /** 舞台上有名字的物件（素材、燈光）+ 主持人 → 世界座標的位置與高度 */
-const buildTargets = (spec: StageSpec | undefined, host: { pose: string; x?: number; y?: number; scale?: number } | null) => {
+const buildTargets = (META: Record<string, AssetMeta>, spec: StageSpec | undefined, host: { pose: string; x?: number; y?: number; scale?: number } | null) => {
   const map = new Map<string, TargetBox>();
   for (const it of spec?.items ?? []) {
     if (!it.name) continue;
@@ -268,6 +267,7 @@ const FocusWrap: React.FC<{ focus: Focus[]; children: React.ReactNode }> = ({ fo
 
 export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt: number }> = ({ scene, timeline, navEnterAt }) => {
   const errors: string[] = [];
+  const assetMeta = useAssets().meta;
   const stage = STAGES[scene.stage ?? "void"];
   if (!stage) errors.push(`[${scene.id}] 舞台「${scene.stage}」不存在，可用：${Object.keys(STAGES).join("、")}`);
   const rt3d = build3d(scene, errors);
@@ -276,7 +276,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
 
   // scene 沒寫 host（undefined）時用舞台存的預設站位；寫 null 表示不出現（3D scene 預設不出現）
   const h = scene.host !== undefined ? scene.host : rt3d ? null : stage?.defaultHost ?? null;
-  const targets = buildTargets(rt3d ? undefined : stage?.spec, h);
+  const targets = buildTargets(assetMeta, rt3d ? undefined : stage?.spec, h);
 
   // 角色：站位要用舞台物件，所以在 targets 之後；角色本身也可以被 target 指名（id；host 同時是「主持人」）
   const actors = buildActors(scene.actors ?? [], targets, h, rt3d ? { rt: rt3d, cam: camera, duration: scene.duration } : undefined);

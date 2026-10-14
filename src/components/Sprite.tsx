@@ -1,6 +1,6 @@
 import React, { useId } from "react";
-import { Img, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import assetMeta from "../generated/asset-meta.json";
+import { Img, useCurrentFrame, useVideoConfig } from "remotion";
+import { useAssets } from "../lib/assets";
 import { color as themeColor } from "../theme";
 import { hexToRgb, px } from "../lib/util";
 import { useBloomPass } from "./BloomContext";
@@ -54,22 +54,7 @@ export type SpriteProps = {
   hideImage?: boolean;
 };
 
-type Meta = {
-  w: number;
-  h: number;
-  kind: string;
-  cols?: number;
-  rows?: number;
-  frameW?: number;
-  frameH?: number;
-  frames?: number | { src: string; w: number; h: number }[];
-  fps?: number;
-  play?: "loop" | "once";
-};
-
 export const PLAY_MODES = ["loop", "once"];
-
-const META = assetMeta as Record<string, Meta>;
 
 const TINTS: Record<string, string> = {
   red: themeColor.red,
@@ -113,6 +98,7 @@ export const Sprite: React.FC<SpriteProps> = ({
   const inBloomPass = useBloomPass();
   const { fps } = useVideoConfig();
   const filterId = "tint" + useId().replace(/:/g, "");
+  const { meta: META, url } = useAssets();
   const meta = META[asset] ?? META[asset.replace(/\/+$/, "")];
 
   if (!meta) {
@@ -163,7 +149,7 @@ export const Sprite: React.FC<SpriteProps> = ({
     );
   }
 
-  const src = staticFile(`lib/${cur ? cur.src : asset}`);
+  const src = url(cur ? cur.src : asset);
 
   return (
     <div
