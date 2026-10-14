@@ -47,7 +47,7 @@ node scripts/stills.mjs Showcase4 50 440 700   # 一次打包，輸出指定幀�
 | 組件 | 用途 |
 |---|---|
 | `Sprite` | 顯示素材庫的單張圖或動畫條。原生尺寸繪製、整數倍放大；動畫 8–12fps 逐格播放、不補間；支援 `flipX`、`tint`（red / gray / gold / #hex）、`glow`、`bloom={false}` |
-| `Host` | 主持人「超級人機」（`Me_我的像素人物/pixel/`，33 個姿勢），`pose` 用 character.json 的 name |
+| `Host` | 主持人「超級人機」（`public/svgAll/svg_host/svg/` 的像素 SVG，33 個姿勢），`pose` 用 `assets/host/poses.json` 的 name |
 | `PixelBitmap` | 用字串畫小型像素圖（✕、王冠、星星、鎖、汗滴、游標、獎盃） |
 | `ErrorBox` | 素材、姿勢、參數錯誤時在畫面上顯示紅框 |
 
@@ -166,10 +166,10 @@ node scripts/render-timeline.mjs timelines/<名稱>.json        # 渲染任一�
 
 ## 素材
 
-- 素材庫 `D:/桌面/PixelSRPG-Forge-main`、索引 `D:/桌面/asset_index` **只讀**，不修改。
+- 素材庫 `D:/桌面/素材庫/PixelSRPG-Forge-main` **只讀**，不修改。新庫沒有的檔案暫時回舊庫 `D:/桌面/PixelSRPG-Forge-main` 找（給舊範例用），`npm run assets` 會列出警告。
 - 要用的素材列在 `assets.list.json`，執行 `npm run assets` 複製到 `public/lib/`，並產生 `src/generated/asset-meta.json`（尺寸與動畫格子）。
-- 主持人 `Me_我的像素人物/pixel/*` 和 `character.json` 會自動複製。
-- 動畫格子資訊來自 `inventory.csv`；檔名帶 `(寬x高)` 時以檔名為準（索引偶爾判錯，例如 Slime 被判成 88×30）。
+- 主持人：姿勢說明在 `assets/host/poses.json`，圖檔用 `public/svgAll/svg_host/svg/<姿勢>.svg`；還沒有 SVG 的姿勢暫用 `assets/host/legacy/<姿勢>.png`（不進 git）。
+- 動畫格子：檔名帶 `(寬x高)` 時照它切格；其他一律當單張圖。
 - `public/lib/` 不進 git（素材包與個人形象不公開散布）。clone 下來後，在有素材庫的電腦上執行 `npm run assets` 即可。
 
 ## 字體

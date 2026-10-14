@@ -3,6 +3,8 @@ node_modules/
 out/
 # 從素材庫複製的素材（素材包與個人形象，不公開散布）；執行 npm run assets 重新複製
 public/lib/
+# 主持人在 svg_host 裡還沒有 SVG 的姿勢（個人形象，不公開散布）
+assets/host/legacy/
 .remotion/
 *.log
 .DS_Store

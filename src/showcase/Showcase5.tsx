@@ -3,7 +3,7 @@ import { AbsoluteFill, Sequence, useCurrentFrame } from "remotion";
 import { Ambience } from "../components/Ambience";
 import { Camera } from "../components/Camera";
 import { QuestionBubble, SunBurst } from "../components/emphasis";
-import { Host } from "../components/Host";
+import { Host, hostAsset } from "../components/Host";
 import { Inventory, ProfileCard } from "../components/panels";
 import { PixelStage } from "../components/PixelStage";
 import { DropStack, KeyDrop, PropSwap, SmokePop } from "../components/props";
@@ -17,7 +17,6 @@ import { At, Guide } from "./Showcase2";
 
 const G = HOST_FEET;
 const lamp = { type: "lamp" as const, ...LAMP_GLOW, radius: 50, cone: 40 };
-const P = "Me_我的像素人物/pixel/";
 
 const Room: React.FC<{ children?: React.ReactNode; pose?: string; hostX?: number }> = ({ children, pose, hostX = 150 }) => (
   <Camera>
@@ -63,9 +62,9 @@ const SwapDemo: React.FC = () => {
 const SmokeDemo: React.FC = () => (
   <PixelStage hud={<Guide />} ui={<Label name="SmokePop" code="C38" note="煙霧中依次登場，頭上名牌，之後頭頂彈出小標籤；左右對稱" />}>
     <Room>
-      <At f={6}><SmokePop x={240} y={G} asset={`${P}full_front.png`} label="主角" tag="$1/年" tagVariant="red" /></At>
-      <At f={22}><SmokePop x={180} y={G} asset={`${P}full_point_happy.png`} label="同事 A" tag="$1/年" tagAt={18} /></At>
-      <At f={30}><SmokePop x={300} y={G} asset={`${P}full_wave_talk.png`} flipX label="同事 B" tag="$1/年" tagAt={18} /></At>
+      <At f={6}><SmokePop x={240} y={G} asset={hostAsset("full_front")} label="主角" tag="$1/年" tagVariant="red" /></At>
+      <At f={22}><SmokePop x={180} y={G} asset={hostAsset("full_point_happy")} label="同事 A" tag="$1/年" tagAt={18} /></At>
+      <At f={30}><SmokePop x={300} y={G} asset={hostAsset("full_wave_talk")} flipX label="同事 B" tag="$1/年" tagAt={18} /></At>
     </Room>
   </PixelStage>
 );
@@ -106,10 +105,10 @@ const CardDemo: React.FC = () => {
           {f < 75 ? (
             <>
               <At f={4}><SunBurst x={LAYOUT.centerX} y={92} radius={110} /></At>
-              <At f={4}><ProfileCard name="超級人機" title="知識頻道主持人" badge="會寫程式" stat="47 秒" avatar={`${P}bust_front.png`} avatarScale={1} x={LAYOUT.centerX} y={60} /></At>
+              <At f={4}><ProfileCard name="超級人機" title="知識頻道主持人" badge="會寫程式" stat="47 秒" avatar={hostAsset("bust_front")} avatarScale={1} x={LAYOUT.centerX} y={60} /></At>
             </>
           ) : (
-            <At f={75}><ProfileCard name="雷軍" title="小米創辦人" avatar={`${P}bust_front.png`} avatarScale={1} layout="column" from="right" x={360} y={40} /></At>
+            <At f={75}><ProfileCard name="雷軍" title="小米創辦人" avatar={hostAsset("bust_front")} avatarScale={1} layout="column" from="right" x={360} y={40} /></At>
           )}
         </>
       }

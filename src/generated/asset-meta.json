@@ -144,104 +144,9 @@
   "h": 14,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/full_front.png": {
-  "w": 27,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_front_right.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_side_right.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_back_left.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_back.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_back_right.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_phone_smile.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_mic_talk.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_mic_hold.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_surprised_explain.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_point_happy.png": {
-  "w": 31,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_laugh_clasp.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_sit_cheer.png": {
-  "w": 33,
-  "h": 50,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_wave_talk.png": {
-  "w": 31,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_mic_sing.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_nervous_teary.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_point_nervous.png": {
-  "w": 31,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/full_crouch_cry.png": {
-  "w": 28,
-  "h": 51,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/half_laptop.png": {
-  "w": 34,
-  "h": 40,
-  "kind": "single"
- },
- "Me_我的像素人物/pixel/half_phone_call.png": {
-  "w": 26,
-  "h": 40,
+ "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合1_png/287.png": {
+  "w": 15,
+  "h": 12,
   "kind": "single"
  },
  "Me_我的像素人物/pixel/half_phone_call_alt.png": {
@@ -249,62 +154,212 @@
   "h": 40,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/half_read_paper.png": {
+ "@pixel_Apply/videos/小米創業思考/assets/generated/book_page_closeup.png": {
+  "w": 480,
+  "h": 270,
+  "kind": "single"
+ },
+ "@pixel_Apply/videos/小米創業思考/assets/generated/pit_hole.png": {
+  "w": 32,
+  "h": 10,
+  "kind": "single"
+ },
+ "@pixel_Apply/videos/小米創業思考/assets/generated/bookmark_red.png": {
+  "w": 6,
+  "h": 14,
+  "kind": "single"
+ },
+ "Weapons_武器装备/武器装备-冒险岛/414.png": {
+  "w": 32,
+  "h": 32,
+  "kind": "single"
+ },
+ "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (26)_png/13.png": {
+  "w": 19,
+  "h": 17,
+  "kind": "single"
+ },
+ "@pixel_Apply/videos/小米創業思考/assets/generated/price_tag_small.png": {
+  "w": 9,
+  "h": 12,
+  "kind": "single"
+ },
+ "Weapons_武器装备/武器装备-冒险岛/383.png": {
+  "w": 29,
+  "h": 29,
+  "kind": "single"
+ },
+ "@pixel_Apply/videos/小米創業思考/assets/generated/thread_spool.png": {
+  "w": 14,
+  "h": 16,
+  "kind": "single"
+ },
+ "Asset_Packs_素材套图/CleanCity/Tiles/GuttyKreum_CleanCityB_240.png": {
+  "w": 16,
+  "h": 16,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_front.svg": {
+  "w": 27,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_front_right.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_side_right.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_back_left.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_back.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_back_right.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_phone_smile.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_mic_talk.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_mic_hold.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/assets/host/legacy/full_surprised_explain.png": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/assets/host/legacy/full_point_happy.png": {
+  "w": 31,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_laugh_clasp.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_sit_cheer.svg": {
+  "w": 33,
+  "h": 50,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_wave_talk.svg": {
+  "w": 31,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_mic_sing.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_nervous_teary.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/assets/host/legacy/full_point_nervous.png": {
+  "w": 31,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/full_crouch_cry.svg": {
+  "w": 28,
+  "h": 51,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/half_laptop.svg": {
+  "w": 34,
+  "h": 40,
+  "kind": "single"
+ },
+ "@engine/assets/host/legacy/half_phone_call.png": {
+  "w": 26,
+  "h": 40,
+  "kind": "single"
+ },
+ "@engine/public/svgAll/svg_host/svg/half_phone_call_alt.svg": {
+  "w": 27,
+  "h": 40,
+  "kind": "single"
+ },
+ "@engine/assets/host/legacy/half_read_paper.png": {
   "w": 22,
   "h": 32,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/half_present_coffee.png": {
+ "@engine/public/svgAll/svg_host/svg/half_present_coffee.svg": {
   "w": 33,
   "h": 32,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/half_coffee_document.png": {
+ "@engine/public/svgAll/svg_host/svg/half_coffee_document.svg": {
   "w": 26,
   "h": 32,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/half_desk_sleep_side.png": {
+ "@engine/assets/host/legacy/half_desk_sleep_side.png": {
   "w": 34,
   "h": 27,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/half_desk_sleep.png": {
+ "@engine/public/svgAll/svg_host/svg/half_desk_sleep.svg": {
   "w": 34,
   "h": 26,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/half_panic.png": {
+ "@engine/public/svgAll/svg_host/svg/half_panic.svg": {
   "w": 29,
   "h": 30,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/bust_front.png": {
+ "@engine/public/svgAll/svg_host/svg/bust_front.svg": {
   "w": 31,
   "h": 51,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/bust_front_right.png": {
+ "@engine/public/svgAll/svg_host/svg/bust_front_right.svg": {
   "w": 32,
   "h": 51,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/bust_side_right.png": {
+ "@engine/public/svgAll/svg_host/svg/bust_side_right.svg": {
   "w": 32,
   "h": 51,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/bust_back_left.png": {
+ "@engine/public/svgAll/svg_host/svg/bust_back_left.svg": {
   "w": 31,
   "h": 52,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/bust_back.png": {
+ "@engine/public/svgAll/svg_host/svg/bust_back.svg": {
   "w": 31,
   "h": 52,
   "kind": "single"
  },
- "Me_我的像素人物/pixel/bust_back_right.png": {
+ "@engine/public/svgAll/svg_host/svg/bust_back_right.svg": {
   "w": 33,
   "h": 52,
   "kind": "single"

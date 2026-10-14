@@ -1,36 +1,21 @@
 // 把用到的素材從素材庫複製到 public/lib/（保留相對路徑），並產生 src/generated/asset-meta.json。
-// 素材庫和索引只讀，不寫入。
+// 素材庫只讀，不寫入。
 // 用法：node scripts/copy-assets.mjs [清單或鎖定版 JSON ...]（預設 assets.list.json）
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const LIB_ROOT = "D:/桌面/PixelSRPG-Forge-main";
-const INVENTORY = "D:/桌面/asset_index/inventory.csv";
-const HOST_DIR = "Me_我的像素人物";
+const LIB_ROOT = "D:/桌面/素材庫/PixelSRPG-Forge-main";
+// 過渡用：舊的範例、舞台、pixel_Apply 還引用舊素材庫的檔案。新庫找不到時才回舊庫找，並列出警告；新影片只用新庫。
+const OLD_LIB_ROOT = "D:/桌面/PixelSRPG-Forge-main";
+const fromOldLib = [];
 const PROJECT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC_LIB = path.join(PROJECT, "public", "lib");
 const GENERATED = path.join(PROJECT, "src", "generated");
-
-// 簡單的 CSV 解析（支援雙引號欄位）
-function parseLine(line) {
-  const out = [];
-  const re = /("(?:[^"]|"")*"|[^,]*)(,|$)/g;
-  let m;
-  while ((m = re.exec(line))) {
-    const v = m[1];
-    out.push(v.startsWith('"') ? v.slice(1, -1).replace(/""/g, '"') : v);
-    if (!m[2]) break;
-  }
-  return out;
-}
-
-function parseCsv(text) {
-  const rows = text.split(/\r?\n/).filter(Boolean).map(parseLine);
-  const [head, ...body] = rows;
-  head[0] = head[0].replace(/^\uFEFF/, "");
-  return body.filter((r) => r.length === head.length).map((r) => Object.fromEntries(head.map((h, i) => [h, r[i]])));
-}
+// 主持人：姿勢說明在 assets/host/poses.json；圖檔用 svgAll/svg_host 的 SVG，還沒有 SVG 的姿勢暫用 assets/host/legacy/ 的 PNG
+const HOST_POSES = path.join(PROJECT, "assets", "host", "poses.json");
+const HOST_SVG = "public/svgAll/svg_host/svg";
+const HOST_LEGACY = "assets/host/legacy";
 
 // Node 22.9 在 Windows 上對含「【】」等字元的路徑呼叫 mkdirSync({recursive:true}) 會直接崩潰，改成逐層建立
 function mkdirp(dir) {
@@ -46,6 +31,15 @@ function pngSize(file) {
   if (b.toString("ascii", 1, 4) !== "PNG") throw new Error(`不是 PNG：${file}`);
   return [b.readUInt32BE(16), b.readUInt32BE(20)];
 }
+
+// SVG 的尺寸取 viewBox（svg_host 的 viewBox 就是原圖像素座標）
+function svgSize(file) {
+  const m = /viewBox="\s*[\d.-]+[\s,]+[\d.-]+[\s,]+([\d.]+)[\s,]+([\d.]+)\s*"/.exec(fs.readFileSync(file, "utf8"));
+  if (!m) throw new Error(`SVG 沒有 viewBox：${file}`);
+  return [Math.round(+m[1]), Math.round(+m[2])];
+}
+
+const imageSize = (file) => (/\.svg$/i.test(file) ? svgSize(file) : pngSize(file));
 
 // 收集要複製的路徑：清單檔的 paths，或鎖定版 JSON 裡所有 "asset" 字串
 function collect(file) {
@@ -101,7 +95,12 @@ if (fs.existsSync(projectsFile)) {
 }
 const sourceOf = (rel) => {
   const m = /^@([^/]+)\/(.+)$/.exec(rel);
-  if (!m) return path.join(LIB_ROOT, rel);
+  if (!m) {
+    const src = path.join(LIB_ROOT, rel);
+    const old = path.join(OLD_LIB_ROOT, rel);
+    if (!fs.existsSync(src) && fs.existsSync(old)) { fromOldLib.push(rel); return old; }
+    return src;
+  }
   // "@engine/…" = 這個專案自己的素材（例如 assets/generated/leijun_avatar.png）
   if (m[1] === "engine") return path.join(PROJECT, m[2]);
   return PROJECTS[m[1]] ? path.join(PROJECTS[m[1]], m[2]) : null;
@@ -115,40 +114,39 @@ if (!inputs.length) {
 const wanted = new Set();
 for (const f of inputs) collect(f).forEach((p) => wanted.add(p));
 
-const character = JSON.parse(fs.readFileSync(path.join(LIB_ROOT, HOST_DIR, "character.json"), "utf8"));
-for (const pose of character.poses) wanted.add(`${HOST_DIR}/${pose.file}`);
+const character = JSON.parse(fs.readFileSync(HOST_POSES, "utf8"));
+delete character._comment;
+const legacyPoses = [];
+for (const pose of character.poses) {
+  const svg = `${HOST_SVG}/${pose.name}.svg`;
+  const png = `${HOST_LEGACY}/${pose.name}.png`;
+  const rel = fs.existsSync(path.join(PROJECT, svg)) ? svg : fs.existsSync(path.join(PROJECT, png)) ? png : null;
+  if (!rel) { console.warn(`警告：主持人姿勢「${pose.name}」沒有圖檔（${svg} 或 ${png}），略過`); continue; }
+  if (rel === png) legacyPoses.push(pose.name);
+  [pose.width, pose.height] = imageSize(path.join(PROJECT, rel));
+  pose.file = `@engine/${rel}`;
+  wanted.add(pose.file);
+}
+character.poses = character.poses.filter((p) => p.file);
+if (legacyPoses.length) console.log(`主持人：${character.poses.length} 個姿勢，其中 ${legacyPoses.length} 個還沒有 SVG、暫用 PNG：${legacyPoses.join("、")}`);
 
-const inv = new Map(parseCsv(fs.readFileSync(INVENTORY, "utf8")).map((r) => [r.path, r]));
 const meta = {};
 const errors = [];
 for (const rel of wanted) {
   const src = sourceOf(rel);
   if (!src) { errors.push(`素材「${rel}」指向未登記的外部專案（projects.local.json）`); continue; }
   if (!fs.existsSync(src)) { errors.push(`找不到素材：${rel}`); continue; }
-  const r = inv.get(rel);
-  if (r && r.keep === "0") console.warn(`警告：inventory 標記為不保留（keep=0）：${rel}`);
-  if (r && r.kind === "sheet") console.warn(`警告：這是合集圖（kind=sheet）：${rel}`);
   const dst = path.join(PUBLIC_LIB, rel);
   mkdirp(path.dirname(dst));
   if (!fs.existsSync(dst) || fs.statSync(dst).size !== fs.statSync(src).size) fs.copyFileSync(src, dst);
-  const [w, h] = pngSize(src);
-  const m = { w, h, kind: r?.kind ?? "single" };
-  if (r?.kind === "anim") {
-    Object.assign(m, {
-      cols: +r.cols, rows: +r.rows, frameW: +r.frame_w, frameH: +r.frame_h,
-      frames: +(r.anim_frames || +r.cols * +r.rows),
-    });
-  }
-  // 檔名帶「(寬x高)」時以檔名為準：inventory 的自動偵測偶爾會把兩格併成一格（例如 Slime 44x30 被判成 88x30）
+  const [w, h] = imageSize(src);
+  const m = { w, h, kind: "single" };
+  // 動畫條：檔名帶「(寬x高)」就照它切格（例如 Checkpoint (Flag Idle)(64x64).png = 640×64 → 10 格）
   const fm = path.basename(rel).match(/\((\d+)x(\d+)\)/);
   if (fm) {
     const [fw, fh] = [+fm[1], +fm[2]];
     if (w % fw === 0 && h % fh === 0 && (w > fw || h > fh)) {
-      const fixed = { kind: "anim", cols: w / fw, rows: h / fh, frameW: fw, frameH: fh, frames: (w / fw) * (h / fh) };
-      if (m.kind === "anim" && (m.frameW !== fw || m.frameH !== fh)) {
-        console.warn(`修正動畫格子：${rel}\n  inventory ${m.frameW}x${m.frameH}×${m.cols} → 檔名 ${fw}x${fh}×${fixed.cols}`);
-      }
-      Object.assign(m, fixed);
+      Object.assign(m, { kind: "anim", cols: w / fw, rows: h / fh, frameW: fw, frameH: fh, frames: (w / fw) * (h / fh) });
     }
   }
   meta[rel] = m;
@@ -172,4 +170,5 @@ for (const f of STAGE_FILES) {
 fs.writeFileSync(path.join(GENERATED, "stages.json"), JSON.stringify(stages, null, 1));
 if (STAGE_FILES.length) console.log(`舞台：${Object.keys(stages).join("、")}`);
 console.log(`已複製 ${Object.keys(meta).length} 張素材到 public/lib/，meta 寫入 src/generated/asset-meta.json`);
+if (fromOldLib.length) console.warn(`警告：${fromOldLib.length} 張素材新素材庫沒有，暫時從舊素材庫（${OLD_LIB_ROOT}）複製。新影片不要用這些：\n  ${fromOldLib.join("\n  ")}`);
 if (errors.length) { console.error(errors.join("\n")); process.exit(1); }
