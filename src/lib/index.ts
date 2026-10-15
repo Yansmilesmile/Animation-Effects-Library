@@ -38,6 +38,45 @@ export { TopNav } from "../components/TopNav";
 export { Watermark } from "../components/Watermark";
 export { ErrorBox } from "../components/ErrorBox";
 
+// 3D 層：背景或單一主體，可夾在 2D 層之間（docs/layer3d.md）
+export {
+  Layer3D,
+  layer3dPoint,
+  prepareScene,
+  pointIn,
+  registerScene3D,
+  registerLayer3DType,
+  LAYER3D_TYPES,
+  SCENES_3D,
+  makeCanvas,
+  pixelTexture,
+  paintSurface,
+  pixelsToCanvas,
+  rng,
+  shade,
+  boxMesh,
+  beamMesh,
+  blobShadowMesh,
+} from "../three/layer3d";
+export type {
+  Layer3DProps,
+  Scene3D,
+  CameraTrack,
+  CameraSpec as Layer3DCameraSpec,
+  CameraMove as Layer3DCameraMove,
+  Animate as Layer3DAnimate,
+  Environment as Layer3DEnvironment,
+  LightSpec as Layer3DLight,
+  Layer3DType,
+  BuildContext as Layer3DBuildContext,
+  FrameContext as Layer3DFrameContext,
+  RoomParams,
+  TerrainParams,
+  HandParams,
+  PixelArt,
+  SurfaceSpec,
+} from "../three/layer3d";
+
 // 角色：主持人（靜態姿勢）、骨架角色（host / colleague / leijun …，做動作庫的動作）
 export { Host, HOST_POSES, hostAsset } from "../components/Host";
 export type { HostProps } from "../components/Host";

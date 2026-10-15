@@ -1,6 +1,7 @@
 import type { AmbienceInput } from "../components/Ambience";
 import type { CameraMove, CameraState } from "../components/Camera";
 import type { Highlight } from "../components/Subtitle";
+import type { Animate, CameraMove as CameraMove3D, Scene3D } from "../three/layer3d/types";
 
 /**
  * 時間軸 JSON 格式（分鏡 AI 產生、TimelineComposition 渲染）。
@@ -31,6 +32,12 @@ export type Scene = {
    * 用 S3State / S3Camera / S3Focus 事件控制，target / 角色站位可寫 "3d:<錨點>"。見 docs/stage3d.md
    */
   stage3d?: string;
+  /**
+   * 3D 層（<Layer3D>）：背景或單一主體，畫在數字 layer 的 2D 事件之間（見 docs/layer3d.md）。
+   * scene = registerScene3D 註冊的名稱或場景 JSON；camera / animate 的 start 可寫 "@詞"。
+   * target / 角色站位可寫 "3d:<點>"（場景的命名點，換成那一幀的畫面位置，不跟隨）。
+   */
+  layer3d?: Layer3DSceneDecl;
   /** 像素層底色（CSS background） */
   background?: string;
   /** 主持人：pose 與站位（世界座標，y 預設地面線）。省略 = 用舞台存的預設站位（舞台編輯器擺的）；null = 不出現 */
@@ -50,6 +57,19 @@ export type Scene = {
   /** bloom / 暗角強度覆寫 */
   bloom?: number;
   vignette?: number;
+};
+
+type At = number | string;
+export type Layer3DSceneDecl = {
+  scene: string | Scene3D;
+  /** 機位 id，或鏡頭運動（一段或多段）：{ start, duration, from, to, move: push|pull|pan|hold|cut, ease } */
+  camera?: string | (Omit<CameraMove3D, "start"> & { start?: At }) | (Omit<CameraMove3D, "start"> & { start?: At })[];
+  /** 參數補間：{ target: 組件 id | "environment", start, duration, ease, to: { 參數: 值 } } */
+  animate?: (Omit<Animate, "start"> & { start?: At })[];
+  pixelSize?: number;
+  background?: string;
+  /** 3D 層的排序位置（和事件的數字 layer 比），預設 0 */
+  z?: number;
 };
 
 /** scene.actors 的一個角色。id 寫 "host" = 取代 scene 的主持人（預設站在主持人的位置） */
@@ -88,8 +108,12 @@ export type TimelineEvent = {
   start: number | string;
   /** 顯示多久（幀）；省略 = 到 scene 結束 */
   duration?: number;
-  /** 覆寫預設圖層："world"（跟鏡頭走）| "hud"（固定在畫面） */
-  layer?: "world" | "hud" | "back";
+  /**
+   * 覆寫預設圖層："world"（跟鏡頭走）| "hud"（固定在畫面）| "back"（主持人 / 角色後面）；
+   * 數字 = 和 3D 層（scene.layer3d，z 預設 0）排順序：比 3D 的 z 小畫在 3D 後面，大於等於畫在 3D 前面（但在 back / 角色 / world 之下）。
+   * 數字層用世界座標，同數字依事件順序。
+   */
+  layer?: "world" | "hud" | "back" | number;
   /** 指名舞台上的物件（舞台編輯器裡的名稱、「主持人」、角色 id，或 "3d:<錨點>"）：自動帶入 x / y；PropFx 必填 */
   target?: string;
   /** target 的定位點：物件的 center（預設）/ top（頭頂）/ bottom（底部） */
