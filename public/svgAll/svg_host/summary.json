@@ -1,0 +1,1218 @@
+[
+  {
+    "name": "bust_back",
+    "size": [
+      31,
+      52
+    ],
+    "palette": 17,
+    "pixels": 1291,
+    "parts": {
+      "face_detail": 35,
+      "hair": 608,
+      "face": 77,
+      "hand_left": 2,
+      "jacket": 345,
+      "tie": 11,
+      "shirt": 13,
+      "neck": 1,
+      "sleeve_right": 113,
+      "sleeve_left": 86
+    },
+    "verify": {
+      "pixels": 1291,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "bust_back.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/bust_back.svg",
+      "parts_svg": "svg/bust_back_parts.svg",
+      "annotated_svg": "annotated/bust_back_annotated.svg",
+      "annotated_png": "annotated/bust_back_annotated.png",
+      "zones_png": "zones/bust_back_zones.png",
+      "parts_json": "parts_json/bust_back.json",
+      "doc": "docs/bust_back.md",
+      "parts_sheet": "sheet/bust_back_parts_sheet.png"
+    }
+  },
+  {
+    "name": "bust_back_left",
+    "size": [
+      31,
+      52
+    ],
+    "palette": 17,
+    "pixels": 1275,
+    "parts": {
+      "face_detail": 51,
+      "hair": 604,
+      "face": 72,
+      "jacket": 348,
+      "shirt": 14,
+      "tie": 7,
+      "sleeve_right": 111,
+      "sleeve_left": 68
+    },
+    "verify": {
+      "pixels": 1275,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "bust_back_left.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/bust_back_left.svg",
+      "parts_svg": "svg/bust_back_left_parts.svg",
+      "annotated_svg": "annotated/bust_back_left_annotated.svg",
+      "annotated_png": "annotated/bust_back_left_annotated.png",
+      "zones_png": "zones/bust_back_left_zones.png",
+      "parts_json": "parts_json/bust_back_left.json",
+      "doc": "docs/bust_back_left.md",
+      "parts_sheet": "sheet/bust_back_left_parts_sheet.png"
+    }
+  },
+  {
+    "name": "bust_back_right",
+    "size": [
+      33,
+      52
+    ],
+    "palette": 18,
+    "pixels": 1348,
+    "parts": {
+      "face_detail": 40,
+      "hair": 634,
+      "face": 66,
+      "jacket": 388,
+      "shirt": 23,
+      "tie": 10,
+      "sleeve_right": 103,
+      "sleeve_left": 81,
+      "hand_left": 1,
+      "hand_right": 2
+    },
+    "verify": {
+      "pixels": 1348,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "bust_back_right.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/bust_back_right.svg",
+      "parts_svg": "svg/bust_back_right_parts.svg",
+      "annotated_svg": "annotated/bust_back_right_annotated.svg",
+      "annotated_png": "annotated/bust_back_right_annotated.png",
+      "zones_png": "zones/bust_back_right_zones.png",
+      "parts_json": "parts_json/bust_back_right.json",
+      "doc": "docs/bust_back_right.md",
+      "parts_sheet": "sheet/bust_back_right_parts_sheet.png"
+    }
+  },
+  {
+    "name": "bust_front",
+    "size": [
+      31,
+      51
+    ],
+    "palette": 20,
+    "pixels": 1281,
+    "parts": {
+      "face_detail": 140,
+      "hair": 495,
+      "face": 209,
+      "sleeve_left": 84,
+      "jacket": 174,
+      "shirt": 30,
+      "tie": 51,
+      "sleeve_right": 98
+    },
+    "verify": {
+      "pixels": 1281,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "bust_front.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/bust_front.svg",
+      "parts_svg": "svg/bust_front_parts.svg",
+      "annotated_svg": "annotated/bust_front_annotated.svg",
+      "annotated_png": "annotated/bust_front_annotated.png",
+      "zones_png": "zones/bust_front_zones.png",
+      "parts_json": "parts_json/bust_front.json",
+      "doc": "docs/bust_front.md",
+      "parts_sheet": "sheet/bust_front_parts_sheet.png"
+    }
+  },
+  {
+    "name": "bust_front_right",
+    "size": [
+      32,
+      51
+    ],
+    "palette": 20,
+    "pixels": 1290,
+    "parts": {
+      "face_detail": 88,
+      "hair": 552,
+      "face": 192,
+      "sleeve_left": 89,
+      "jacket": 187,
+      "shirt": 39,
+      "sleeve_right": 96,
+      "tie": 46,
+      "hand_right": 1
+    },
+    "verify": {
+      "pixels": 1290,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "bust_front_right.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/bust_front_right.svg",
+      "parts_svg": "svg/bust_front_right_parts.svg",
+      "annotated_svg": "annotated/bust_front_right_annotated.svg",
+      "annotated_png": "annotated/bust_front_right_annotated.png",
+      "zones_png": "zones/bust_front_right_zones.png",
+      "parts_json": "parts_json/bust_front_right.json",
+      "doc": "docs/bust_front_right.md",
+      "parts_sheet": "sheet/bust_front_right_parts_sheet.png"
+    }
+  },
+  {
+    "name": "bust_side_right",
+    "size": [
+      32,
+      51
+    ],
+    "palette": 19,
+    "pixels": 1114,
+    "parts": {
+      "face_detail": 63,
+      "hair": 568,
+      "face": 163,
+      "jacket": 199,
+      "shirt": 20,
+      "sleeve_right": 43,
+      "tie": 16,
+      "sleeve_left": 42
+    },
+    "verify": {
+      "pixels": 1114,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "bust_side_right.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/bust_side_right.svg",
+      "parts_svg": "svg/bust_side_right_parts.svg",
+      "annotated_svg": "annotated/bust_side_right_annotated.svg",
+      "annotated_png": "annotated/bust_side_right_annotated.png",
+      "zones_png": "zones/bust_side_right_zones.png",
+      "parts_json": "parts_json/bust_side_right.json",
+      "doc": "docs/bust_side_right.md",
+      "parts_sheet": "sheet/bust_side_right_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_back",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 19,
+    "pixels": 946,
+    "parts": {
+      "face_detail": 32,
+      "hair": 472,
+      "face": 56,
+      "hand_right": 5,
+      "sleeve_left": 30,
+      "jacket": 196,
+      "shirt": 1,
+      "sleeve_right": 49,
+      "hand_left": 13,
+      "leg_left": 12,
+      "leg_right": 12,
+      "shoe_left": 39,
+      "shoe_right": 29
+    },
+    "verify": {
+      "pixels": 946,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_back.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_back.svg",
+      "parts_svg": "svg/full_back_parts.svg",
+      "annotated_svg": "annotated/full_back_annotated.svg",
+      "annotated_png": "annotated/full_back_annotated.png",
+      "zones_png": "zones/full_back_zones.png",
+      "parts_json": "parts_json/full_back.json",
+      "doc": "docs/full_back.md",
+      "parts_sheet": "sheet/full_back_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_back_left",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 18,
+    "pixels": 972,
+    "parts": {
+      "face_detail": 40,
+      "hair": 469,
+      "face": 54,
+      "hand_right": 3,
+      "jacket": 206,
+      "shirt": 2,
+      "sleeve_right": 46,
+      "sleeve_left": 41,
+      "hand_left": 11,
+      "leg_left": 12,
+      "leg_right": 12,
+      "shoe_left": 43,
+      "shoe_right": 33
+    },
+    "verify": {
+      "pixels": 972,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_back_left.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_back_left.svg",
+      "parts_svg": "svg/full_back_left_parts.svg",
+      "annotated_svg": "annotated/full_back_left_annotated.svg",
+      "annotated_png": "annotated/full_back_left_annotated.png",
+      "zones_png": "zones/full_back_left_zones.png",
+      "parts_json": "parts_json/full_back_left.json",
+      "doc": "docs/full_back_left.md",
+      "parts_sheet": "sheet/full_back_left_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_back_right",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 17,
+    "pixels": 1023,
+    "parts": {
+      "face_detail": 37,
+      "hair": 476,
+      "face": 43,
+      "hand_left": 7,
+      "hand_right": 11,
+      "jacket": 239,
+      "sleeve_right": 59,
+      "sleeve_left": 44,
+      "leg_left": 12,
+      "leg_right": 14,
+      "shoe_left": 34,
+      "shoe_right": 47
+    },
+    "verify": {
+      "pixels": 1023,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_back_right.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_back_right.svg",
+      "parts_svg": "svg/full_back_right_parts.svg",
+      "annotated_svg": "annotated/full_back_right_annotated.svg",
+      "annotated_png": "annotated/full_back_right_annotated.png",
+      "zones_png": "zones/full_back_right_zones.png",
+      "parts_json": "parts_json/full_back_right.json",
+      "doc": "docs/full_back_right.md",
+      "parts_sheet": "sheet/full_back_right_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_crouch_cry",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 20,
+    "pixels": 1079,
+    "parts": {
+      "face_detail": 124,
+      "hair": 329,
+      "face": 159,
+      "hand_right": 13,
+      "hand_left": 33,
+      "sleeve_left": 38,
+      "jacket": 173,
+      "shirt": 12,
+      "neck": 1,
+      "sleeve_right": 73,
+      "tie": 13,
+      "leg_left": 13,
+      "leg_right": 21,
+      "shoe_left": 33,
+      "shoe_right": 44
+    },
+    "verify": {
+      "pixels": 1079,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_crouch_cry.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_crouch_cry.svg",
+      "parts_svg": "svg/full_crouch_cry_parts.svg",
+      "annotated_svg": "annotated/full_crouch_cry_annotated.svg",
+      "annotated_png": "annotated/full_crouch_cry_annotated.png",
+      "zones_png": "zones/full_crouch_cry_zones.png",
+      "parts_json": "parts_json/full_crouch_cry.json",
+      "doc": "docs/full_crouch_cry.md",
+      "parts_sheet": "sheet/full_crouch_cry_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_front",
+    "size": [
+      27,
+      51
+    ],
+    "palette": 19,
+    "pixels": 1045,
+    "parts": {
+      "face_detail": 64,
+      "hair": 400,
+      "face": 132,
+      "sleeve_left": 43,
+      "jacket": 189,
+      "shirt": 27,
+      "sleeve_right": 56,
+      "tie": 22,
+      "hand_left": 7,
+      "hand_right": 7,
+      "leg_left": 14,
+      "leg_right": 12,
+      "shoe_left": 38,
+      "shoe_right": 34
+    },
+    "verify": {
+      "pixels": 1045,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_front.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_front.svg",
+      "parts_svg": "svg/full_front_parts.svg",
+      "annotated_svg": "annotated/full_front_annotated.svg",
+      "annotated_png": "annotated/full_front_annotated.png",
+      "zones_png": "zones/full_front_zones.png",
+      "parts_json": "parts_json/full_front.json",
+      "doc": "docs/full_front.md",
+      "parts_sheet": "sheet/full_front_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_front_right",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 20,
+    "pixels": 1022,
+    "parts": {
+      "face_detail": 61,
+      "hair": 431,
+      "face": 125,
+      "sleeve_left": 41,
+      "jacket": 157,
+      "shirt": 11,
+      "sleeve_right": 61,
+      "tie": 18,
+      "hand_left": 14,
+      "hand_right": 3,
+      "leg_left": 14,
+      "leg_right": 14,
+      "shoe_left": 34,
+      "shoe_right": 38
+    },
+    "verify": {
+      "pixels": 1022,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_front_right.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_front_right.svg",
+      "parts_svg": "svg/full_front_right_parts.svg",
+      "annotated_svg": "annotated/full_front_right_annotated.svg",
+      "annotated_png": "annotated/full_front_right_annotated.png",
+      "zones_png": "zones/full_front_right_zones.png",
+      "parts_json": "parts_json/full_front_right.json",
+      "doc": "docs/full_front_right.md",
+      "parts_sheet": "sheet/full_front_right_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_laugh_clasp",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 20,
+    "pixels": 1014,
+    "parts": {
+      "face_detail": 125,
+      "hair": 331,
+      "face": 159,
+      "sleeve_left": 28,
+      "jacket": 149,
+      "shirt": 3,
+      "sleeve_right": 67,
+      "tie": 6,
+      "neck": 6,
+      "hand_left": 22,
+      "hand_right": 13,
+      "leg_left": 10,
+      "leg_right": 18,
+      "shoe_left": 33,
+      "shoe_right": 44
+    },
+    "verify": {
+      "pixels": 1014,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_laugh_clasp.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_laugh_clasp.svg",
+      "parts_svg": "svg/full_laugh_clasp_parts.svg",
+      "annotated_svg": "annotated/full_laugh_clasp_annotated.svg",
+      "annotated_png": "annotated/full_laugh_clasp_annotated.png",
+      "zones_png": "zones/full_laugh_clasp_zones.png",
+      "parts_json": "parts_json/full_laugh_clasp.json",
+      "doc": "docs/full_laugh_clasp.md",
+      "parts_sheet": "sheet/full_laugh_clasp_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_mic_hold",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 20,
+    "pixels": 1001,
+    "parts": {
+      "face_detail": 67,
+      "hair": 409,
+      "face": 124,
+      "sleeve_left": 32,
+      "jacket": 152,
+      "shirt": 10,
+      "sleeve_right": 49,
+      "tie": 21,
+      "hand_left": 24,
+      "hand_right": 16,
+      "leg_left": 14,
+      "leg_right": 12,
+      "shoe_left": 37,
+      "shoe_right": 34
+    },
+    "verify": {
+      "pixels": 1001,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_mic_hold.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_mic_hold.svg",
+      "parts_svg": "svg/full_mic_hold_parts.svg",
+      "annotated_svg": "annotated/full_mic_hold_annotated.svg",
+      "annotated_png": "annotated/full_mic_hold_annotated.png",
+      "zones_png": "zones/full_mic_hold_zones.png",
+      "parts_json": "parts_json/full_mic_hold.json",
+      "doc": "docs/full_mic_hold.md",
+      "parts_sheet": "sheet/full_mic_hold_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_mic_sing",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 19,
+    "pixels": 1006,
+    "parts": {
+      "face_detail": 83,
+      "hair": 364,
+      "face": 154,
+      "sleeve_left": 32,
+      "jacket": 152,
+      "shirt": 10,
+      "sleeve_right": 51,
+      "tie": 22,
+      "neck": 2,
+      "hand_left": 21,
+      "hand_right": 16,
+      "leg_left": 14,
+      "leg_right": 14,
+      "shoe_left": 37,
+      "shoe_right": 34
+    },
+    "verify": {
+      "pixels": 1006,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_mic_sing.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_mic_sing.svg",
+      "parts_svg": "svg/full_mic_sing_parts.svg",
+      "annotated_svg": "annotated/full_mic_sing_annotated.svg",
+      "annotated_png": "annotated/full_mic_sing_annotated.png",
+      "zones_png": "zones/full_mic_sing_zones.png",
+      "parts_json": "parts_json/full_mic_sing.json",
+      "doc": "docs/full_mic_sing.md",
+      "parts_sheet": "sheet/full_mic_sing_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_mic_talk",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 20,
+    "pixels": 1004,
+    "parts": {
+      "face_detail": 68,
+      "hair": 413,
+      "face": 120,
+      "sleeve_left": 38,
+      "jacket": 174,
+      "shirt": 6,
+      "sleeve_right": 35,
+      "neck": 9,
+      "tie": 6,
+      "hand_left": 5,
+      "hand_right": 31,
+      "leg_left": 12,
+      "leg_right": 14,
+      "shoe_left": 34,
+      "shoe_right": 39
+    },
+    "verify": {
+      "pixels": 1004,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_mic_talk.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_mic_talk.svg",
+      "parts_svg": "svg/full_mic_talk_parts.svg",
+      "annotated_svg": "annotated/full_mic_talk_annotated.svg",
+      "annotated_png": "annotated/full_mic_talk_annotated.png",
+      "zones_png": "zones/full_mic_talk_zones.png",
+      "parts_json": "parts_json/full_mic_talk.json",
+      "doc": "docs/full_mic_talk.md",
+      "parts_sheet": "sheet/full_mic_talk_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_nervous_teary",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 20,
+    "pixels": 1019,
+    "parts": {
+      "face_detail": 71,
+      "hair": 404,
+      "face": 117,
+      "hand_left": 16,
+      "sleeve_left": 45,
+      "neck": 1,
+      "jacket": 169,
+      "shirt": 12,
+      "sleeve_right": 55,
+      "tie": 20,
+      "hand_right": 4,
+      "leg_left": 16,
+      "leg_right": 12,
+      "shoe_left": 44,
+      "shoe_right": 33
+    },
+    "verify": {
+      "pixels": 1019,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_nervous_teary.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_nervous_teary.svg",
+      "parts_svg": "svg/full_nervous_teary_parts.svg",
+      "annotated_svg": "annotated/full_nervous_teary_annotated.svg",
+      "annotated_png": "annotated/full_nervous_teary_annotated.png",
+      "zones_png": "zones/full_nervous_teary_zones.png",
+      "parts_json": "parts_json/full_nervous_teary.json",
+      "doc": "docs/full_nervous_teary.md",
+      "parts_sheet": "sheet/full_nervous_teary_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_phone_smile",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 20,
+    "pixels": 995,
+    "parts": {
+      "face_detail": 114,
+      "hair": 309,
+      "face": 140,
+      "jacket": 171,
+      "shirt": 5,
+      "sleeve_left": 41,
+      "sleeve_right": 46,
+      "tie": 14,
+      "hand_left": 24,
+      "hand_right": 22,
+      "leg_left": 14,
+      "leg_right": 12,
+      "shoe_left": 44,
+      "shoe_right": 39
+    },
+    "verify": {
+      "pixels": 995,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_phone_smile.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_phone_smile.svg",
+      "parts_svg": "svg/full_phone_smile_parts.svg",
+      "annotated_svg": "annotated/full_phone_smile_annotated.svg",
+      "annotated_png": "annotated/full_phone_smile_annotated.png",
+      "zones_png": "zones/full_phone_smile_zones.png",
+      "parts_json": "parts_json/full_phone_smile.json",
+      "doc": "docs/full_phone_smile.md",
+      "parts_sheet": "sheet/full_phone_smile_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_side_right",
+    "size": [
+      28,
+      51
+    ],
+    "palette": 20,
+    "pixels": 905,
+    "parts": {
+      "face_detail": 48,
+      "hair": 424,
+      "face": 108,
+      "sleeve_left": 35,
+      "jacket": 130,
+      "shirt": 9,
+      "sleeve_right": 37,
+      "tie": 14,
+      "hand_left": 15,
+      "leg_left": 12,
+      "leg_right": 10,
+      "shoe_left": 30,
+      "shoe_right": 33
+    },
+    "verify": {
+      "pixels": 905,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_side_right.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_side_right.svg",
+      "parts_svg": "svg/full_side_right_parts.svg",
+      "annotated_svg": "annotated/full_side_right_annotated.svg",
+      "annotated_png": "annotated/full_side_right_annotated.png",
+      "zones_png": "zones/full_side_right_zones.png",
+      "parts_json": "parts_json/full_side_right.json",
+      "doc": "docs/full_side_right.md",
+      "parts_sheet": "sheet/full_side_right_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_sit_cheer",
+    "size": [
+      33,
+      50
+    ],
+    "palette": 19,
+    "pixels": 1110,
+    "parts": {
+      "face_detail": 49,
+      "hair": 394,
+      "face": 155,
+      "jacket": 303,
+      "neck": 13,
+      "shirt": 16,
+      "sleeve_right": 50,
+      "tie": 21,
+      "hand_right": 5,
+      "sleeve_left": 36,
+      "hand_left": 8,
+      "leg_left": 12,
+      "leg_right": 12,
+      "shoe_left": 18,
+      "shoe_right": 18
+    },
+    "verify": {
+      "pixels": 1110,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_sit_cheer.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_sit_cheer.svg",
+      "parts_svg": "svg/full_sit_cheer_parts.svg",
+      "annotated_svg": "annotated/full_sit_cheer_annotated.svg",
+      "annotated_png": "annotated/full_sit_cheer_annotated.png",
+      "zones_png": "zones/full_sit_cheer_zones.png",
+      "parts_json": "parts_json/full_sit_cheer.json",
+      "doc": "docs/full_sit_cheer.md",
+      "parts_sheet": "sheet/full_sit_cheer_parts_sheet.png"
+    }
+  },
+  {
+    "name": "full_wave_talk",
+    "size": [
+      31,
+      51
+    ],
+    "palette": 19,
+    "pixels": 1039,
+    "parts": {
+      "face_detail": 61,
+      "hair": 417,
+      "face": 127,
+      "hand_right": 9,
+      "sleeve_left": 52,
+      "jacket": 193,
+      "shirt": 12,
+      "neck": 20,
+      "tie": 20,
+      "sleeve_right": 9,
+      "hand_left": 18,
+      "leg_left": 16,
+      "leg_right": 10,
+      "shoe_left": 43,
+      "shoe_right": 32
+    },
+    "verify": {
+      "pixels": 1039,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "full_wave_talk.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/full_wave_talk.svg",
+      "parts_svg": "svg/full_wave_talk_parts.svg",
+      "annotated_svg": "annotated/full_wave_talk_annotated.svg",
+      "annotated_png": "annotated/full_wave_talk_annotated.png",
+      "zones_png": "zones/full_wave_talk_zones.png",
+      "parts_json": "parts_json/full_wave_talk.json",
+      "doc": "docs/full_wave_talk.md",
+      "parts_sheet": "sheet/full_wave_talk_parts_sheet.png"
+    }
+  },
+  {
+    "name": "half_coffee_document",
+    "size": [
+      26,
+      32
+    ],
+    "palette": 19,
+    "pixels": 559,
+    "parts": {
+      "face_detail": 67,
+      "hair": 188,
+      "face": 83,
+      "sleeve_left": 20,
+      "jacket": 100,
+      "shirt": 54,
+      "tie": 10,
+      "sleeve_right": 9,
+      "hand_left": 18,
+      "hand_right": 10
+    },
+    "verify": {
+      "pixels": 559,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "half_coffee_document.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/half_coffee_document.svg",
+      "parts_svg": "svg/half_coffee_document_parts.svg",
+      "annotated_svg": "annotated/half_coffee_document_annotated.svg",
+      "annotated_png": "annotated/half_coffee_document_annotated.png",
+      "zones_png": "zones/half_coffee_document_zones.png",
+      "parts_json": "parts_json/half_coffee_document.json",
+      "doc": "docs/half_coffee_document.md",
+      "parts_sheet": "sheet/half_coffee_document_parts_sheet.png"
+    }
+  },
+  {
+    "name": "half_desk_sleep",
+    "size": [
+      34,
+      26
+    ],
+    "palette": 18,
+    "pixels": 625,
+    "parts": {
+      "face_detail": 74,
+      "hair": 271,
+      "face": 80,
+      "hand_left": 30,
+      "hand_right": 29,
+      "neck": 86,
+      "jacket": 23,
+      "shirt": 14,
+      "sleeve_left": 8,
+      "sleeve_right": 10
+    },
+    "verify": {
+      "pixels": 625,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "half_desk_sleep.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/half_desk_sleep.svg",
+      "parts_svg": "svg/half_desk_sleep_parts.svg",
+      "annotated_svg": "annotated/half_desk_sleep_annotated.svg",
+      "annotated_png": "annotated/half_desk_sleep_annotated.png",
+      "zones_png": "zones/half_desk_sleep_zones.png",
+      "parts_json": "parts_json/half_desk_sleep.json",
+      "doc": "docs/half_desk_sleep.md",
+      "parts_sheet": "sheet/half_desk_sleep_parts_sheet.png"
+    }
+  },
+  {
+    "name": "half_laptop",
+    "size": [
+      34,
+      40
+    ],
+    "palette": 19,
+    "pixels": 971,
+    "parts": {
+      "face_detail": 52,
+      "hair": 352,
+      "face": 116,
+      "jacket": 219,
+      "shirt": 19,
+      "neck": 2,
+      "sleeve_right": 47,
+      "tie": 16,
+      "sleeve_left": 56,
+      "hand_right": 66,
+      "hand_left": 26
+    },
+    "verify": {
+      "pixels": 971,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "half_laptop.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/half_laptop.svg",
+      "parts_svg": "svg/half_laptop_parts.svg",
+      "annotated_svg": "annotated/half_laptop_annotated.svg",
+      "annotated_png": "annotated/half_laptop_annotated.png",
+      "zones_png": "zones/half_laptop_zones.png",
+      "parts_json": "parts_json/half_laptop.json",
+      "doc": "docs/half_laptop.md",
+      "parts_sheet": "sheet/half_laptop_parts_sheet.png"
+    }
+  },
+  {
+    "name": "half_panic",
+    "size": [
+      29,
+      30
+    ],
+    "palette": 20,
+    "pixels": 626,
+    "parts": {
+      "face_detail": 49,
+      "hair": 302,
+      "face": 110,
+      "sleeve_left": 27,
+      "jacket": 74,
+      "shirt": 11,
+      "tie": 15,
+      "sleeve_right": 38
+    },
+    "verify": {
+      "pixels": 626,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "half_panic.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/half_panic.svg",
+      "parts_svg": "svg/half_panic_parts.svg",
+      "annotated_svg": "annotated/half_panic_annotated.svg",
+      "annotated_png": "annotated/half_panic_annotated.png",
+      "zones_png": "zones/half_panic_zones.png",
+      "parts_json": "parts_json/half_panic.json",
+      "doc": "docs/half_panic.md",
+      "parts_sheet": "sheet/half_panic_parts_sheet.png"
+    }
+  },
+  {
+    "name": "half_phone_call_alt",
+    "size": [
+      27,
+      40
+    ],
+    "palette": 19,
+    "pixels": 815,
+    "parts": {
+      "face_detail": 134,
+      "hair": 279,
+      "face": 120,
+      "sleeve_left": 19,
+      "jacket": 179,
+      "shirt": 10,
+      "sleeve_right": 53,
+      "neck": 1,
+      "tie": 13,
+      "hand_right": 7
+    },
+    "verify": {
+      "pixels": 815,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "half_phone_call_alt.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/half_phone_call_alt.svg",
+      "parts_svg": "svg/half_phone_call_alt_parts.svg",
+      "annotated_svg": "annotated/half_phone_call_alt_annotated.svg",
+      "annotated_png": "annotated/half_phone_call_alt_annotated.png",
+      "zones_png": "zones/half_phone_call_alt_zones.png",
+      "parts_json": "parts_json/half_phone_call_alt.json",
+      "doc": "docs/half_phone_call_alt.md",
+      "parts_sheet": "sheet/half_phone_call_alt_parts_sheet.png"
+    }
+  },
+  {
+    "name": "half_present_coffee",
+    "size": [
+      33,
+      32
+    ],
+    "palette": 20,
+    "pixels": 775,
+    "parts": {
+      "face_detail": 57,
+      "hair": 395,
+      "face": 84,
+      "hand_left": 2,
+      "hand_right": 16,
+      "sleeve_left": 25,
+      "shirt": 18,
+      "jacket": 119,
+      "neck": 8,
+      "sleeve_right": 41,
+      "tie": 10
+    },
+    "verify": {
+      "pixels": 775,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": null,
+    "source": "half_present_coffee.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/half_present_coffee.svg",
+      "parts_svg": "svg/half_present_coffee_parts.svg",
+      "annotated_svg": "annotated/half_present_coffee_annotated.svg",
+      "annotated_png": "annotated/half_present_coffee_annotated.png",
+      "zones_png": "zones/half_present_coffee_zones.png",
+      "parts_json": "parts_json/half_present_coffee.json",
+      "doc": "docs/half_present_coffee.md",
+      "parts_sheet": "sheet/half_present_coffee_parts_sheet.png"
+    }
+  }
+]

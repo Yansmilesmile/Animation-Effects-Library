@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="224" height="408" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>左袖 / left sleeve</title>
+  <desc>左袖(sleeve_left)｜原位版：viewBox 為全圖 28x51，與其他部位對齊可還原原圖｜左/右以畫面視角為準｜1 單位 = 1 原始像素</desc>
+  <path fill="#b3b6bc" d="M5 29H6V32H5ZM4 31H5V38H4ZM3 33H4V37H3ZM5 33H6V38H5Z"/>
+  <path fill="#161410" d="M5 28H6V29H5ZM4 29H5V30H4ZM2 33H3V34H2ZM4 38H6V39H4Z"/>
+  <path fill="#0d0c08" d="M3 31H4V33H3ZM2 34H3V37H2Z"/>
+  <path fill="#6d6f75" d="M4 30H5V31H4ZM5 32H6V33H5Z"/>
+  <path fill="#888b91" d="M3 37H4V38H3Z"/>
+</svg>

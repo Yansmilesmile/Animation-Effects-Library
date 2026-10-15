@@ -1,0 +1,281 @@
+[
+  {
+    "name": "leijun_full_back",
+    "size": [
+      22,
+      62
+    ],
+    "palette": 8,
+    "pixels": 1076,
+    "parts": {
+      "hair": 427,
+      "face": 20,
+      "jacket": 384,
+      "sleeve_left": 57,
+      "sleeve_right": 81,
+      "hand_left": 2,
+      "hand_right": 3,
+      "leg_left": 12,
+      "leg_right": 12,
+      "shoe_left": 39,
+      "shoe_right": 39
+    },
+    "verify": {
+      "pixels": 1076,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": "全身背面",
+    "source": "leijun_full_back.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/leijun_full_back.svg",
+      "parts_svg": "svg/leijun_full_back_parts.svg",
+      "annotated_svg": "annotated/leijun_full_back_annotated.svg",
+      "annotated_png": "annotated/leijun_full_back_annotated.png",
+      "zones_png": "zones/leijun_full_back_zones.png",
+      "parts_json": "parts_json/leijun_full_back.json",
+      "doc": "docs/leijun_full_back.md",
+      "parts_sheet": "sheet/leijun_full_back_parts_sheet.png"
+    }
+  },
+  {
+    "name": "leijun_full_front",
+    "size": [
+      21,
+      64
+    ],
+    "palette": 22,
+    "pixels": 1108,
+    "parts": {
+      "face_detail": 108,
+      "hair": 128,
+      "face": 258,
+      "sleeve_left": 69,
+      "jacket": 298,
+      "shirt": 4,
+      "sleeve_right": 94,
+      "tie": 19,
+      "hand_right": 9,
+      "hand_left": 8,
+      "leg_left": 18,
+      "leg_right": 15,
+      "shoe_left": 43,
+      "shoe_right": 37
+    },
+    "verify": {
+      "pixels": 1108,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": "全身正面站姿、露齒微笑",
+    "source": "leijun_full_front.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/leijun_full_front.svg",
+      "parts_svg": "svg/leijun_full_front_parts.svg",
+      "annotated_svg": "annotated/leijun_full_front_annotated.svg",
+      "annotated_png": "annotated/leijun_full_front_annotated.png",
+      "zones_png": "zones/leijun_full_front_zones.png",
+      "parts_json": "parts_json/leijun_full_front.json",
+      "doc": "docs/leijun_full_front.md",
+      "parts_sheet": "sheet/leijun_full_front_parts_sheet.png"
+    }
+  },
+  {
+    "name": "leijun_full_side_right",
+    "size": [
+      23,
+      62
+    ],
+    "palette": 19,
+    "pixels": 860,
+    "parts": {
+      "face_detail": 97,
+      "hair": 236,
+      "face": 152,
+      "sleeve_left": 41,
+      "jacket": 179,
+      "shirt": 2,
+      "sleeve_right": 64,
+      "tie": 2,
+      "hand_left": 15,
+      "hand_right": 7,
+      "leg_left": 10,
+      "leg_right": 4,
+      "shoe_left": 30,
+      "shoe_right": 21
+    },
+    "verify": {
+      "pixels": 860,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": "全身右側面站姿",
+    "source": "leijun_full_side_right.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/leijun_full_side_right.svg",
+      "parts_svg": "svg/leijun_full_side_right_parts.svg",
+      "annotated_svg": "annotated/leijun_full_side_right_annotated.svg",
+      "annotated_png": "annotated/leijun_full_side_right_annotated.png",
+      "zones_png": "zones/leijun_full_side_right_zones.png",
+      "parts_json": "parts_json/leijun_full_side_right.json",
+      "doc": "docs/leijun_full_side_right.md",
+      "parts_sheet": "sheet/leijun_full_side_right_parts_sheet.png"
+    }
+  },
+  {
+    "name": "leijun_full_walk_front",
+    "size": [
+      24,
+      64
+    ],
+    "palette": 24,
+    "pixels": 1092,
+    "parts": {
+      "face_detail": 111,
+      "hair": 131,
+      "face": 257,
+      "sleeve_left": 52,
+      "jacket": 355,
+      "shirt": 8,
+      "sleeve_right": 40,
+      "tie": 21,
+      "hand_right": 18,
+      "hand_left": 5,
+      "leg_left": 18,
+      "leg_right": 14,
+      "shoe_left": 39,
+      "shoe_right": 23
+    },
+    "verify": {
+      "pixels": 1092,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": "全身正面邁步走、微笑",
+    "source": "leijun_full_walk_front.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/leijun_full_walk_front.svg",
+      "parts_svg": "svg/leijun_full_walk_front_parts.svg",
+      "annotated_svg": "annotated/leijun_full_walk_front_annotated.svg",
+      "annotated_png": "annotated/leijun_full_walk_front_annotated.png",
+      "zones_png": "zones/leijun_full_walk_front_zones.png",
+      "parts_json": "parts_json/leijun_full_walk_front.json",
+      "doc": "docs/leijun_full_walk_front.md",
+      "parts_sheet": "sheet/leijun_full_walk_front_parts_sheet.png"
+    }
+  },
+  {
+    "name": "leijun_full_walk_side_right",
+    "size": [
+      24,
+      62
+    ],
+    "palette": 20,
+    "pixels": 949,
+    "parts": {
+      "face_detail": 100,
+      "hair": 249,
+      "face": 149,
+      "jacket": 251,
+      "shirt": 4,
+      "sleeve_right": 102,
+      "tie": 3,
+      "hand_right": 11,
+      "hand_left": 5,
+      "sleeve_left": 9,
+      "leg_left": 18,
+      "leg_right": 9,
+      "shoe_left": 21,
+      "shoe_right": 18
+    },
+    "verify": {
+      "pixels": 949,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": "全身右側面走路",
+    "source": "leijun_full_walk_side_right.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/leijun_full_walk_side_right.svg",
+      "parts_svg": "svg/leijun_full_walk_side_right_parts.svg",
+      "annotated_svg": "annotated/leijun_full_walk_side_right_annotated.svg",
+      "annotated_png": "annotated/leijun_full_walk_side_right_annotated.png",
+      "zones_png": "zones/leijun_full_walk_side_right_zones.png",
+      "parts_json": "parts_json/leijun_full_walk_side_right.json",
+      "doc": "docs/leijun_full_walk_side_right.md",
+      "parts_sheet": "sheet/leijun_full_walk_side_right_parts_sheet.png"
+    }
+  },
+  {
+    "name": "leijun_full_wave",
+    "size": [
+      33,
+      64
+    ],
+    "palette": 24,
+    "pixels": 1203,
+    "parts": {
+      "face_detail": 117,
+      "hair": 177,
+      "face": 258,
+      "hand_left": 38,
+      "sleeve_left": 20,
+      "jacket": 363,
+      "shirt": 6,
+      "tie": 22,
+      "sleeve_right": 88,
+      "hand_right": 18,
+      "leg_left": 9,
+      "leg_right": 25,
+      "shoe_left": 21,
+      "shoe_right": 41
+    },
+    "verify": {
+      "pixels": 1203,
+      "clean_bad": 0,
+      "clean_extra": 0,
+      "parts_bad": 0,
+      "overlap": 0,
+      "missing": 0,
+      "ok": true
+    },
+    "action": "舉手揮手打招呼、微笑",
+    "source": "leijun_full_wave.png",
+    "per_part": true,
+    "files": {
+      "svg": "svg/leijun_full_wave.svg",
+      "parts_svg": "svg/leijun_full_wave_parts.svg",
+      "annotated_svg": "annotated/leijun_full_wave_annotated.svg",
+      "annotated_png": "annotated/leijun_full_wave_annotated.png",
+      "zones_png": "zones/leijun_full_wave_zones.png",
+      "parts_json": "parts_json/leijun_full_wave.json",
+      "doc": "docs/leijun_full_wave.md",
+      "parts_sheet": "sheet/leijun_full_wave_parts_sheet.png"
+    }
+  }
+]

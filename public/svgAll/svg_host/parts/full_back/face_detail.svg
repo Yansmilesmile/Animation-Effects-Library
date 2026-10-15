@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="224" height="408" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>五官細節 / face detail</title>
+  <desc>五官細節(face_detail)｜原位版：viewBox 為全圖 28x51，與其他部位對齊可還原原圖｜左/右以畫面視角為準｜1 單位 = 1 原始像素</desc>
+  <path fill="#23241e" d="M10 16H13V17H10ZM11 17H13V21H11ZM3 19H4V20H3ZM11 21H12V22H11Z"/>
+  <path fill="#1d1d1a" d="M5 16H7V17H5ZM9 16H10V17H9ZM10 17H11V19H10ZM12 21H13V23H12Z"/>
+  <path fill="#060603" d="M3 16H5V17H3ZM3 17H4V18H3ZM10 21H11V22H10ZM11 22H12V23H11ZM12 23H13V24H12Z"/>
+  <path fill="#0d0c08" d="M6 17H7V18H6ZM3 18H4V19H3ZM10 19H11V21H10ZM3 23H4V24H3ZM4 24H5V25H4Z"/>
+</svg>

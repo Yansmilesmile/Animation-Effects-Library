@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 2" width="72" height="16" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>右腿 / right leg</title>
+  <desc>右腿(leg_right)｜裁切版：viewBox 已縮到部位範圍 (14,44,9,2)｜左/右以畫面視角為準｜1 單位 = 1 原始像素</desc>
+  <path fill="#2c2d29" d="M2 0H7V2H2ZM8 0H9V1H8Z"/>
+  <path fill="#1d1d1a" d="M7 0H8V2H7ZM1 1H2V2H1Z"/>
+  <path fill="#161410" d="M0 0H1V2H0Z"/>
+  <path fill="#23241e" d="M1 0H2V1H1Z"/>
+  <path fill="#56504c" d="M8 1H9V2H8Z"/>
+</svg>

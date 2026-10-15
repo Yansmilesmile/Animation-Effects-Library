@@ -1,0 +1,232 @@
+{
+  "source": "bust_side_right.png",
+  "size_px": [
+    32,
+    51
+  ],
+  "palette_size": 19,
+  "opaque_pixels": 1114,
+  "coordinate_system": "origin top-left; 1 unit = 1 source pixel; bbox top-left based",
+  "left_right_convention": "viewer-relative (screen-left = character's right side)",
+  "bands_px": {
+    "neck_y": 33,
+    "neck_end": 35,
+    "head_bottom": 33,
+    "face_bbox": [
+      10,
+      19,
+      27,
+      32
+    ],
+    "split_y": null,
+    "hem_y": 50,
+    "shoe_top": null,
+    "torso_x0": 2,
+    "torso_x1": 23,
+    "sl_x": 5.57,
+    "sr_x": 18.59
+  },
+  "parts": [
+    {
+      "id": "hair",
+      "name_zh": "頭髮",
+      "name_en": "hair",
+      "zone_color": "#8c5fd4",
+      "pixel_count": 568,
+      "bbox_px": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 33
+      },
+      "center_px": {
+        "x": 15.69,
+        "y": 12.81
+      },
+      "colors": {
+        "#1d1d1a": 288,
+        "#2c2d29": 148,
+        "#060603": 76,
+        "#161410": 18,
+        "#0d0c08": 10,
+        "#23241e": 6,
+        "#fdddb0": 6,
+        "#383833": 4,
+        "#56504c": 3,
+        "#e3a27a": 2,
+        "#6d6f75": 2,
+        "#888b91": 2,
+        "#b3b6bc": 1,
+        "#cd8a66": 1,
+        "#fcfcfb": 1
+      }
+    },
+    {
+      "id": "face",
+      "name_zh": "臉部",
+      "name_en": "face",
+      "zone_color": "#fdd9a8",
+      "pixel_count": 163,
+      "bbox_px": {
+        "x": 10,
+        "y": 19,
+        "w": 18,
+        "h": 14
+      },
+      "center_px": {
+        "x": 18.57,
+        "y": 26.0
+      },
+      "colors": {
+        "#fdddb0": 127,
+        "#e3a27a": 30,
+        "#cd8a66": 4,
+        "#a66950": 1,
+        "#a08679": 1
+      }
+    },
+    {
+      "id": "face_detail",
+      "name_zh": "五官細節",
+      "name_en": "face detail",
+      "zone_color": "#22d3ee",
+      "pixel_count": 63,
+      "bbox_px": {
+        "x": 10,
+        "y": 19,
+        "w": 18,
+        "h": 14
+      },
+      "center_px": {
+        "x": 18.63,
+        "y": 24.96
+      },
+      "colors": {
+        "#060603": 28,
+        "#fcfcfb": 16,
+        "#0d0c08": 10,
+        "#1d1d1a": 8,
+        "#2c2d29": 1
+      }
+    },
+    {
+      "id": "shirt",
+      "name_zh": "白襯衫",
+      "name_en": "shirt",
+      "zone_color": "#f2f2f0",
+      "pixel_count": 20,
+      "bbox_px": {
+        "x": 12,
+        "y": 33,
+        "w": 7,
+        "h": 8
+      },
+      "center_px": {
+        "x": 16.4,
+        "y": 35.35
+      },
+      "colors": {
+        "#fcfcfb": 20
+      }
+    },
+    {
+      "id": "tie",
+      "name_zh": "領帶",
+      "name_en": "tie",
+      "zone_color": "#4a5580",
+      "pixel_count": 16,
+      "bbox_px": {
+        "x": 16,
+        "y": 35,
+        "w": 7,
+        "h": 13
+      },
+      "center_px": {
+        "x": 20.56,
+        "y": 41.5
+      },
+      "colors": {
+        "#3c425d": 16
+      }
+    },
+    {
+      "id": "jacket",
+      "name_zh": "西裝外套",
+      "name_en": "jacket body",
+      "zone_color": "#9aa3ad",
+      "pixel_count": 199,
+      "bbox_px": {
+        "x": 6,
+        "y": 33,
+        "w": 13,
+        "h": 17
+      },
+      "center_px": {
+        "x": 12.12,
+        "y": 42.17
+      },
+      "colors": {
+        "#b3b6bc": 158,
+        "#5d6273": 26,
+        "#060603": 6,
+        "#6d6f75": 5,
+        "#888b91": 1,
+        "#383833": 1,
+        "#161410": 1,
+        "#56504c": 1
+      }
+    },
+    {
+      "id": "sleeve_left",
+      "name_zh": "左袖",
+      "name_en": "left sleeve",
+      "zone_color": "#6f7c8f",
+      "pixel_count": 42,
+      "bbox_px": {
+        "x": 2,
+        "y": 36,
+        "w": 4,
+        "h": 15
+      },
+      "center_px": {
+        "x": 4.45,
+        "y": 44.12
+      },
+      "colors": {
+        "#b3b6bc": 19,
+        "#060603": 11,
+        "#5d6273": 8,
+        "#1d1d1a": 2,
+        "#161410": 1,
+        "#0d0c08": 1
+      }
+    },
+    {
+      "id": "sleeve_right",
+      "name_zh": "右袖",
+      "name_en": "right sleeve",
+      "zone_color": "#55637a",
+      "pixel_count": 43,
+      "bbox_px": {
+        "x": 19,
+        "y": 34,
+        "w": 5,
+        "h": 17
+      },
+      "center_px": {
+        "x": 21.08,
+        "y": 44.2
+      },
+      "colors": {
+        "#060603": 20,
+        "#b3b6bc": 10,
+        "#0d0c08": 4,
+        "#5d6273": 4,
+        "#1d1d1a": 2,
+        "#888b91": 1,
+        "#2c2d29": 1,
+        "#23241e": 1
+      }
+    }
+  ]
+}

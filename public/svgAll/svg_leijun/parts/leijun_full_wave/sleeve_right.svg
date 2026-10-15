@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 64" width="264" height="512" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>右袖 / right sleeve</title>
+  <desc>右袖(sleeve_right)｜原位版：viewBox 為全圖 33x64，與其他部位對齊可還原原圖｜左/右以畫面視角為準｜1 單位 = 1 原始像素（動作：舉手揮手打招呼、微笑）</desc>
+  <path fill="#3c3c3c" d="M26 28H29V31H26ZM29 29H30V39H29ZM27 31H29V34H27ZM30 31H31V39H30ZM28 34H29V39H28ZM31 34H32V40H31Z"/>
+  <path fill="#1a1a1a" d="M29 28H30V29H29ZM30 29H31V31H30ZM26 31H27V48H26ZM31 32H32V34H31ZM27 34H28V40H27ZM32 34H33V44H32ZM27 42H28V44H27ZM28 43H29V44H28ZM29 44H32V45H29Z"/>
+</svg>

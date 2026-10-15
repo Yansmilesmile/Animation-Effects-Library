@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 62" width="176" height="496" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>leijun_full_back parts</title>
+  <desc>leijun_full_back（全身背面） ｜ 22×62 px ｜ 部位: 頭髮(hair)、臉部(face)、西裝外套(jacket)、左袖(sleeve_left)、右袖(sleeve_right)、左手(hand_left)、右手(hand_right)、左腿(leg_left)、右腿(leg_right)、左鞋(shoe_left)、右鞋(shoe_right) ｜ 左/右以畫面視角為準，1 單位 = 1 原始像素</desc>
+  <g id="hair" data-name-zh="頭髮" data-name-en="hair">
+    <path fill="#1a1a1a" d="M7 0H15V1H7ZM4 1H7V3H4ZM8 1H10V2H8ZM12 1H17V4H12ZM3 2H4V6H3ZM10 2H12V3H10ZM17 2H19V5H17ZM2 3H3V19H2ZM4 3H6V5H4ZM19 3H20V19H19ZM6 4H7V8H6ZM13 4H17V7H13ZM1 5H2V14H1ZM5 5H6V7H5ZM7 5H9V7H7ZM10 5H13V9H10ZM17 5H18V7H17ZM20 5H21V14H20ZM0 6H1V12H0ZM9 6H10V8H9ZM21 6H22V12H21ZM7 7H8V8H7ZM13 7H16V8H13ZM3 8H5V22H3ZM13 8H15V9H13ZM17 8H18V23H17ZM5 9H6V22H5ZM12 9H14V10H12ZM16 9H17V22H16ZM18 9H19V22H18ZM6 10H13V23H6ZM14 10H16V23H14ZM13 11H14V23H13ZM0 14H1V18H0ZM21 14H22V18H21ZM1 18H2V19H1ZM20 18H21V19H20ZM4 22H5V23H4ZM5 23H6V24H5ZM16 23H17V24H16Z"/>
+    <path fill="#3c3c3c" d="M7 1H8V5H7ZM10 1H12V2H10ZM8 2H10V5H8ZM6 3H7V4H6ZM10 3H12V5H10ZM12 4H13V5H12ZM4 5H5V8H4ZM9 5H10V6H9ZM18 5H19V9H18ZM3 6H4V8H3ZM5 7H6V9H5ZM8 7H9V10H8ZM16 7H18V8H16ZM6 8H8V10H6ZM9 8H10V10H9ZM15 8H17V9H15ZM10 9H12V10H10ZM14 9H16V10H14ZM13 10H14V11H13Z"/>
+  </g>
+  <g id="face" data-name-zh="臉部" data-name-en="face">
+    <path fill="#d28a64" d="M5 22H6V23H5ZM16 22H17V23H16ZM6 23H16V24H6Z"/>
+    <path fill="#e8b286" d="M1 14H2V18H1ZM20 14H21V18H20Z"/>
+  </g>
+  <g id="jacket" data-name-zh="西裝外套" data-name-en="jacket body">
+    <path fill="#3c3c3c" d="M7 25H15V44H7ZM5 26H7V39H5ZM15 26H17V44H15ZM4 27H5V38H4ZM6 39H7V45H6ZM5 40H6V45H5ZM4 41H5V45H4ZM7 44H10V45H7ZM11 44H16V45H11ZM5 46H17V47H5ZM5 47H10V51H5ZM11 47H17V51H11ZM6 51H10V54H6ZM11 51H16V54H11Z"/>
+    <path fill="#1a1a1a" d="M6 24H16V25H6ZM5 25H7V26H5ZM15 25H17V26H15ZM4 26H5V27H4ZM4 38H5V41H4ZM5 39H6V40H5ZM10 44H11V46H10ZM16 44H17V46H16ZM4 45H10V46H4ZM11 45H16V46H11ZM4 46H5V52H4ZM10 47H11V54H10ZM5 51H6V54H5ZM16 51H17V54H16Z"/>
+  </g>
+  <g id="sleeve_left" data-name-zh="左袖" data-name-en="left sleeve">
+    <path fill="#1a1a1a" d="M3 26H4V27H3ZM2 27H3V29H2ZM1 29H2V33H1ZM3 30H4V31H3ZM3 32H4V42H3ZM0 33H1V40H0ZM1 40H2V44H1ZM2 44H4V45H2Z"/>
+    <path fill="#3c3c3c" d="M3 27H4V30H3ZM2 29H3V42H2ZM3 31H4V32H3ZM1 33H2V40H1Z"/>
+    <path fill="#6f6b5a" d="M3 42H4V43H3Z"/>
+    <path fill="#493124" d="M2 43H3V44H2Z"/>
+  </g>
+  <g id="sleeve_right" data-name-zh="右袖" data-name-en="right sleeve">
+    <path fill="#1a1a1a" d="M17 26H19V27H17ZM19 27H20V29H19ZM20 29H21V33H20ZM18 30H19V31H18ZM17 32H18V51H17ZM21 33H22V40H21ZM20 40H21V44H20ZM19 43H20V45H19ZM18 44H19V45H18Z"/>
+    <path fill="#3c3c3c" d="M17 27H19V30H17ZM19 29H20V42H19ZM17 30H18V32H17ZM18 31H19V42H18ZM20 33H21V40H20Z"/>
+  </g>
+  <g id="hand_left" data-name-zh="左手" data-name-en="left hand">
+    <path fill="#d28a64" d="M2 42H3V43H2Z"/>
+    <path fill="#84563f" d="M3 43H4V44H3Z"/>
+  </g>
+  <g id="hand_right" data-name-zh="右手" data-name-en="right hand">
+    <path fill="#e8b286" d="M18 42H19V43H18Z"/>
+    <path fill="#d28a64" d="M19 42H20V43H19Z"/>
+    <path fill="#b67754" d="M18 43H19V44H18Z"/>
+  </g>
+  <g id="leg_left" data-name-zh="左腿" data-name-en="left leg">
+    <path fill="#3c3c3c" d="M6 54H10V56H6Z"/>
+    <path fill="#1a1a1a" d="M5 54H6V56H5ZM10 54H11V56H10Z"/>
+  </g>
+  <g id="leg_right" data-name-zh="右腿" data-name-en="right leg">
+    <path fill="#3c3c3c" d="M11 54H16V56H11Z"/>
+    <path fill="#1a1a1a" d="M16 54H17V56H16Z"/>
+  </g>
+  <g id="shoe_left" data-name-zh="左鞋" data-name-en="left shoe">
+    <path fill="#1a1a1a" d="M5 56H6V59H5ZM10 56H11V62H10ZM6 58H10V59H6ZM4 59H5V62H4ZM8 59H10V62H8ZM5 60H8V62H5Z"/>
+    <path fill="#3c3c3c" d="M6 56H10V58H6ZM5 59H8V60H5Z"/>
+  </g>
+  <g id="shoe_right" data-name-zh="右鞋" data-name-en="right shoe">
+    <path fill="#1a1a1a" d="M16 56H17V59H16ZM11 58H16V59H11ZM11 59H14V62H11ZM17 59H18V62H17ZM14 60H17V62H14Z"/>
+    <path fill="#3c3c3c" d="M11 56H16V58H11ZM14 59H17V60H14Z"/>
+  </g>
+</svg>

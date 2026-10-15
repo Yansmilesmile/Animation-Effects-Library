@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 12" width="80" height="96" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>臉部 / face</title>
+  <desc>臉部(face)｜裁切版：viewBox 已縮到部位範圍 (3,18,10,12)｜左/右以畫面視角為準｜1 單位 = 1 原始像素</desc>
+  <path fill="#fdddb0" d="M4 0H5V11H4ZM1 1H3V9H1ZM3 2H4V11H3ZM7 3H8V6H7ZM0 4H1V8H0ZM5 4H7V6H5ZM5 7H9V9H5ZM9 8H10V11H9ZM2 9H3V10H2ZM5 9H6V10H5ZM8 9H9V11H8Z"/>
+  <path fill="#e3a27a" d="M5 1H7V4H5ZM5 6H7V7H5ZM6 9H8V11H6ZM5 10H6V11H5ZM7 11H8V12H7Z"/>
+  <path fill="#f1c696" d="M5 0H6V1H5Z"/>
+</svg>

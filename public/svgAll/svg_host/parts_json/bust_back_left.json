@@ -1,0 +1,216 @@
+{
+  "source": "bust_back_left.png",
+  "size_px": [
+    31,
+    52
+  ],
+  "palette_size": 17,
+  "opaque_pixels": 1275,
+  "coordinate_system": "origin top-left; 1 unit = 1 source pixel; bbox top-left based",
+  "left_right_convention": "viewer-relative (screen-left = character's right side)",
+  "bands_px": {
+    "neck_y": 30,
+    "neck_end": 32,
+    "head_bottom": 30,
+    "face_bbox": [
+      3,
+      18,
+      13,
+      29
+    ],
+    "split_y": null,
+    "hem_y": 51,
+    "shoe_top": null,
+    "torso_x0": 1,
+    "torso_x1": 30,
+    "sl_x": 5.930000000000001,
+    "sr_x": 23.91
+  },
+  "parts": [
+    {
+      "id": "hair",
+      "name_zh": "頭髮",
+      "name_en": "hair",
+      "zone_color": "#8c5fd4",
+      "pixel_count": 604,
+      "bbox_px": {
+        "x": 0,
+        "y": 0,
+        "w": 30,
+        "h": 30
+      },
+      "center_px": {
+        "x": 16.09,
+        "y": 13.25
+      },
+      "colors": {
+        "#1d1d1a": 389,
+        "#2c2d29": 112,
+        "#060603": 65,
+        "#23241e": 10,
+        "#161410": 9,
+        "#fcfcfb": 7,
+        "#5d6273": 5,
+        "#6d6f75": 4,
+        "#0d0c08": 3
+      }
+    },
+    {
+      "id": "face",
+      "name_zh": "臉部",
+      "name_en": "face",
+      "zone_color": "#fdd9a8",
+      "pixel_count": 72,
+      "bbox_px": {
+        "x": 3,
+        "y": 18,
+        "w": 11,
+        "h": 12
+      },
+      "center_px": {
+        "x": 7.72,
+        "y": 24.57
+      },
+      "colors": {
+        "#fdddb0": 58,
+        "#e3a27a": 10,
+        "#cd8a66": 2,
+        "#f1c696": 2
+      }
+    },
+    {
+      "id": "face_detail",
+      "name_zh": "五官細節",
+      "name_en": "face detail",
+      "zone_color": "#22d3ee",
+      "pixel_count": 51,
+      "bbox_px": {
+        "x": 3,
+        "y": 18,
+        "w": 11,
+        "h": 12
+      },
+      "center_px": {
+        "x": 9.87,
+        "y": 22.3
+      },
+      "colors": {
+        "#1d1d1a": 33,
+        "#060603": 13,
+        "#0d0c08": 3,
+        "#161410": 2
+      }
+    },
+    {
+      "id": "shirt",
+      "name_zh": "白襯衫",
+      "name_en": "shirt",
+      "zone_color": "#f2f2f0",
+      "pixel_count": 14,
+      "bbox_px": {
+        "x": 10,
+        "y": 30,
+        "w": 12,
+        "h": 2
+      },
+      "center_px": {
+        "x": 15.43,
+        "y": 30.71
+      },
+      "colors": {
+        "#fcfcfb": 14
+      }
+    },
+    {
+      "id": "tie",
+      "name_zh": "領帶",
+      "name_en": "tie",
+      "zone_color": "#4a5580",
+      "pixel_count": 7,
+      "bbox_px": {
+        "x": 13,
+        "y": 31,
+        "w": 7,
+        "h": 1
+      },
+      "center_px": {
+        "x": 16.5,
+        "y": 31.5
+      },
+      "colors": {
+        "#3c425d": 7
+      }
+    },
+    {
+      "id": "jacket",
+      "name_zh": "西裝外套",
+      "name_en": "jacket body",
+      "zone_color": "#9aa3ad",
+      "pixel_count": 348,
+      "bbox_px": {
+        "x": 6,
+        "y": 30,
+        "w": 18,
+        "h": 22
+      },
+      "center_px": {
+        "x": 15.09,
+        "y": 41.42
+      },
+      "colors": {
+        "#b3b6bc": 302,
+        "#5d6273": 31,
+        "#060603": 11,
+        "#383833": 2,
+        "#6d6f75": 1,
+        "#0d0c08": 1
+      }
+    },
+    {
+      "id": "sleeve_left",
+      "name_zh": "左袖",
+      "name_en": "left sleeve",
+      "zone_color": "#6f7c8f",
+      "pixel_count": 68,
+      "bbox_px": {
+        "x": 1,
+        "y": 35,
+        "w": 5,
+        "h": 17
+      },
+      "center_px": {
+        "x": 3.78,
+        "y": 43.99
+      },
+      "colors": {
+        "#b3b6bc": 50,
+        "#060603": 17,
+        "#0d0c08": 1
+      }
+    },
+    {
+      "id": "sleeve_right",
+      "name_zh": "右袖",
+      "name_en": "right sleeve",
+      "zone_color": "#55637a",
+      "pixel_count": 111,
+      "bbox_px": {
+        "x": 24,
+        "y": 32,
+        "w": 7,
+        "h": 20
+      },
+      "center_px": {
+        "x": 27.12,
+        "y": 42.98
+      },
+      "colors": {
+        "#b3b6bc": 68,
+        "#060603": 22,
+        "#5d6273": 15,
+        "#888b91": 5,
+        "#0d0c08": 1
+      }
+    }
+  ]
+}

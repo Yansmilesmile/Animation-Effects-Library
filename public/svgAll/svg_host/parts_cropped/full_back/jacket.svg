@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 19" width="88" height="152" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>西裝外套 / jacket body</title>
+  <desc>西裝外套(jacket)｜裁切版：viewBox 已縮到部位範圍 (8,25,11,19)｜左/右以畫面視角為準｜1 單位 = 1 原始像素</desc>
+  <path fill="#b3b6bc" d="M1 1H2V2H1ZM4 1H9V8H4ZM2 2H4V13H2ZM9 2H11V14H9ZM0 3H2V13H0ZM4 8H5V13H4ZM6 8H9V14H6ZM3 13H4V14H3ZM5 13H6V14H5ZM5 15H10V16H5Z"/>
+  <path fill="#6d6f75" d="M2 0H4V1H2ZM3 1H4V2H3ZM10 1H11V2H10ZM1 2H2V3H1ZM5 8H6V13H5ZM4 13H5V15H4ZM0 14H4V15H0ZM5 14H11V15H5Z"/>
+  <path fill="#23241e" d="M3 17H6V19H3ZM9 17H11V19H9ZM1 18H3V19H1ZM8 18H9V19H8Z"/>
+  <path fill="#888b91" d="M4 0H10V1H4ZM2 1H3V2H2ZM0 13H3V14H0ZM10 15H11V16H10Z"/>
+  <path fill="#060603" d="M0 0H2V1H0ZM10 0H11V1H10ZM0 2H1V3H0ZM6 17H7V19H6ZM0 18H1V19H0Z"/>
+  <path fill="#1d1d1a" d="M7 16H9V17H7ZM10 16H11V17H10Z"/>
+  <path fill="#161410" d="M9 16H10V17H9ZM8 17H9V18H8ZM7 18H8V19H7Z"/>
+  <path fill="#383833" d="M4 16H6V17H4Z"/>
+  <path fill="#5d6273" d="M4 15H5V16H4Z"/>
+  <path fill="#2c2d29" d="M6 16H7V17H6Z"/>
+  <path fill="#0d0c08" d="M7 17H8V18H7Z"/>
+</svg>

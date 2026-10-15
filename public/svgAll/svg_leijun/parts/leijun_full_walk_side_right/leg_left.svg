@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 62" width="192" height="496" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>左腿 / left leg</title>
+  <desc>左腿(leg_left)｜原位版：viewBox 為全圖 24x62，與其他部位對齊可還原原圖｜左/右以畫面視角為準｜1 單位 = 1 原始像素（動作：全身右側面走路）</desc>
+  <path fill="#1a1a1a" d="M1 57H8V58H1ZM9 57H10V59H9ZM2 58H7V59H2ZM10 58H12V59H10Z"/>
+  <path fill="#3c3c3c" d="M10 57H12V58H10Z"/>
+</svg>

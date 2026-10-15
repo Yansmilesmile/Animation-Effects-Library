@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="224" height="408" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>左手 / left hand</title>
+  <desc>左手(hand_left)｜原位版：viewBox 為全圖 28x51，與其他部位對齊可還原原圖｜左/右以畫面視角為準｜1 單位 = 1 原始像素</desc>
+  <path fill="#fdddb0" d="M6 35H10V37H6ZM5 36H6V39H5ZM10 36H11V37H10ZM13 36H14V40H13ZM12 38H13V39H12Z"/>
+  <path fill="#cd8a66" d="M8 34H10V35H8ZM6 37H7V38H6ZM8 37H11V38H8ZM4 38H5V39H4Z"/>
+  <path fill="#f1c696" d="M7 27H8V28H7ZM10 35H11V36H10ZM12 37H13V38H12Z"/>
+  <path fill="#a08679" d="M7 34H8V35H7ZM5 35H6V36H5ZM7 37H8V38H7Z"/>
+  <path fill="#a66950" d="M13 35H14V36H13ZM12 39H13V40H12Z"/>
+  <path fill="#e3a27a" d="M4 39H5V40H4Z"/>
+</svg>

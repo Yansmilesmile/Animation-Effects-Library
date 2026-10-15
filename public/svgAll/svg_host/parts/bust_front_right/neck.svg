@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 51" width="256" height="408" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>脖子 / neck</title>
+  <desc>脖子(neck)｜原位版：viewBox 為全圖 32x51，與其他部位對齊可還原原圖｜左/右以畫面視角為準｜1 單位 = 1 原始像素</desc>
+  <path fill="#fdddb0" d="M10 30H18V31H10ZM18 31H20V32H18ZM17 32H19V33H17Z"/>
+  <path fill="#cd8a66" d="M18 30H20V31H18ZM11 31H18V32H11ZM14 32H17V33H14Z"/>
+  <path fill="#a08679" d="M9 30H10V31H9Z"/>
+  <path fill="#f1c696" d="M20 30H21V31H20Z"/>
+</svg>

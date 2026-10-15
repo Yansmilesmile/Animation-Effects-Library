@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7 6" width="56" height="48" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>左鞋 / left shoe</title>
+  <desc>左鞋(shoe_left)｜裁切版：viewBox 已縮到部位範圍 (5,58,7,6)｜左/右以畫面視角為準｜1 單位 = 1 原始像素（動作：全身正面邁步走、微笑）</desc>
+  <path fill="#1a1a1a" d="M1 0H2V3H1ZM6 0H7V6H6ZM2 1H5V2H2ZM5 2H6V3H5ZM0 3H1V6H0ZM1 4H6V6H1Z"/>
+  <path fill="#3c3c3c" d="M2 0H6V1H2ZM5 1H6V2H5ZM2 2H5V4H2ZM1 3H2V4H1ZM5 3H6V4H5Z"/>
+</svg>

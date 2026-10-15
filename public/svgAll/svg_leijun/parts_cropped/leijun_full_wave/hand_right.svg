@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 13" width="72" height="104" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>右手 / right hand</title>
+  <desc>右手(hand_right)｜裁切版：viewBox 已縮到部位範圍 (23,31,9,13)｜左/右以畫面視角為準｜1 單位 = 1 原始像素（動作：舉手揮手打招呼、微笑）</desc>
+  <path fill="#f7cb9c" d="M6 9H8V12H6Z"/>
+  <path fill="#e8b286" d="M5 9H6V11H5ZM8 10H9V12H8Z"/>
+  <path fill="#d28a64" d="M4 9H5V10H4ZM6 12H8V13H6Z"/>
+  <path fill="#b67754" d="M4 10H5V11H4ZM8 12H9V13H8Z"/>
+  <path fill="#cca45e" d="M0 0H1V1H0Z"/>
+  <path fill="#edd8c2" d="M8 9H9V10H8Z"/>
+  <path fill="#b6826e" d="M5 11H6V12H5Z"/>
+</svg>

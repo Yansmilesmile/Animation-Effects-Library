@@ -1,0 +1,408 @@
+{
+  "source": "full_sit_cheer.png",
+  "size_px": [
+    33,
+    50
+  ],
+  "palette_size": 19,
+  "opaque_pixels": 1110,
+  "coordinate_system": "origin top-left; 1 unit = 1 source pixel; bbox top-left based",
+  "left_right_convention": "viewer-relative (screen-left = character's right side)",
+  "bands_px": {
+    "neck_y": 28,
+    "neck_end": 30,
+    "head_bottom": 28,
+    "face_bbox": [
+      6,
+      16,
+      25,
+      27
+    ],
+    "split_y": 46,
+    "hem_y": 45,
+    "shoe_top": 47,
+    "torso_x0": 0,
+    "torso_x1": 32,
+    "sl_x": 5.44,
+    "sr_x": 25.28
+  },
+  "parts": [
+    {
+      "id": "hair",
+      "name_zh": "頭髮",
+      "name_en": "hair",
+      "zone_color": "#8c5fd4",
+      "pixel_count": 394,
+      "bbox_px": {
+        "x": 3,
+        "y": 0,
+        "w": 28,
+        "h": 28
+      },
+      "center_px": {
+        "x": 17.1,
+        "y": 9.97
+      },
+      "colors": {
+        "#23241e": 145,
+        "#383833": 118,
+        "#0d0c08": 45,
+        "#1d1d1a": 30,
+        "#060603": 19,
+        "#2c2d29": 14,
+        "#161410": 8,
+        "#888b91": 6,
+        "#b3b6bc": 4,
+        "#f1c696": 3,
+        "#6d6f75": 1,
+        "#56504c": 1
+      }
+    },
+    {
+      "id": "face",
+      "name_zh": "臉部",
+      "name_en": "face",
+      "zone_color": "#fdd9a8",
+      "pixel_count": 155,
+      "bbox_px": {
+        "x": 6,
+        "y": 16,
+        "w": 20,
+        "h": 12
+      },
+      "center_px": {
+        "x": 16.35,
+        "y": 21.33
+      },
+      "colors": {
+        "#fdddb0": 119,
+        "#cd8a66": 13,
+        "#e3a27a": 12,
+        "#f1c696": 7,
+        "#a08679": 4
+      }
+    },
+    {
+      "id": "face_detail",
+      "name_zh": "五官細節",
+      "name_en": "face detail",
+      "zone_color": "#22d3ee",
+      "pixel_count": 49,
+      "bbox_px": {
+        "x": 6,
+        "y": 16,
+        "w": 20,
+        "h": 12
+      },
+      "center_px": {
+        "x": 15.91,
+        "y": 21.26
+      },
+      "colors": {
+        "#0d0c08": 18,
+        "#161410": 11,
+        "#23241e": 8,
+        "#fcfcfb": 6,
+        "#1d1d1a": 3,
+        "#060603": 1,
+        "#383833": 1,
+        "#2c2d29": 1
+      }
+    },
+    {
+      "id": "neck",
+      "name_zh": "脖子",
+      "name_en": "neck",
+      "zone_color": "#d9a06b",
+      "pixel_count": 13,
+      "bbox_px": {
+        "x": 9,
+        "y": 28,
+        "w": 22,
+        "h": 3
+      },
+      "center_px": {
+        "x": 27.19,
+        "y": 29.5
+      },
+      "colors": {
+        "#fdddb0": 6,
+        "#f1c696": 5,
+        "#a66950": 1,
+        "#e3a27a": 1
+      }
+    },
+    {
+      "id": "shirt",
+      "name_zh": "白襯衫",
+      "name_en": "shirt",
+      "zone_color": "#f2f2f0",
+      "pixel_count": 16,
+      "bbox_px": {
+        "x": 13,
+        "y": 28,
+        "w": 8,
+        "h": 7
+      },
+      "center_px": {
+        "x": 16.75,
+        "y": 31.0
+      },
+      "colors": {
+        "#fcfcfb": 16
+      }
+    },
+    {
+      "id": "tie",
+      "name_zh": "領帶",
+      "name_en": "tie",
+      "zone_color": "#4a5580",
+      "pixel_count": 21,
+      "bbox_px": {
+        "x": 15,
+        "y": 29,
+        "w": 4,
+        "h": 10
+      },
+      "center_px": {
+        "x": 16.98,
+        "y": 33.55
+      },
+      "colors": {
+        "#3c425d": 21
+      }
+    },
+    {
+      "id": "jacket",
+      "name_zh": "西裝外套",
+      "name_en": "jacket body",
+      "zone_color": "#9aa3ad",
+      "pixel_count": 303,
+      "bbox_px": {
+        "x": 6,
+        "y": 28,
+        "w": 20,
+        "h": 18
+      },
+      "center_px": {
+        "x": 15.82,
+        "y": 37.62
+      },
+      "colors": {
+        "#b3b6bc": 120,
+        "#2c2d29": 71,
+        "#6d6f75": 34,
+        "#161410": 30,
+        "#1d1d1a": 15,
+        "#888b91": 13,
+        "#0d0c08": 10,
+        "#383833": 4,
+        "#56504c": 3,
+        "#23241e": 3
+      }
+    },
+    {
+      "id": "sleeve_left",
+      "name_zh": "左袖",
+      "name_en": "left sleeve",
+      "zone_color": "#6f7c8f",
+      "pixel_count": 36,
+      "bbox_px": {
+        "x": 0,
+        "y": 34,
+        "w": 6,
+        "h": 12
+      },
+      "center_px": {
+        "x": 3.56,
+        "y": 42.08
+      },
+      "colors": {
+        "#0d0c08": 7,
+        "#2c2d29": 7,
+        "#161410": 6,
+        "#b3b6bc": 4,
+        "#23241e": 4,
+        "#383833": 3,
+        "#56504c": 2,
+        "#1d1d1a": 2,
+        "#060603": 1
+      }
+    },
+    {
+      "id": "sleeve_right",
+      "name_zh": "右袖",
+      "name_en": "right sleeve",
+      "zone_color": "#55637a",
+      "pixel_count": 50,
+      "bbox_px": {
+        "x": 26,
+        "y": 28,
+        "w": 7,
+        "h": 18
+      },
+      "center_px": {
+        "x": 29.02,
+        "y": 39.3
+      },
+      "colors": {
+        "#2c2d29": 14,
+        "#161410": 9,
+        "#0d0c08": 8,
+        "#b3b6bc": 5,
+        "#23241e": 4,
+        "#888b91": 3,
+        "#1d1d1a": 2,
+        "#6d6f75": 2,
+        "#383833": 2,
+        "#56504c": 1
+      }
+    },
+    {
+      "id": "hand_left",
+      "name_zh": "左手",
+      "name_en": "left hand",
+      "zone_color": "#f2c39b",
+      "pixel_count": 8,
+      "bbox_px": {
+        "x": 4,
+        "y": 39,
+        "w": 5,
+        "h": 3
+      },
+      "center_px": {
+        "x": 6.25,
+        "y": 40.62
+      },
+      "colors": {
+        "#fdddb0": 6,
+        "#a08679": 1,
+        "#e3a27a": 1
+      }
+    },
+    {
+      "id": "hand_right",
+      "name_zh": "右手",
+      "name_en": "right hand",
+      "zone_color": "#dba97f",
+      "pixel_count": 5,
+      "bbox_px": {
+        "x": 28,
+        "y": 31,
+        "w": 3,
+        "h": 2
+      },
+      "center_px": {
+        "x": 29.3,
+        "y": 31.9
+      },
+      "colors": {
+        "#f1c696": 3,
+        "#a08679": 1,
+        "#cd8a66": 1
+      }
+    },
+    {
+      "id": "leg_left",
+      "name_zh": "左腿",
+      "name_en": "left leg",
+      "zone_color": "#3f3f46",
+      "pixel_count": 12,
+      "bbox_px": {
+        "x": 1,
+        "y": 46,
+        "w": 12,
+        "h": 1
+      },
+      "center_px": {
+        "x": 7.0,
+        "y": 46.5
+      },
+      "colors": {
+        "#0d0c08": 4,
+        "#2c2d29": 3,
+        "#1d1d1a": 3,
+        "#23241e": 1,
+        "#161410": 1
+      }
+    },
+    {
+      "id": "leg_right",
+      "name_zh": "右腿",
+      "name_en": "right leg",
+      "zone_color": "#5a5a63",
+      "pixel_count": 12,
+      "bbox_px": {
+        "x": 20,
+        "y": 46,
+        "w": 12,
+        "h": 1
+      },
+      "center_px": {
+        "x": 26.0,
+        "y": 46.5
+      },
+      "colors": {
+        "#0d0c08": 4,
+        "#1d1d1a": 3,
+        "#2c2d29": 2,
+        "#161410": 1,
+        "#383833": 1,
+        "#23241e": 1
+      }
+    },
+    {
+      "id": "shoe_left",
+      "name_zh": "左鞋",
+      "name_en": "left shoe",
+      "zone_color": "#1f1f24",
+      "pixel_count": 18,
+      "bbox_px": {
+        "x": 2,
+        "y": 47,
+        "w": 9,
+        "h": 3
+      },
+      "center_px": {
+        "x": 5.67,
+        "y": 48.17
+      },
+      "colors": {
+        "#0d0c08": 7,
+        "#2c2d29": 5,
+        "#23241e": 2,
+        "#383833": 1,
+        "#161410": 1,
+        "#56504c": 1,
+        "#1d1d1a": 1
+      }
+    },
+    {
+      "id": "shoe_right",
+      "name_zh": "右鞋",
+      "name_en": "right shoe",
+      "zone_color": "#2e2e35",
+      "pixel_count": 18,
+      "bbox_px": {
+        "x": 23,
+        "y": 47,
+        "w": 8,
+        "h": 3
+      },
+      "center_px": {
+        "x": 27.56,
+        "y": 48.28
+      },
+      "colors": {
+        "#0d0c08": 4,
+        "#2c2d29": 4,
+        "#23241e": 3,
+        "#060603": 2,
+        "#1d1d1a": 2,
+        "#383833": 1,
+        "#56504c": 1,
+        "#b3b6bc": 1
+      }
+    }
+  ]
+}

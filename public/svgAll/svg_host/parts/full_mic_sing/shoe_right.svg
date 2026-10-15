@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="224" height="408" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet">
+  <title>右鞋 / right shoe</title>
+  <desc>右鞋(shoe_right)｜原位版：viewBox 為全圖 28x51，與其他部位對齊可還原原圖｜左/右以畫面視角為準｜1 單位 = 1 原始像素</desc>
+  <path fill="#0d0c08" d="M14 46H15V47H14ZM16 46H17V47H16ZM20 46H21V47H20ZM14 50H20V51H14Z"/>
+  <path fill="#383833" d="M14 47H17V48H14ZM14 49H20V50H14Z"/>
+  <path fill="#2c2d29" d="M18 47H20V49H18ZM14 48H18V49H14Z"/>
+  <path fill="#060603" d="M15 46H16V47H15ZM20 47H21V50H20Z"/>
+  <path fill="#161410" d="M17 46H20V47H17Z"/>
+  <path fill="#23241e" d="M17 47H18V48H17Z"/>
+</svg>
