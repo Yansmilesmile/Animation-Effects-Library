@@ -44,6 +44,13 @@ export type Scene = {
   host?: { pose: string; x?: number; y?: number; flipX?: boolean; scale?: number; talk?: boolean } | null;
   /** 這個 scene 導航高亮第幾段；省略 = 不顯示導航 */
   navIndex?: number;
+  /** 導航從第幾幀滑入（數字或 "@詞"）；省略 = scene 開頭（前一個 scene 已顯示導航時不再滑入） */
+  navAt?: number | string;
+  /**
+   * 換到下一個 scene 的 2D 轉場：這個 scene 的最後一幀凍住，蓋在下一個 scene 開頭的 duration 幀上往一側擦出。
+   * type："wipe"（A16 直線擦除，整張卡滑出）| "blur"（A7 橫向動態模糊擦除，拖影 + 變暗）；direction 預設 wipe 往左、blur 往右；duration 預設 12。
+   */
+  transitionOut?: { type: "wipe" | "blur"; direction?: "left" | "right"; duration?: number };
   /** false = 這個 scene 不顯示浮水印 */
   watermark?: boolean;
   /** 起始鏡頭，預設標準取景 shot()（1.5 倍、地面線在畫面 80%） */

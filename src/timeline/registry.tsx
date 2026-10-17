@@ -101,8 +101,9 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     component: SmokePop,
     layer: "world",
     code: "C38",
-    props: { ...POS, asset: "string", scale: "number", flipX: "boolean", label: "string", tag: "string", tagAt: "number", tagVariant: "string", smoke: "string" },
-    required: ["x", "y", "asset"],
+    props: { ...POS, asset: "string", actor: "string", hide: "array", h: "number", scale: "number", flipX: "boolean", label: "string", tag: "string", tagAt: "number", tagVariant: "string", smoke: "string" },
+    required: ["x", "y"],
+    check: (p) => (p.asset || p.actor || (Array.isArray(p.hide) && p.hide.length) ? [] : ["SmokePop 需要 asset、actor 或 hide 其中之一"]),
   },
   KeyDrop: {
     component: KeyDrop,
@@ -145,7 +146,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     component: QuestionCard,
     layer: "hud",
     code: "B5 卡片",
-    props: { ...POS, title: "string", asset: "string", assetScale: "number", text: "string", w: "number", h: "number", from: "object", openFrames: "number", hangers: "array", shrinkAt: "number", shrinkTo: "object", shrinkFrames: "number" },
+    props: { ...POS, title: "string", asset: "string", assetScale: "number", text: "string", typeAt: "number", typeEvery: "number", w: "number", h: "number", from: "object", openFrames: "number", hangers: "array", shrinkAt: "number", shrinkTo: "object", shrinkFrames: "number" },
     check: (p) => (Array.isArray(p.hangers) ? p.hangers.flatMap((hg: any, k: number) => (hg?.asset ? [] : [`hangers[${k}] 缺少 asset`])) : []),
   },
 

@@ -20,6 +20,10 @@ export type QuestionCardProps = {
   asset?: string;
   assetScale?: number;
   text?: string;
+  /** 逐字打出 text：從第幾幀開始（省略 = 卡片撐開時整句出現） */
+  typeAt?: number;
+  /** 逐字打出：每幾幀一個字，預設 2 */
+  typeEvery?: number;
   w?: number;
   h?: number;
   from?: { x: number; y: number };
@@ -43,6 +47,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   asset,
   assetScale = 2,
   text,
+  typeAt,
+  typeEvery = 2,
   w = 150,
   h = 100,
   from,
@@ -67,6 +73,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     cy = y + (to.y - y) * p;
     s = 1 + (to.scale - 1) * p;
   }
+  const typed = typeAt === undefined ? 0 : Math.floor((f - typeAt) / Math.max(1, typeEvery)) + 1;
 
   return (
     <div style={{ position: "absolute", left: Math.round(cx), top: Math.round(cy), transform: `translate(-50%, -50%) scale(${s.toFixed(3)})`, width: w, height: h }}>
@@ -108,8 +115,16 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         <div style={{ position: "absolute", left: 0, right: 0, top: 9, textAlign: "center", fontFamily: FONT_PIXEL, fontSize: 12, lineHeight: 1, color: color.goldLight, whiteSpace: "nowrap" }}>{title}</div>
       ) : null}
       {asset ? <Sprite asset={asset} x={w / 2} y={title ? h / 2 + 6 : h / 2} anchor="center" scale={assetScale} /> : null}
-      {text ? (
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 8, textAlign: "center", fontFamily: FONT_PIXEL, fontSize: 12, lineHeight: 1, color: color.white, whiteSpace: "nowrap" }}>{text}</div>
+      {text && (typeAt === undefined || f >= typeAt) ? (
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 8, textAlign: "center", fontFamily: FONT_PIXEL, fontSize: 12, lineHeight: 1, color: color.white, whiteSpace: "nowrap" }}>
+          {typeAt === undefined ? text : (
+            <>
+              {/* 未打出的字佔位（透明），整句位置不會跳 */}
+              {[...text].slice(0, typed).join("")}
+              <span style={{ opacity: 0 }}>{[...text].slice(typed).join("")}</span>
+            </>
+          )}
+        </div>
       ) : null}
     </div>
   );

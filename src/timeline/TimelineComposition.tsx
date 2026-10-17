@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Audio, CalculateMetadataFunction, Sequence, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, CalculateMetadataFunction, Freeze, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { Ambience } from "../components/Ambience";
 import { Camera, CAMERA_HOME, CAMERA_WIDE, CameraState, worldToScreen } from "../components/Camera";
 import { PIXEL } from "../theme";
@@ -21,6 +21,7 @@ import character from "../generated/character.json";
 import { AssetMeta, useAssets } from "../lib/assets";
 import type { ActorDecl, Scene, Timeline, TimelineEvent } from "./types";
 import { Actor } from "../actor/Actor";
+import { SMOKE_REVEAL } from "../components/props/SmokePop";
 import { ACTORS } from "../actor/rig";
 import { ActorEv, ActorInit, markFrame, Pt } from "../actor/timeline";
 
@@ -264,11 +265,13 @@ const EventView: React.FC<{ r: Resolved; scene: Scene; camera: CameraState }> = 
   ) : (
     <C {...props} />
   );
-  return (
+  const seq = (
     <Sequence from={r.start} durationInFrames={dur} layout="none">
       {r.focus?.length ? <FocusWrap focus={r.focus}>{body}</FocusWrap> : body}
     </Sequence>
   );
+  // 有 id 的事件：PropFx 可以指名它（晃動、移動、消失…），以組件的 (x, y) 為軸；在 Sequence 外面，用 scene 的幀
+  return r.ev.id ? <FxTarget name={r.ev.id} x={Number(raw.x ?? 0)} y={Number(raw.y ?? 0)} render={() => seq} /> : seq;
 };
 
 /** 事件的 focus：壓暗 / 模糊依關鍵幀漸變（A20 前景虛焦時讓組件一起虛化） */
@@ -286,8 +289,14 @@ const FocusWrap: React.FC<{ focus: Focus[]; children: React.ReactNode }> = ({ fo
   return <div style={{ position: "absolute", inset: 0, filter: filter || undefined }}>{children}</div>;
 };
 
-export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt: number }> = ({ scene, timeline, navEnterAt }) => {
+export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt: number; ghost?: boolean }> = ({ scene, timeline, navEnterAt, ghost }) => {
   const errors: string[] = [];
+  if (scene.navAt !== undefined) {
+    const r = resolveStart(scene.navAt, scene);
+    if (r.error) errors.push(`[${scene.id}] navAt：${r.error}`);
+    else navEnterAt = r.frame!;
+  }
+  if (scene.transitionOut && !["wipe", "blur"].includes(scene.transitionOut.type)) errors.push(`[${scene.id}] transitionOut.type「${scene.transitionOut.type}」不存在，可用：wipe、blur`);
   const assetMeta = useAssets().meta;
   const stage = STAGES[scene.stage ?? "void"];
   if (!stage) errors.push(`[${scene.id}] 舞台「${scene.stage}」不存在，可用：${Object.keys(STAGES).join("、")}`);
@@ -430,8 +439,16 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
         if (follow) idFollow.set(name, follow);
       }
     }
-    if (ACTOR_EVENTS.has(ev.component) && typeof props.actor === "string" && !actors.inits.some((a) => a.id === props.actor)) {
-      errs.push(`角色「${props.actor}」沒有在這個 scene 的 actors 宣告。已宣告：${actors.inits.map((a) => a.id).join("、") || "（沒有，請在 scene 加 \"actors\"）"}`);
+    const smokeActors = ev.component === "SmokePop" ? [props.actor, ...(Array.isArray(props.hide) ? props.hide : [])].filter((a) => a !== undefined) : [];
+    for (const a of ACTOR_EVENTS.has(ev.component) ? [props.actor] : smokeActors) {
+      if (typeof a === "string" && !actors.inits.some((x) => x.id === a)) {
+        errs.push(`角色「${a}」沒有在這個 scene 的 actors 宣告。已宣告：${actors.inits.map((x) => x.id).join("、") || "（沒有，請在 scene 加 \"actors\"）"}`);
+      }
+    }
+    // SmokePop 帶骨架角色：名牌高度用角色的身高
+    if (ev.component === "SmokePop" && typeof props.actor === "string" && props.h === undefined) {
+      const a = actors.inits.find((x) => x.id === props.actor);
+      if (a) props.h = (ACTORS[a.rig]?.views[a.view]?.h ?? 51) * a.scale;
     }
     return { ev, i, start, errors: errs, props, follow, focus };
   });
@@ -465,7 +482,14 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     if (r.ev.component === "Act") list.push({ kind: "act", start: r.start, duration: r.ev.duration, action: p.action, view: p.view, facing: p.facing, loop: p.loop, from: pts.from, to: pts.to, prop: p.prop, speed: p.speed });
     else list.push({ kind: "state", start: r.start, costume: p.costume, silhouette: p.silhouette, dim: p.dim, scale: p.scale, visible: p.visible, view: p.view, facing: p.facing, talk: p.talk, at: pts.at, tagText: p.tagText });
   }
-
+  // SmokePop 的 actor / hide：在煙最濃的那一幀讓角色出場（站到 x, y）/ 退場
+  for (const r of resolved) {
+    if (r.ev.component !== "SmokePop" || r.errors.length) continue;
+    const p = r.props as Record<string, any>;
+    const at = r.start + SMOKE_REVEAL;
+    if (typeof p.actor === "string") actorEvents.get(p.actor)!.push({ kind: "state", start: at, visible: true, at: { x: p.x, y: p.y } });
+    for (const id of Array.isArray(p.hide) ? p.hide : []) actorEvents.get(id)!.push({ kind: "state", start: at, visible: false });
+  }
   for (const r of resolved) for (const e of r.errors) errors.push(`[${scene.id}] 事件 #${r.i + 1} ${r.ev.component}：${e}`);
   const ok = resolved.filter((r) => r.errors.length === 0 && r.ev.component !== "PropFx" && !ACTOR_EVENTS.has(r.ev.component) && !S3_EVENTS.has(r.ev.component));
   // PropFx：交給舞台物件自己套用（晃動、發光、消失…）
@@ -529,6 +553,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
 
   return (
     <Stage3DRuntimeContext.Provider value={rt3d ?? null}>
+    <PropFxContext.Provider value={fx}>
     <PixelStage
       background={scene.background ?? rt3d?.module.background ?? stage?.background}
       bloom={scene.bloom}
@@ -537,12 +562,14 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
         <EventView key={r.i} r={r} scene={scene} camera={camera} />
       ))}
       ui={
-        <>
-          {timeline.nav && scene.navIndex !== undefined ? <TopNav chapters={timeline.nav.chapters} current={scene.navIndex} enterAt={navEnterAt} /> : null}
-          {timeline.watermark && scene.watermark !== false ? <Watermark topic={timeline.watermark} /> : null}
-          {scene.subtitles?.length ? <Subtitles lines={scene.subtitles} /> : null}
-          <ErrorPanel errors={errors} />
-        </>
+        ghost ? null : (
+          <>
+            {timeline.nav && scene.navIndex !== undefined ? <TopNav chapters={timeline.nav.chapters} current={scene.navIndex} enterAt={navEnterAt} /> : null}
+            {timeline.watermark && scene.watermark !== false ? <Watermark topic={timeline.watermark} /> : null}
+            {scene.subtitles?.length ? <Subtitles lines={scene.subtitles} /> : null}
+            <ErrorPanel errors={errors} />
+          </>
+        )
       }
     >
       {rt3d ? <Stage3DView runtime={rt3d} /> : null}
@@ -552,19 +579,49 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
       ) : null}
       {numberedLayer(over3d)}
       <Camera initial={camera} moves={scene.camera}>
-        <PropFxContext.Provider value={fx}>
-          {StageC ? (
-            <StageC host={host}>{worldContent}</StageC>
-          ) : (
-            <>
-              {host}
-              {worldContent}
-            </>
-          )}
-        </PropFxContext.Provider>
+        {StageC ? (
+          <StageC host={host}>{worldContent}</StageC>
+        ) : (
+          <>
+            {host}
+            {worldContent}
+          </>
+        )}
       </Camera>
     </PixelStage>
+    </PropFxContext.Provider>
     </Stage3DRuntimeContext.Provider>
+  );
+};
+
+/**
+ * 2D 轉場的凍結畫面：wipe（A16）整張滑出、邊緣帶陰影；blur（A7）滑出時水平拖影（只橫向模糊）並變暗。
+ * 畫面座標是 1920×1080（在 PixelStage 外面）。
+ */
+const TransitionGhost: React.FC<{ type: "wipe" | "blur"; direction?: "left" | "right"; frames: number; id: number; children: React.ReactNode }> = ({ type, direction, frames, id, children }) => {
+  const f = useCurrentFrame();
+  const p = Math.min(1, Math.max(0, (f + 1) / frames));
+  const e = p * p; // 先慢後快
+  const dir = (direction ?? (type === "wipe" ? "left" : "right")) === "left" ? -1 : 1;
+  const dx = dir * e * 100;
+  if (type === "wipe") {
+    return (
+      <AbsoluteFill style={{ transform: `translateX(${dx.toFixed(2)}%)`, boxShadow: "0 0 48px 16px rgba(0,0,0,0.7)" }}>
+        <AbsoluteFill style={{ overflow: "hidden" }}>{children}</AbsoluteFill>
+      </AbsoluteFill>
+    );
+  }
+  const fid = `sb-hblur-${id}`;
+  const blur = 4 + 90 * e;
+  return (
+    <AbsoluteFill style={{ transform: `translateX(${dx.toFixed(2)}%)` }}>
+      <svg width={0} height={0} style={{ position: "absolute" }}>
+        <filter id={fid} x="-50%" y="0" width="200%" height="100%">
+          <feGaussianBlur stdDeviation={`${blur.toFixed(1)} 0`} />
+        </filter>
+      </svg>
+      <AbsoluteFill style={{ overflow: "hidden", filter: `url(#${fid}) brightness(${(1 - 0.55 * p).toFixed(3)})` }}>{children}</AbsoluteFill>
+    </AbsoluteFill>
   );
 };
 
@@ -581,11 +638,26 @@ export const TimelineComposition: React.FC<TimelineProps> = ({ timeline }) => {
         const from = t;
         t += scene.duration;
         // 導航條：前一個 scene 已經顯示導航時，不再滑入一次
-        const prevShown = i > 0 && timeline.scenes[i - 1].navIndex !== undefined;
+        const prev = i > 0 ? timeline.scenes[i - 1] : undefined;
+        const prevShown = prev?.navIndex !== undefined;
+        const tr = prev?.transitionOut;
+        const trFrames = tr ? Math.max(1, Math.min(tr.duration ?? 12, scene.duration)) : 0;
         return (
-          <Sequence key={scene.id + i} from={from} durationInFrames={scene.duration} name={scene.id}>
-            <SceneView scene={scene} timeline={timeline} navEnterAt={prevShown ? -10 : 0} />
-          </Sequence>
+          <React.Fragment key={scene.id + i}>
+            <Sequence from={from} durationInFrames={scene.duration} name={scene.id}>
+              <SceneView scene={scene} timeline={timeline} navEnterAt={prevShown ? -10 : 0} />
+            </Sequence>
+            {prev && tr ? (
+              // 轉場：上一個 scene 的最後一幀凍住，蓋在這個 scene 開頭往一側擦出
+              <Sequence from={from} durationInFrames={trFrames} name={`${prev.id}→${scene.id}`}>
+                <TransitionGhost type={tr.type} direction={tr.direction} frames={trFrames} id={i}>
+                  <Freeze frame={prev.duration - 1}>
+                    <SceneView scene={prev} timeline={timeline} navEnterAt={-10} ghost />
+                  </Freeze>
+                </TransitionGhost>
+              </Sequence>
+            ) : null}
+          </React.Fragment>
         );
       })}
     </AbsoluteFill>
