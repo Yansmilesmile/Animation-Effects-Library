@@ -75,7 +75,7 @@ const build3dLayer = (scene: Scene, errors: string[]): L3D | undefined => {
   };
   const camera = typeof d.camera === "string" || d.camera === undefined ? d.camera : (Array.isArray(d.camera) ? d.camera : [d.camera]).map((m) => ({ ...m, start: at(m.start, "camera") }));
   const animate = (d.animate ?? []).map((a) => ({ ...a, start: at(a.start, "animate") }));
-  const prep = prepareScene(d.scene, camera, animate);
+  const prep = prepareScene(d.scene, camera, animate, d.outline);
   for (const e of prep.errors) errors.push(`[${scene.id}] layer3d：${e}`);
   return { prep, camera, animate, z: d.z ?? 0 };
 };

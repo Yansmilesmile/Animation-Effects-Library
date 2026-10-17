@@ -23,6 +23,7 @@
     "animate": [                                 // 參數補間（見各類型的「可補間」）
       { "target": "study", "start": "@關燈", "duration": 20, "to": { "lightLevel": 0.2 } }
     ],
+    "outline": { "ids": ["hand"] },              // 選填：覆寫場景的像素描邊（見 3.1），false = 不描
     "z": 0                                       // 3D 層的排序位置（預設 0）
   },
   "host": { "pose": "full_mic_talk", "x": 96, "y": 262, "scale": 2 },   // 2D 主持人（粗像素），畫在 3D 前面
@@ -62,6 +63,7 @@
     "colorLevels": 48                                                 // 色階＋有序抖動，0 = 關
   },
   "palette": ["#56645b", "…"], "quantize": "off",                    // ramp | strict：量化到調色盤
+  "outline": { "color": "#000000", "width": 1, "ids": ["hand"] },     // 像素描邊，見 3.1；省略 = 不描
   "environment": { … },            // 見第 5 節
   "lights": [                      // ambient | hemisphere | directional | point | spot
     { "type": "hemisphere", "sky": "#9a8566", "ground": "#1e1914", "intensity": 0.45 },
@@ -78,6 +80,21 @@
 
 - 單位是公尺；y 朝上。`shiftY`：鏡頭往下看但垂直線不歪（一點透視，0–0.4）。
 - 組件提供的點自動加前綴：`"3d:<組件 id>.<點>"`（例如 `3d:town.tower`、`3d:study.desk`）。
+
+### 3.1 outline：像素描邊
+
+在低解析度那一層描（一格寬 = 放大後一個像素粗），和 2D 像素素材的描邊一致。適合單一主體（手），背景（房間、地形）通常不描。
+
+| 參數 | 說明 |
+|---|---|
+| `color` | 預設 `"#000000"` |
+| `width` | 1–3 格，預設 1（上下左右四鄰，不帶角） |
+| `ids` | 只描這些組件 id；省略 = 全部組件 |
+| `inner` | 內線：同一批物件互相遮擋處（手指疊在手掌上）要不要描，值是深度差門檻（公尺），預設 `0.3`；`false` = 只描外框 |
+| `fog` | 物體被霧吃掉四成以上的地方不描（手臂融進後方雲時線也跟著消失），預設 `true` |
+
+- 寫在場景 JSON 的 `outline`；時間軸 `layer3d.outline`、TSX `<Layer3D outline={…}>` 可覆寫（`false` = 關掉）。
+- 只看要描的組件：被其他 3D 組件擋住的部分照樣描（Layer3D 不做遮擋）；被前面 2D 層蓋住的就看不到。
 
 ## 4. 鏡頭
 
@@ -185,4 +202,4 @@
 
 ## 10. 報錯（紅框）
 
-不認得的組件類型 / 參數、機位不存在、move / ease 寫錯、animate 的 target 或參數不能補間、燈或天氣的 type 寫錯、`3d:<點>` 不存在、圖片載入失敗、事件 `layer` 寫錯。
+不認得的組件類型 / 參數、機位不存在、move / ease 寫錯、animate 的 target 或參數不能補間、燈或天氣的 type 寫錯、`3d:<點>` 不存在、圖片載入失敗、事件 `layer` 寫錯、`outline` 的參數 / `ids` / `width` 寫錯。

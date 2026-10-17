@@ -44,14 +44,25 @@ const FinishShader = {
     uColors: { value: Array.from({ length: MAX_COLORS }, () => new THREE.Vector3()) },
     uCount: { value: 0 },
     uDither: { value: 0.35 },
+    /** 描邊遮罩：r = 視線深度、g = 沒被霧吃掉的比例、a = 有描邊物件 */
+    tMask: { value: null as THREE.Texture | null },
+    uOutline: { value: 0 },
+    uOutColor: { value: new THREE.Vector3() },
+    uOutWidth: { value: 1 },
+    uInner: { value: 0 },
+    uFogFade: { value: 1 },
+    uTexel: { value: new THREE.Vector2() },
   },
   vertexShader: /* glsl */ `
     varying vec2 vUv;
     void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
   fragmentShader: /* glsl */ `
-    uniform sampler2D tDiffuse, tCoverage;
+    uniform sampler2D tDiffuse, tCoverage, tMask;
     uniform float uTransparent, uContrast, uSat, uVig, uAspect, uLevels, uDither;
-    uniform vec3 uTint;
+    uniform float uOutline, uInner, uFogFade;
+    uniform int uOutWidth;
+    uniform vec2 uTexel;
+    uniform vec3 uTint, uOutColor;
     uniform vec3 uColors[${MAX_COLORS}];
     uniform int uCount;
     varying vec2 vUv;
@@ -92,9 +103,54 @@ const FinishShader = {
         if (a < 0.02) { a = 0.0; c = vec3(0.0); }
         else if (cov < 0.5) c = min(c, vec3(a));
       }
+      if (uOutline > 0.5) {
+        // 菱形鄰域（width 1 = 上下左右四格，像素畫的描邊不帶角）
+        vec4 m0 = texture2D(tMask, vUv);
+        bool line = false;
+        for (int dy = -3; dy <= 3; dy++)
+          for (int dx = -3; dx <= 3; dx++) {
+            if (abs(dx) + abs(dy) > uOutWidth || (dx == 0 && dy == 0)) continue;
+            vec4 mn = texture2D(tMask, vUv + vec2(float(dx), float(dy)) * uTexel);
+            if (mn.a < 0.5 || (uFogFade > 0.5 && mn.g < 0.6)) continue;
+            // 外框：我不是物件、鄰居是；內線：鄰居比我近 uInner 以上（線落在後面那一側）
+            if (m0.a < 0.5 || (uInner > 0.0 && m0.r - mn.r > uInner)) line = true;
+          }
+        if (line) { c = uOutColor; a = 1.0; }
+      }
       gl_FragColor = vec4(c, a);
     }`,
 };
+
+/** 要描邊的物件開這一層（camera.layers 只開這層時畫遮罩） */
+export const OUTLINE_LAYER = 1;
+
+/** 遮罩材質：r = 視線深度、g = 1 − 霧（和 three 的霧公式一樣）、a = 1 */
+const makeMaskMaterial = () =>
+  new THREE.ShaderMaterial({
+    uniforms: { uFogKind: { value: 0 }, uNear: { value: 0 }, uFar: { value: 1 }, uDensity: { value: 0 } },
+    vertexShader: /* glsl */ `
+      varying float vDepth;
+      void main() {
+        vec4 p = vec4(position, 1.0);
+        #ifdef USE_INSTANCING
+        p = instanceMatrix * p;
+        #endif
+        vec4 mv = modelViewMatrix * p;
+        vDepth = -mv.z;
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: /* glsl */ `
+      uniform float uFogKind, uNear, uFar, uDensity;
+      varying float vDepth;
+      void main() {
+        float fog = 0.0;
+        if (uFogKind > 1.5) fog = 1.0 - exp(-uDensity * uDensity * vDepth * vDepth);
+        else if (uFogKind > 0.5) fog = smoothstep(uNear, uFar, vDepth);
+        gl_FragColor = vec4(vDepth, 1.0 - fog, 0.0, 1.0);
+      }`,
+    side: THREE.DoubleSide,
+    fog: false,
+  });
 
 export type PostChain = { composer: EffectComposer; render: () => void; dispose: () => void };
 
@@ -136,12 +192,60 @@ export const buildPost = (gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: T
     u.uDither.value = cfg.dither ?? 0.35;
   }
   composer.addPass(fin);
+
+  // 描邊：先把開了 OUTLINE_LAYER 的物件畫成遮罩（深度＋霧），Finish 在低解析度上找邊
+  const ol = cfg.outline;
+  const mask = ol ? new THREE.WebGLRenderTarget(width, height, { type: THREE.HalfFloatType, format: THREE.RGBAFormat, minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter }) : null;
+  const maskMat = ol ? makeMaskMaterial() : null;
+  if (ol && mask) {
+    u.uOutline.value = 1;
+    u.tMask.value = mask.texture;
+    const oc = hexToRgb(ol.color ?? "#000000");
+    (u.uOutColor.value as THREE.Vector3).set(oc[0], oc[1], oc[2]);
+    u.uOutWidth.value = Math.round(Math.max(1, Math.min(3, ol.width ?? 1)));
+    u.uInner.value = ol.inner === false ? 0 : ol.inner ?? 0.3;
+    u.uFogFade.value = ol.fog === false ? 0 : 1;
+    (u.uTexel.value as THREE.Vector2).set(1 / width, 1 / height);
+  }
+  const renderMask = () => {
+    if (!mask || !maskMat) return;
+    const fog = scene.fog;
+    const mu = maskMat.uniforms;
+    mu.uFogKind.value = fog instanceof THREE.FogExp2 ? 2 : fog instanceof THREE.Fog ? 1 : 0;
+    if (fog instanceof THREE.Fog) {
+      mu.uNear.value = fog.near;
+      mu.uFar.value = fog.far;
+    } else if (fog instanceof THREE.FogExp2) mu.uDensity.value = fog.density;
+    const layers = camera.layers.mask;
+    const prevOverride = scene.overrideMaterial;
+    const prevClear = gl.getClearAlpha();
+    const prevColor = gl.getClearColor(new THREE.Color());
+    const prevTone = gl.toneMapping;
+    camera.layers.set(OUTLINE_LAYER);
+    scene.overrideMaterial = maskMat;
+    gl.toneMapping = THREE.NoToneMapping;
+    gl.setClearColor(0x000000, 0);
+    gl.setRenderTarget(mask);
+    gl.clear();
+    gl.render(scene, camera);
+    gl.setRenderTarget(null);
+    camera.layers.mask = layers;
+    scene.overrideMaterial = prevOverride;
+    gl.toneMapping = prevTone;
+    gl.setClearColor(prevColor, prevClear);
+  };
+
   return {
     composer,
-    render: () => composer.render(),
+    render: () => {
+      renderMask();
+      composer.render();
+    },
     dispose: () => {
       composer.dispose();
       save?.renderTarget.dispose();
+      mask?.dispose();
+      maskMat?.dispose();
     },
   };
 };

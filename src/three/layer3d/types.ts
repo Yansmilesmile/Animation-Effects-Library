@@ -73,6 +73,23 @@ export type Environment = {
 
 export type ComponentSpec = { type: string; id?: string; [k: string]: unknown };
 
+/**
+ * 像素描邊：在低解析度那一層描（一格 = 放大後一個像素），和 2D 像素素材的描邊一致。
+ * 外框一定描；inner = 同一批物件互相遮擋處（手指疊在手掌上）的內線，值是深度差門檻（公尺），false = 不描。
+ */
+export type OutlineSpec = {
+  /** 預設 "#000000" */
+  color?: string;
+  /** 幾格寬（1–3），預設 1 */
+  width?: number;
+  /** 只描這些組件 id；省略 = 全部組件 */
+  ids?: string[];
+  /** 內線的深度差門檻（公尺），預設 0.3；false = 只描外框 */
+  inner?: number | false;
+  /** 物體被霧吃掉四成以上的地方不描（伸進雲裡的手臂），預設 true */
+  fog?: boolean;
+};
+
 export type Scene3D = {
   name?: string;
   seed?: number;
@@ -96,6 +113,8 @@ export type Scene3D = {
     /** 色階數（有序抖動），0 = 關 */
     colorLevels?: number;
   };
+  /** 像素描邊（見 OutlineSpec）；省略 = 不描 */
+  outline?: OutlineSpec;
   environment?: Environment;
   lights?: LightSpec[];
   components?: ComponentSpec[];

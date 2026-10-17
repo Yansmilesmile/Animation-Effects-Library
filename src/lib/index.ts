@@ -67,6 +67,7 @@ export type {
   Animate as Layer3DAnimate,
   Environment as Layer3DEnvironment,
   LightSpec as Layer3DLight,
+  OutlineSpec as Layer3DOutline,
   Layer3DType,
   BuildContext as Layer3DBuildContext,
   FrameContext as Layer3DFrameContext,

@@ -1,7 +1,7 @@
 import { buildCameraTrack, CameraTrack, EASES, projectPoint } from "./camera";
 import { timeValue } from "./environment";
 import { LAYER3D_TYPES } from "./types/index";
-import type { Animate, Layer3DType, Scene3D, Vec3 } from "./types";
+import type { Animate, Layer3DType, OutlineSpec, Scene3D, Vec3 } from "./types";
 
 /**
  * 場景 JSON → 檢查過、可逐幀取值的場景：組件（類型模組＋參數）、environment、參數補間、命名點。
@@ -49,7 +49,8 @@ export type PreparedScene = {
 
 const isObj = (v: unknown): v is Record<string, unknown> => !!v && typeof v === "object" && !Array.isArray(v);
 
-export const prepareScene = (input: Scene3D | string | undefined, cameraTrack?: CameraTrack, animate: Animate[] = []): PreparedScene => {
+/** outline：覆寫場景的描邊（undefined = 用場景的，false = 不描） */
+export const prepareScene = (input: Scene3D | string | undefined, cameraTrack?: CameraTrack, animate: Animate[] = [], outline?: OutlineSpec | false): PreparedScene => {
   const errors: string[] = [];
   let scene: Scene3D;
   if (typeof input === "string") {
@@ -57,6 +58,7 @@ export const prepareScene = (input: Scene3D | string | undefined, cameraTrack?: 
     if (!s) errors.push(`3D 場景「${input}」沒有註冊，可用：${Object.keys(SCENES_3D).join("、") || "（沒有，請在入口檔 registerScene3D）"}`);
     scene = s ?? { cameras: {} };
   } else scene = input ?? { cameras: {} };
+  if (outline !== undefined) scene = { ...scene, outline: outline || undefined };
   if (!isObj(scene.cameras) || !Object.keys(scene.cameras).length) errors.push("場景沒有 cameras（至少一個機位）");
 
   const components: PreparedComponent[] = [];
@@ -78,7 +80,15 @@ export const prepareScene = (input: Scene3D | string | undefined, cameraTrack?: 
     components.push({ id, type: c.type, def, params });
   });
 
-  const LIGHT_TYPES = ["ambient", "hemisphere", "directional", "point", "spot"];
+  const o = scene.outline;
+  if (o) {
+    const OUTLINE_KEYS = ["color", "width", "ids", "inner", "fog"];
+    for (const k of Object.keys(o)) if (!OUTLINE_KEYS.includes(k)) errors.push(`outline：不認得的參數「${k}」，可用：${OUTLINE_KEYS.join("、")}`);
+    for (const id of o.ids ?? []) if (!components.some((c) => c.id === id)) errors.push(`outline.ids：組件「${id}」不存在，可用：${components.map((c) => c.id).join("、")}`);
+    if (o.width !== undefined && !(o.width >= 1 && o.width <= 3)) errors.push(`outline.width 要在 1–3 之間（目前 ${o.width}）`);
+  }
+
+  const LIGHT_TYPES =["ambient", "hemisphere", "directional", "point", "spot"];
   for (const L of scene.lights ?? []) if (!LIGHT_TYPES.includes(L.type)) errors.push(`燈的 type「${L.type}」不存在，可用：${LIGHT_TYPES.join("、")}`);
   const w = scene.environment?.weather;
   if (w && w.type !== "snow" && w.type !== "rain") errors.push(`weather.type「${w.type}」不存在，可用：snow、rain`);

@@ -10,9 +10,9 @@ import { PIXEL, VIDEO } from "../../theme";
 import { applyCamera, CameraTrack } from "./camera";
 import { buildEnvironment, EnvParams } from "./environment";
 import { buildLights } from "./lights";
-import { buildPost } from "./post";
+import { buildPost, OUTLINE_LAYER } from "./post";
 import { PreparedScene, prepareScene } from "./scene";
-import type { Animate, Built, Scene3D } from "./types";
+import type { Animate, Built, OutlineSpec, Scene3D } from "./types";
 
 /**
  * <Layer3D> —— 一層即時渲染的 3D（背景或單一主體），可以夾在任意兩個 2D 層之間。
@@ -38,6 +38,8 @@ export type Layer3DProps = {
   pixelSize?: number;
   /** 覆寫場景的 background："transparent" 或顏色 */
   background?: string;
+  /** 覆寫場景的像素描邊：{ color, width, ids, inner, fog }；false = 不描 */
+  outline?: OutlineSpec | false;
   space?: "pixel" | "screen";
   /** 錯誤紅框（預設顯示；時間軸自己收集錯誤時關掉） */
   showErrors?: boolean;
@@ -62,9 +64,12 @@ const Inner: React.FC<{ prep: PreparedScene; cfg: Scene3D; frame: number; fps: n
     const env = buildEnvironment(cfg.environment ?? {}, ctx);
     root.add(env.object);
     root.add(buildLights(cfg.lights ?? []).object);
+    const outlined = cfg.outline ? cfg.outline.ids ?? prep.components.map((c) => c.id) : [];
     const comps = prep.components.map((c) => {
       const b = c.def.build(c.params as never, ctx) as Built<never>;
       root.add(b.object);
+      // 要描邊的組件：整棵開 OUTLINE_LAYER（同時留在預設層，正常照畫）
+      if (outlined.includes(c.id)) b.object.traverse((o) => o.layers.enable(OUTLINE_LAYER));
       return { id: c.id, params: c.params, b };
     });
     return { root, env, comps };
@@ -138,15 +143,16 @@ const useImages = (srcs: string[], url: (p: string) => string) => {
   return state && state.key === key ? state : null;
 };
 
-export const Layer3D: React.FC<Layer3DProps> = ({ scene, camera, animate, pixelSize, background, space = "pixel", showErrors = true }) => {
+export const Layer3D: React.FC<Layer3DProps> = ({ scene, camera, animate, pixelSize, background, outline, space = "pixel", showErrors = true }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const inBloom = useBloomPass();
   const { url } = useAssets();
   const camKey = JSON.stringify(camera ?? null);
   const animKey = JSON.stringify(animate ?? null);
+  const outlineKey = JSON.stringify(outline ?? null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const prep = useMemo(() => prepareScene(scene, camera, animate), [scene, camKey, animKey]);
+  const prep = useMemo(() => prepareScene(scene, camera, animate, outline), [scene, camKey, animKey, outlineKey]);
   const cfg = useMemo<Scene3D>(() => ({ ...prep.scene, ...(background ? { background } : {}) }), [prep.scene, background]);
   const ps = Math.max(1, pixelSize ?? cfg.pixelSize ?? 4);
   const W = Math.round(VIDEO.width / ps);

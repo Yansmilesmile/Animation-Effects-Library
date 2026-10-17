@@ -1,7 +1,7 @@
 import type { AmbienceInput } from "../components/Ambience";
 import type { CameraMove, CameraState } from "../components/Camera";
 import type { Highlight } from "../components/Subtitle";
-import type { Animate, CameraMove as CameraMove3D, Scene3D } from "../three/layer3d/types";
+import type { Animate, CameraMove as CameraMove3D, OutlineSpec, Scene3D } from "../three/layer3d/types";
 
 /**
  * 時間軸 JSON 格式（分鏡 AI 產生、TimelineComposition 渲染）。
@@ -68,6 +68,8 @@ export type Layer3DSceneDecl = {
   animate?: (Omit<Animate, "start"> & { start?: At })[];
   pixelSize?: number;
   background?: string;
+  /** 覆寫場景的像素描邊 { color, width, ids, inner, fog }；false = 不描（見 docs/layer3d.md） */
+  outline?: OutlineSpec | false;
   /** 3D 層的排序位置（和事件的數字 layer 比），預設 0 */
   z?: number;
 };
