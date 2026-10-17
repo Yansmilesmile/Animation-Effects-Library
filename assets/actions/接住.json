@@ -1,0 +1,16 @@
+{
+  "name": "接住",
+  "_comment": "正面：抬頭、雙手往上伸 → 接住從上方降下的道具（第 10 幀，mark catch）→ 收到胸前捧著（之後一直拿著）。prop 預設黃色卷軸，可換",
+  "views": ["front"],
+  "duration": 16,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 2, "face": "lookup" },
+    { "f": 6, "ease": "out", "pose": { "arm_L_upper": 110, "arm_L_lower": 30, "arm_R_upper": 110, "arm_R_lower": 30, "head": { "r": 0, "dx": 0, "dy": -1 } } },
+    { "f": 10, "pose": { "arm_L_upper": 60, "arm_L_lower": -30, "arm_R_upper": 60, "arm_R_lower": -30 } },
+    { "f": 14, "ease": "out", "face": "smile", "pose": { "arm_L_upper": -5, "arm_L_lower": -75, "arm_R_upper": -5, "arm_R_lower": -75, "head": { "r": 0, "dx": 0, "dy": 0 } } }
+  ],
+  "props": [{ "slot": "chest", "asset": "小素材/黃色卷軸.png", "from": 12, "dy": 0 }],
+  "marks": [{ "f": 10, "name": "catch" }]
+}

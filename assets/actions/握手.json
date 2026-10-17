@@ -1,0 +1,17 @@
+{
+  "name": "握手",
+  "_comment": "側面：右手往前伸到腰高（第 8 幀握住，mark grip）→ 上下搖兩次 → 鬆手，笑臉。兩個角色面對面各做一次",
+  "views": ["side"],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 8, "ease": "out", "face": "smile", "pose": { "arm_R_upper": 40, "arm_R_lower": 10, "torso": { "r": 3, "dx": 0 } } },
+    { "f": 12, "pose": { "arm_R_upper": 47, "arm_R_lower": 6 } },
+    { "f": 16, "pose": { "arm_R_upper": 33, "arm_R_lower": 14 } },
+    { "f": 20, "pose": { "arm_R_upper": 47, "arm_R_lower": 6 } },
+    { "f": 24, "pose": { "arm_R_upper": 40, "arm_R_lower": 10 } },
+    { "f": 30, "pose": { "arm_R_upper": 0, "arm_R_lower": 0, "torso": { "r": 0, "dx": 0 } } }
+  ],
+  "marks": [{ "f": 8, "name": "grip" }]
+}

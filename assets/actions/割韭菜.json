@@ -1,0 +1,16 @@
+{
+  "name": "割韭菜",
+  "_comment": "側面：鐮刀高舉 → 往前下方一揮（第 10 幀，mark cut）→ 停一下 → 收回，鐮刀一直拿著",
+  "views": ["side"],
+  "duration": 22,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "pose": { "arm_R_upper": 150, "arm_R_lower": 15, "torso": { "r": -4, "dx": 0 } } },
+    { "f": 10, "ease": "in", "pose": { "arm_R_upper": 60, "arm_R_lower": 25, "torso": { "r": 7, "dx": 1 } } },
+    { "f": 14, "pose": { "arm_R_upper": 60, "arm_R_lower": 25, "torso": { "r": 7, "dx": 1 } } },
+    { "f": 22, "ease": "out", "pose": { "arm_R_upper": 25, "arm_R_lower": 15, "torso": { "r": 1, "dx": 0 } } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/sickle.png", "from": 0, "dy": -6, "shake": [10, 13] }],
+  "marks": [{ "f": 10, "name": "cut" }]
+}

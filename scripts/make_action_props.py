@@ -3,6 +3,7 @@
 # 比二：hand_v.png（正面舉起的 V 手勢）
 # 扯衣：tshirt_torn.png（素材庫「愛心T恤」少一袖、褪色、破洞）
 # 掛牌：tag_blank.png（空白小吊牌；時間軸用 prop 換成寫了字的牌）
+# 喊話 / 罵人：mic_hand.png；玩手機 / 遞手機：phone_hand.png；割韭菜：sickle.png
 import os
 from PIL import Image
 
@@ -103,6 +104,56 @@ TAG_BLANK = [
 ]
 
 
+# 喊話 / 罵人：mic_hand.png（手持話筒，網罩朝上）
+MIC = {"k": hexc("#1a1418"), "g": hexc("#c9ced6"), "m": hexc("#7e8794"), "b": hexc("#3a3d44"), "r": hexc("#d8443a")}
+MIC_HAND = [
+    ".kkk.",
+    "kgmgk",
+    "kmgmk",
+    "kgmgk",
+    ".kkk.",
+    ".kbk.",
+    ".kbk.",
+    ".krk.",
+    ".kbk.",
+    ".kbk.",
+    ".kbk.",
+    "..k..",
+]
+
+# 玩手機 / 遞手機：phone_hand.png（智慧手機，螢幕發亮）
+PHONE = {"k": hexc("#1a1418"), "s": hexc("#9fd8f0"), "w": hexc("#e8f6fc"), "d": hexc("#3a3d44")}
+PHONE_HAND = [
+    "kkkkkk",
+    "kswwsk",
+    "kwsssk",
+    "kssssk",
+    "kssssk",
+    "kssssk",
+    "kssssk",
+    "kddddk",
+    "kkkkkk",
+]
+
+# 割韭菜：sickle.png（側面、刀刃彎向右上，握把在下）
+SICKLE = {"k": hexc("#1a1418"), "s": hexc("#dfe6ee"), "m": hexc("#9aa6b4"), "w": hexc("#9a6436"), "d": hexc("#5c3920")}
+SICKLE_ROWS = [
+    "....kkkkk...",
+    "..kksssssk..",
+    ".ksmmkkksk..",
+    "kmmk....ksk.",
+    "kmk......kk.",
+    "kmk.........",
+    ".kmk........",
+    "..kwk.......",
+    "..kwk.......",
+    "..kdk.......",
+    "..kwk.......",
+    "..kdk.......",
+    "...k........",
+]
+
+
 def torn_tshirt():
     src = Image.open(f"{LIB}/服裝裝飾/衣服服裝時裝/愛心T恤.png").convert("RGBA")
     w, h = src.size
@@ -136,4 +187,7 @@ draw(SCISSORS_CLOSED, PAL).save(os.path.join(OUT, "scissors_closed.png"))
 draw(HAND_V, HAND).save(os.path.join(OUT, "hand_v.png"))
 draw(TAG_BLANK, TAG).save(os.path.join(OUT, "tag_blank.png"))
 torn_tshirt().save(os.path.join(OUT, "tshirt_torn.png"))
-print("scissors_open / scissors_closed / hand_v / tag_blank / tshirt_torn")
+draw(MIC_HAND, MIC).save(os.path.join(OUT, "mic_hand.png"))
+draw(PHONE_HAND, PHONE).save(os.path.join(OUT, "phone_hand.png"))
+draw(SICKLE_ROWS, SICKLE).save(os.path.join(OUT, "sickle.png"))
+print("scissors_open / scissors_closed / hand_v / tag_blank / tshirt_torn / mic_hand / phone_hand / sickle")

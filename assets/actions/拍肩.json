@@ -1,0 +1,17 @@
+{
+  "name": "拍肩",
+  "_comment": "側面：手抬到前方對方肩膀（矮個子 user）高度 → 往下拍兩下（第 9、15 幀，mark pat）→ 收回，笑臉",
+  "views": ["side"],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "face": "smile", "pose": { "arm_R_upper": 68, "arm_R_lower": -10, "torso": { "r": 4, "dx": 1 } } },
+    { "f": 9, "pose": { "arm_R_upper": 58, "arm_R_lower": -30 } },
+    { "f": 12, "pose": { "arm_R_upper": 68, "arm_R_lower": -10 } },
+    { "f": 15, "pose": { "arm_R_upper": 58, "arm_R_lower": -30 } },
+    { "f": 18, "pose": { "arm_R_upper": 65, "arm_R_lower": -15 } },
+    { "f": 24, "pose": { "arm_R_upper": 0, "arm_R_lower": 0, "torso": { "r": 0, "dx": 0 } } }
+  ],
+  "marks": [{ "f": 9, "name": "pat" }]
+}

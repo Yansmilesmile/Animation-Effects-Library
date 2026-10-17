@@ -1,0 +1,20 @@
+{
+  "name": "罵人",
+  "_comment": "側面：話筒在嘴邊、另一手握拳上下揮，身體氣得前後抖（第 6 幀起，mark yell）；之後一直拿著話筒。生氣表情用時間軸的「憤怒」氣泡",
+  "views": ["side"],
+  "duration": 30,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 5, "ease": "out", "face": "surprise", "pose": { "arm_R_upper": 85, "arm_R_lower": 10, "arm_L_upper": 70, "arm_L_lower": 60, "torso": { "r": 8, "dx": 1 }, "head": -6 } },
+    { "f": 8, "ease": "step", "pose": { "torso": { "r": 11, "dx": 1 }, "arm_L_upper": 95 } },
+    { "f": 11, "ease": "step", "pose": { "torso": { "r": 6, "dx": 1 }, "arm_L_upper": 60 } },
+    { "f": 14, "ease": "step", "pose": { "torso": { "r": 11, "dx": 1 }, "arm_L_upper": 95 } },
+    { "f": 17, "ease": "step", "pose": { "torso": { "r": 6, "dx": 1 }, "arm_L_upper": 60 } },
+    { "f": 20, "ease": "step", "pose": { "torso": { "r": 11, "dx": 1 }, "arm_L_upper": 95 } },
+    { "f": 23, "ease": "step", "pose": { "torso": { "r": 6, "dx": 1 }, "arm_L_upper": 60 } },
+    { "f": 30, "pose": { "torso": { "r": 8, "dx": 1 }, "arm_L_upper": 70 } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/mic_hand.png", "from": 0, "dy": -4 }],
+  "marks": [{ "f": 6, "name": "yell" }]
+}

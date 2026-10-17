@@ -1,0 +1,18 @@
+{
+  "name": "打字",
+  "_comment": "側面循環：低頭、雙手前伸在桌面高度，前臂交替上下敲鍵盤（第 4 幀起循環）",
+  "views": ["side"],
+  "duration": 12,
+  "loop": true,
+  "loopFrom": 4,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 1, "face": "lookdown" },
+    { "f": 4, "ease": "out", "pose": { "arm_R_upper": 30, "arm_R_lower": 60, "arm_L_upper": 30, "arm_L_lower": 60, "head": 6, "torso": { "r": 3, "dx": 0 } } },
+    { "f": 6, "pose": { "arm_R_lower": 50, "arm_L_lower": 66 } },
+    { "f": 8, "pose": { "arm_R_lower": 64, "arm_L_lower": 54 } },
+    { "f": 10, "pose": { "arm_R_lower": 52, "arm_L_lower": 64 } },
+    { "f": 12, "pose": { "arm_R_lower": 60, "arm_L_lower": 60 } }
+  ]
+}

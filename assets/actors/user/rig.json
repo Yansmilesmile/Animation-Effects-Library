@@ -1,0 +1,1300 @@
+{
+  "_comment": "用戶 user（小米創業思考第 3 段）：主持人骨架，SVG 是 host 的副本（綠色連帽衫＋褐髮，刪 5 列像素變矮；由 pixel_xiaomi/scripts/make_user.py 產生，座標已換算）。主持人「超級人機」的骨架。座標 = SVG 原生像素（左上角原點）。bones 依序認領像素：take 的 parts 是 SVG 的 <g id>，rect = [x0,y0,x1,y1]（含端點）只拿範圍內的；先列的骨頭先拿。角度：sign 讓手臂一律「正 = 往外抬（正面）/ 往前抬（側面）」，其他骨頭正 = 畫面順時針。改完跑 npm run assets。",
+  "name": "用戶",
+  "views": {
+    "front": {
+      "svg": "front.svg",
+      "root": [
+        13.5,
+        51
+      ],
+      "bones": [
+        {
+          "id": "torso",
+          "parent": "root",
+          "pivot": [
+            13.5,
+            47
+          ],
+          "take": [
+            {
+              "parts": [
+                "hair",
+                "face",
+                "face_detail"
+              ],
+              "rect": [
+                0,
+                31,
+                26,
+                32
+              ]
+            },
+            {
+              "parts": [
+                "jacket",
+                "shirt",
+                "tie",
+                "neck"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "head",
+          "parent": "torso",
+          "pivot": [
+            13.5,
+            31
+          ],
+          "take": [
+            {
+              "parts": [
+                "hair",
+                "face",
+                "face_detail"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hand_L",
+          "parent": "arm_L_lower",
+          "pivot": [
+            4,
+            43.5
+          ],
+          "take": [
+            {
+              "parts": [
+                "hand_left"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "arm_L_upper",
+          "parent": "torso",
+          "pivot": [
+            3.5,
+            34.5
+          ],
+          "sign": 1,
+          "take": [
+            {
+              "parts": [
+                "sleeve_left"
+              ],
+              "rect": [
+                0,
+                33,
+                26,
+                40
+              ]
+            }
+          ]
+        },
+        {
+          "id": "arm_L_lower",
+          "parent": "arm_L_upper",
+          "pivot": [
+            3,
+            41
+          ],
+          "sign": 1,
+          "take": [
+            {
+              "parts": [
+                "sleeve_left"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hand_R",
+          "parent": "arm_R_lower",
+          "pivot": [
+            21.5,
+            43.5
+          ],
+          "sign": -1,
+          "take": [
+            {
+              "parts": [
+                "hand_right"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "arm_R_upper",
+          "parent": "torso",
+          "pivot": [
+            21.5,
+            34.5
+          ],
+          "sign": -1,
+          "take": [
+            {
+              "parts": [
+                "sleeve_right"
+              ],
+              "rect": [
+                0,
+                33,
+                26,
+                40
+              ]
+            }
+          ]
+        },
+        {
+          "id": "arm_R_lower",
+          "parent": "arm_R_upper",
+          "pivot": [
+            22,
+            41
+          ],
+          "sign": -1,
+          "take": [
+            {
+              "parts": [
+                "sleeve_right"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "leg_L",
+          "parent": "root",
+          "pivot": [
+            9.5,
+            47
+          ],
+          "take": [
+            {
+              "parts": [
+                "leg_left"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "foot_L",
+          "parent": "leg_L",
+          "pivot": [
+            9,
+            48
+          ],
+          "take": [
+            {
+              "parts": [
+                "shoe_left"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "leg_R",
+          "parent": "root",
+          "pivot": [
+            17,
+            47
+          ],
+          "take": [
+            {
+              "parts": [
+                "leg_right"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "foot_R",
+          "parent": "leg_R",
+          "pivot": [
+            17.5,
+            48
+          ],
+          "take": [
+            {
+              "parts": [
+                "shoe_right"
+              ]
+            }
+          ]
+        }
+      ],
+      "z": [
+        "leg_L",
+        "foot_L",
+        "leg_R",
+        "foot_R",
+        "torso",
+        "head",
+        "arm_L_upper",
+        "arm_L_lower",
+        "hand_L",
+        "arm_R_upper",
+        "arm_R_lower",
+        "hand_R"
+      ],
+      "slots": {
+        "hand_L": {
+          "bone": "hand_L",
+          "at": [
+            4.5,
+            44.5
+          ]
+        },
+        "hand_R": {
+          "bone": "hand_R",
+          "at": [
+            21.5,
+            44.5
+          ]
+        },
+        "chest": {
+          "bone": "torso",
+          "at": [
+            13.5,
+            41
+          ]
+        },
+        "head": {
+          "bone": "head",
+          "at": [
+            13.5,
+            5
+          ]
+        }
+      },
+      "faces": {
+        "blink": [
+          [
+            6,
+            23,
+            "#fdddb0"
+          ],
+          [
+            7,
+            23,
+            "#fdddb0"
+          ],
+          [
+            8,
+            23,
+            "#fdddb0"
+          ],
+          [
+            9,
+            23,
+            "#fdddb0"
+          ],
+          [
+            6,
+            24,
+            "#fdddb0"
+          ],
+          [
+            7,
+            24,
+            "#fdddb0"
+          ],
+          [
+            8,
+            24,
+            "#fdddb0"
+          ],
+          [
+            9,
+            24,
+            "#fdddb0"
+          ],
+          [
+            14,
+            23,
+            "#fdddb0"
+          ],
+          [
+            15,
+            23,
+            "#fdddb0"
+          ],
+          [
+            16,
+            23,
+            "#fdddb0"
+          ],
+          [
+            17,
+            23,
+            "#fdddb0"
+          ],
+          [
+            18,
+            23,
+            "#fdddb0"
+          ],
+          [
+            14,
+            24,
+            "#fdddb0"
+          ],
+          [
+            15,
+            24,
+            "#fdddb0"
+          ],
+          [
+            16,
+            24,
+            "#fdddb0"
+          ],
+          [
+            17,
+            24,
+            "#fdddb0"
+          ],
+          [
+            18,
+            24,
+            "#fdddb0"
+          ]
+        ],
+        "smile": [
+          [
+            6,
+            23,
+            "#0d0c08"
+          ],
+          [
+            7,
+            23,
+            "#fdddb0"
+          ],
+          [
+            8,
+            23,
+            "#fdddb0"
+          ],
+          [
+            9,
+            23,
+            "#0d0c08"
+          ],
+          [
+            6,
+            24,
+            "#fdddb0"
+          ],
+          [
+            7,
+            24,
+            "#fdddb0"
+          ],
+          [
+            8,
+            24,
+            "#fdddb0"
+          ],
+          [
+            9,
+            24,
+            "#fdddb0"
+          ],
+          [
+            14,
+            23,
+            "#0d0c08"
+          ],
+          [
+            15,
+            23,
+            "#fdddb0"
+          ],
+          [
+            16,
+            23,
+            "#fdddb0"
+          ],
+          [
+            17,
+            23,
+            "#fdddb0"
+          ],
+          [
+            18,
+            23,
+            "#0d0c08"
+          ],
+          [
+            14,
+            24,
+            "#fdddb0"
+          ],
+          [
+            15,
+            24,
+            "#fdddb0"
+          ],
+          [
+            16,
+            24,
+            "#fdddb0"
+          ],
+          [
+            17,
+            24,
+            "#fdddb0"
+          ],
+          [
+            18,
+            24,
+            "#fdddb0"
+          ],
+          [
+            10,
+            28,
+            "#a66950"
+          ],
+          [
+            11,
+            29,
+            "#5a2b26"
+          ],
+          [
+            12,
+            29,
+            "#5a2b26"
+          ],
+          [
+            13,
+            29,
+            "#5a2b26"
+          ],
+          [
+            14,
+            28,
+            "#a66950"
+          ]
+        ],
+        "surprise": [
+          [
+            6,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            7,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            8,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            9,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            6,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            7,
+            24,
+            "#0d0c08"
+          ],
+          [
+            8,
+            24,
+            "#0d0c08"
+          ],
+          [
+            9,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            6,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            7,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            8,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            9,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            14,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            15,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            16,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            17,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            14,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            15,
+            24,
+            "#0d0c08"
+          ],
+          [
+            16,
+            24,
+            "#0d0c08"
+          ],
+          [
+            17,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            14,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            15,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            16,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            17,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            12,
+            28,
+            "#5a2b26"
+          ],
+          [
+            12,
+            29,
+            "#3b1a17"
+          ]
+        ],
+        "lookup": [
+          [
+            8,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            9,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            15,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            16,
+            24,
+            "#fcfcfb"
+          ]
+        ],
+        "lookdown": [
+          [
+            8,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            9,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            15,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            16,
+            23,
+            "#fcfcfb"
+          ]
+        ]
+      },
+      "mouths": [
+        [],
+        [
+          [
+            11,
+            28,
+            "#5a2b26"
+          ],
+          [
+            12,
+            28,
+            "#5a2b26"
+          ],
+          [
+            13,
+            28,
+            "#a66950"
+          ]
+        ],
+        [
+          [
+            11,
+            28,
+            "#3b1a17"
+          ],
+          [
+            12,
+            28,
+            "#3b1a17"
+          ],
+          [
+            13,
+            28,
+            "#5a2b26"
+          ],
+          [
+            11,
+            29,
+            "#a66950"
+          ],
+          [
+            12,
+            29,
+            "#c96f63"
+          ],
+          [
+            13,
+            29,
+            "#cd8a66"
+          ]
+        ]
+      ]
+    },
+    "side": {
+      "svg": "side.svg",
+      "root": [
+        14,
+        51
+      ],
+      "bones": [
+        {
+          "id": "torso",
+          "parent": "root",
+          "pivot": [
+            13,
+            47
+          ],
+          "take": [
+            {
+              "parts": [
+                "hair",
+                "face",
+                "face_detail"
+              ],
+              "rect": [
+                0,
+                31,
+                16,
+                31
+              ]
+            },
+            {
+              "parts": [
+                "jacket",
+                "sleeve_left"
+              ],
+              "rect": [
+                13,
+                5,
+                99,
+                99
+              ]
+            },
+            {
+              "parts": [
+                "shirt",
+                "tie",
+                "sleeve_right",
+                "neck"
+              ]
+            }
+          ],
+          "fill": [
+            [
+              8,
+              32,
+              8,
+              45,
+              "#0d0c08"
+            ],
+            [
+              9,
+              32,
+              12,
+              45,
+              "#6fbf5a"
+            ],
+            [
+              8,
+              46,
+              12,
+              46,
+              "#468a3e"
+            ]
+          ]
+        },
+        {
+          "id": "head",
+          "parent": "torso",
+          "pivot": [
+            15,
+            31
+          ],
+          "take": [
+            {
+              "parts": [
+                "hair",
+                "face",
+                "face_detail"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hand_R",
+          "parent": "arm_R_lower",
+          "pivot": [
+            10,
+            44
+          ],
+          "sign": -1,
+          "take": [
+            {
+              "parts": [
+                "hand_left"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "arm_R_upper",
+          "parent": "torso",
+          "pivot": [
+            9,
+            34.5
+          ],
+          "sign": -1,
+          "take": [
+            {
+              "parts": [
+                "jacket",
+                "sleeve_left"
+              ],
+              "rect": [
+                0,
+                32,
+                12,
+                40
+              ]
+            }
+          ]
+        },
+        {
+          "id": "arm_R_lower",
+          "parent": "arm_R_upper",
+          "pivot": [
+            9,
+            41
+          ],
+          "sign": -1,
+          "take": [
+            {
+              "parts": [
+                "jacket",
+                "sleeve_left"
+              ],
+              "rect": [
+                0,
+                41,
+                12,
+                46
+              ]
+            }
+          ]
+        },
+        {
+          "id": "finger_R",
+          "parent": "hand_R",
+          "pivot": [
+            10,
+            46
+          ],
+          "hidden": true,
+          "pixels": [
+            [
+              10,
+              47,
+              "#fdddb0"
+            ],
+            [
+              10,
+              47,
+              "#cd8a66"
+            ]
+          ]
+        },
+        {
+          "id": "arm_L_upper",
+          "parent": "torso",
+          "pivot": [
+            9,
+            34.5
+          ],
+          "sign": -1,
+          "clone": "arm_R_upper",
+          "shade": 0.62
+        },
+        {
+          "id": "arm_L_lower",
+          "parent": "arm_L_upper",
+          "pivot": [
+            9,
+            41
+          ],
+          "sign": -1,
+          "clone": "arm_R_lower",
+          "shade": 0.62
+        },
+        {
+          "id": "hand_L",
+          "parent": "arm_L_lower",
+          "pivot": [
+            10,
+            44
+          ],
+          "sign": -1,
+          "clone": "hand_R",
+          "shade": 0.62
+        },
+        {
+          "id": "leg_L",
+          "parent": "root",
+          "pivot": [
+            11,
+            47
+          ],
+          "take": [
+            {
+              "parts": [
+                "leg_left"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "foot_L",
+          "parent": "leg_L",
+          "pivot": [
+            11,
+            48
+          ],
+          "take": [
+            {
+              "parts": [
+                "shoe_left"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "leg_R",
+          "parent": "root",
+          "pivot": [
+            16.5,
+            47
+          ],
+          "take": [
+            {
+              "parts": [
+                "leg_right"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "foot_R",
+          "parent": "leg_R",
+          "pivot": [
+            17,
+            48
+          ],
+          "take": [
+            {
+              "parts": [
+                "shoe_right"
+              ]
+            }
+          ]
+        }
+      ],
+      "z": [
+        "arm_L_upper",
+        "arm_L_lower",
+        "hand_L",
+        "leg_L",
+        "foot_L",
+        "leg_R",
+        "foot_R",
+        "torso",
+        "head",
+        "arm_R_upper",
+        "arm_R_lower",
+        "hand_R",
+        "finger_R"
+      ],
+      "slots": {
+        "hand_R": {
+          "bone": "hand_R",
+          "at": [
+            10.5,
+            45
+          ]
+        },
+        "hand_L": {
+          "bone": "hand_L",
+          "at": [
+            10.5,
+            45
+          ]
+        },
+        "chest": {
+          "bone": "torso",
+          "at": [
+            17,
+            40
+          ]
+        },
+        "head": {
+          "bone": "head",
+          "at": [
+            14,
+            5
+          ]
+        }
+      },
+      "faces": {
+        "blink": [
+          [
+            16,
+            23,
+            "#fdddb0"
+          ],
+          [
+            17,
+            23,
+            "#fdddb0"
+          ],
+          [
+            18,
+            23,
+            "#fdddb0"
+          ],
+          [
+            19,
+            23,
+            "#fdddb0"
+          ],
+          [
+            20,
+            23,
+            "#fdddb0"
+          ],
+          [
+            16,
+            24,
+            "#fdddb0"
+          ],
+          [
+            17,
+            24,
+            "#fdddb0"
+          ],
+          [
+            18,
+            24,
+            "#fdddb0"
+          ],
+          [
+            19,
+            24,
+            "#fdddb0"
+          ],
+          [
+            20,
+            24,
+            "#fdddb0"
+          ]
+        ],
+        "smile": [
+          [
+            16,
+            23,
+            "#0d0c08"
+          ],
+          [
+            17,
+            23,
+            "#fdddb0"
+          ],
+          [
+            18,
+            23,
+            "#fdddb0"
+          ],
+          [
+            19,
+            23,
+            "#fdddb0"
+          ],
+          [
+            20,
+            23,
+            "#0d0c08"
+          ],
+          [
+            16,
+            24,
+            "#fdddb0"
+          ],
+          [
+            17,
+            24,
+            "#fdddb0"
+          ],
+          [
+            18,
+            24,
+            "#fdddb0"
+          ],
+          [
+            19,
+            24,
+            "#fdddb0"
+          ],
+          [
+            20,
+            24,
+            "#fdddb0"
+          ],
+          [
+            19,
+            29,
+            "#a66950"
+          ],
+          [
+            20,
+            29,
+            "#5a2b26"
+          ],
+          [
+            21,
+            29,
+            "#5a2b26"
+          ],
+          [
+            22,
+            28,
+            "#a66950"
+          ]
+        ],
+        "surprise": [
+          [
+            16,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            17,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            18,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            19,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            20,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            16,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            17,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            18,
+            24,
+            "#0d0c08"
+          ],
+          [
+            19,
+            24,
+            "#0d0c08"
+          ],
+          [
+            20,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            16,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            17,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            18,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            19,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            20,
+            25,
+            "#fcfcfb"
+          ],
+          [
+            21,
+            29,
+            "#3b1a17"
+          ],
+          [
+            21,
+            30,
+            "#5a2b26"
+          ]
+        ],
+        "lookup": [
+          [
+            18,
+            24,
+            "#fcfcfb"
+          ],
+          [
+            19,
+            24,
+            "#fcfcfb"
+          ]
+        ],
+        "lookdown": [
+          [
+            18,
+            23,
+            "#fcfcfb"
+          ],
+          [
+            19,
+            23,
+            "#fcfcfb"
+          ]
+        ]
+      },
+      "mouths": [
+        [],
+        [
+          [
+            20,
+            29,
+            "#5a2b26"
+          ],
+          [
+            21,
+            29,
+            "#5a2b26"
+          ]
+        ],
+        [
+          [
+            20,
+            29,
+            "#3b1a17"
+          ],
+          [
+            21,
+            29,
+            "#3b1a17"
+          ],
+          [
+            21,
+            30,
+            "#c96f63"
+          ],
+          [
+            20,
+            30,
+            "#a66950"
+          ]
+        ]
+      ]
+    }
+  }
+}

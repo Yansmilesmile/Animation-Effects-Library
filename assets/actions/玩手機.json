@@ -1,0 +1,19 @@
+{
+  "name": "玩手機",
+  "_comment": "正面循環：雙手把手機捧在胸前、低頭看，右手拇指一下一下滑（第 8 幀起循環）",
+  "views": ["front"],
+  "duration": 24,
+  "loop": true,
+  "loopFrom": 8,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 2, "face": "lookdown" },
+    { "f": 8, "ease": "out", "pose": { "arm_L_upper": -5, "arm_L_lower": -75, "arm_R_upper": -5, "arm_R_lower": -82, "head": { "r": 0, "dx": 0, "dy": 1 } } },
+    { "f": 12, "pose": { "arm_R_lower": -90 } },
+    { "f": 16, "pose": { "arm_R_lower": -82 } },
+    { "f": 20, "pose": { "arm_R_lower": -90 } },
+    { "f": 24, "pose": { "arm_R_lower": -82 } }
+  ],
+  "props": [{ "slot": "chest", "asset": "@engine/assets/generated/phone_hand.png", "from": 4, "dy": -1 }]
+}

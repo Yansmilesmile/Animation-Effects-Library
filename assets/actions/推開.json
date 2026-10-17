@@ -1,0 +1,15 @@
+{
+  "name": "推開",
+  "_comment": "側面：手先收到胸前 → 往前用力一推（第 9 幀，mark push）→ 停一下 → 收回",
+  "views": ["side"],
+  "duration": 20,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 5, "pose": { "arm_R_upper": 25, "arm_R_lower": 70, "torso": { "r": -3, "dx": 0 } } },
+    { "f": 9, "ease": "out", "pose": { "arm_R_upper": 85, "arm_R_lower": 0, "hand_R": -20, "torso": { "r": 7, "dx": 1 } } },
+    { "f": 14, "pose": { "arm_R_upper": 85, "arm_R_lower": 0, "hand_R": -20, "torso": { "r": 7, "dx": 1 } } },
+    { "f": 20, "pose": { "arm_R_upper": 0, "arm_R_lower": 0, "hand_R": 0, "torso": { "r": 0, "dx": 0 } } }
+  ],
+  "marks": [{ "f": 9, "name": "push" }]
+}

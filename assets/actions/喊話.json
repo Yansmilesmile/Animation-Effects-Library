@@ -1,0 +1,18 @@
+{
+  "name": "喊話",
+  "_comment": "側面：手持話筒舉到嘴邊、身體前傾、仰頭張嘴大喊（第 8 幀起，mark shout），身體隨喊聲小幅前後動；之後一直拿著話筒",
+  "views": ["side"],
+  "duration": 30,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "pose": { "arm_R_upper": 85, "arm_R_lower": 10, "arm_L_upper": -10, "arm_L_lower": 40, "torso": { "r": 7, "dx": 1 }, "head": -10 } },
+    { "f": 8, "face": "surprise" },
+    { "f": 14, "pose": { "torso": { "r": 10, "dx": 1 }, "head": -12 } },
+    { "f": 20, "pose": { "torso": { "r": 6, "dx": 1 }, "head": -8 } },
+    { "f": 26, "pose": { "torso": { "r": 10, "dx": 1 }, "head": -12 } },
+    { "f": 30, "pose": { "torso": { "r": 7, "dx": 1 }, "head": -10 } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/mic_hand.png", "from": 0, "dy": -4 }],
+  "marks": [{ "f": 8, "name": "shout" }]
+}

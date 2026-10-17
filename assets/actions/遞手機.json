@@ -1,0 +1,15 @@
+{
+  "name": "遞手機",
+  "_comment": "側面：手機從胸前往前遞出去給對方看（第 10 幀遞到，mark give），之後一直伸著",
+  "views": ["side"],
+  "duration": 14,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 4, "pose": { "arm_R_upper": 10, "arm_R_lower": 75 } },
+    { "f": 10, "ease": "out", "face": "smile", "pose": { "arm_R_upper": 72, "arm_R_lower": 12, "torso": { "r": 4, "dx": 1 } } },
+    { "f": 14, "pose": { "arm_R_upper": 70, "arm_R_lower": 14, "torso": { "r": 4, "dx": 1 } } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/phone_hand.png", "from": 0, "dy": -3 }],
+  "marks": [{ "f": 10, "name": "give" }]
+}

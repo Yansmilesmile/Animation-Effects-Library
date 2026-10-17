@@ -1,0 +1,17 @@
+{
+  "name": "得意",
+  "_comment": "正面：挺胸（整個人上提 1 像素）、左手叉腰、右手在胸前來回擦徽章兩下，笑臉",
+  "views": ["front"],
+  "duration": 30,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 4, "ease": "out", "face": "smile", "pose": { "root": { "dy": -1 }, "arm_L_upper": 25, "arm_L_lower": -70, "arm_R_upper": -10, "arm_R_lower": -100 } },
+    { "f": 9, "pose": { "arm_R_lower": -85 } },
+    { "f": 13, "pose": { "arm_R_lower": -110 } },
+    { "f": 17, "pose": { "arm_R_lower": -85 } },
+    { "f": 21, "pose": { "arm_R_lower": -110 } },
+    { "f": 26, "pose": { "root": { "dy": -1 }, "arm_R_upper": -5, "arm_R_lower": -95 } },
+    { "f": 30, "pose": { "root": { "dy": 0 } } }
+  ]
+}
