@@ -39,7 +39,7 @@ export type PreparedScene = {
   scene: Scene3D;
   errors: string[];
   components: PreparedComponent[];
-  env: { time: number };
+  env: { time: number; fogNear?: number; fogFar?: number };
   /** 某個 target（組件 id 或 "environment"）在第 f 幀的參數 */
   paramsAt: (target: string, base: Params, f: number) => Params;
   camera: ReturnType<typeof buildCameraTrack>;
@@ -92,7 +92,9 @@ export const prepareScene = (input: Scene3D | string | undefined, cameraTrack?: 
   for (const L of scene.lights ?? []) if (!LIGHT_TYPES.includes(L.type)) errors.push(`燈的 type「${L.type}」不存在，可用：${LIGHT_TYPES.join("、")}`);
   const w = scene.environment?.weather;
   if (w && w.type !== "snow" && w.type !== "rain") errors.push(`weather.type「${w.type}」不存在，可用：snow、rain`);
-  const env = { time: timeValue(scene.environment?.time) };
+  const fogEnv = scene.environment?.fog;
+  const linearFog = !!fogEnv && fogEnv.density === undefined && fogEnv.near !== undefined;
+  const env = { time: timeValue(scene.environment?.time), ...(linearFog ? { fogNear: fogEnv!.near!, fogFar: fogEnv!.far ?? 100 } : {}) };
   const byTarget = new Map<string, Animate[]>();
   for (const a of animate) {
     const comp = components.find((c) => c.id === a.target);
@@ -100,7 +102,7 @@ export const prepareScene = (input: Scene3D | string | undefined, cameraTrack?: 
       errors.push(`animate：target「${a.target}」不存在，可用：${["environment", ...components.map((c) => c.id)].join("、")}`);
       continue;
     }
-    const allowed = a.target === "environment" ? ["time"] : comp!.def.animatable ?? [];
+    const allowed = a.target === "environment" ? ["time", ...(linearFog ? ["fogNear", "fogFar"] : [])] : comp!.def.animatable ?? [];
     for (const k of Object.keys(a.to ?? {})) if (!allowed.includes(k)) errors.push(`animate「${a.target}」：參數「${k}」不能補間，可用：${allowed.join("、") || "（沒有）"}`);
     if (a.ease && !EASES[a.ease]) errors.push(`animate：ease「${a.ease}」不存在，可用：${Object.keys(EASES).join("、")}`);
     if (!byTarget.has(a.target)) byTarget.set(a.target, []);

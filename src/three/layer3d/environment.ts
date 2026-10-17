@@ -24,7 +24,7 @@ const tri = (cols: string[], t: number) => {
   return new THREE.Color(cols[i]).lerp(new THREE.Color(cols[i + 1]), c - i);
 };
 
-export type EnvParams = { time: number };
+export type EnvParams = { time: number; fogNear?: number; fogFar?: number };
 
 const SkyShader = {
   uniforms: {
@@ -171,6 +171,12 @@ export const buildEnvironment = (env: Environment, ctx: BuildContext): Built<Env
   }
 
   const fog = env.fog ? (env.fog.density !== undefined || env.fog.near === undefined ? new THREE.FogExp2(env.fog.color, env.fog.density ?? 0.03) : new THREE.Fog(env.fog.color, env.fog.near, env.fog.far ?? 100)) : undefined;
+  // 線性霧可補間 fogNear / fogFar（霧往前推、吃掉遠景）
+  if (fog instanceof THREE.Fog)
+    updaters.push((p) => {
+      if (p.fogNear !== undefined) fog.near = p.fogNear;
+      if (p.fogFar !== undefined) fog.far = p.fogFar;
+    });
 
   return { object: root, fog, update: (p, f) => updaters.forEach((u) => u(p, f)) };
 };
