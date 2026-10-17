@@ -1,0 +1,22 @@
+{
+  "name": "簽字",
+  "_comment": "正面：低頭，左手把攤開的卷軸捧在胸前，右手拿筆在上面來回劃（第 8 幀起，mark sign），第 26 幀簽完抬頭；之後一直捧著卷軸",
+  "views": ["front"],
+  "duration": 30,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 2, "face": "lookdown" },
+    { "f": 6, "ease": "out", "pose": { "arm_L_upper": -5, "arm_L_lower": -75, "arm_R_upper": -5, "arm_R_lower": -85, "hand_R": 0, "head": { "r": 0, "dx": 0, "dy": 1 } } },
+    { "f": 10, "pose": { "arm_R_lower": -100, "hand_R": 15 } },
+    { "f": 14, "pose": { "arm_R_lower": -80, "hand_R": -10 } },
+    { "f": 18, "pose": { "arm_R_lower": -100, "hand_R": 15 } },
+    { "f": 22, "pose": { "arm_R_lower": -80, "hand_R": -10 } },
+    { "f": 26, "face": "smile", "pose": { "arm_R_lower": -90, "hand_R": 0, "head": { "r": 0, "dx": 0, "dy": 0 } } }
+  ],
+  "props": [
+    { "slot": "chest", "asset": "@engine/assets/generated/scroll_open.png", "from": 4, "dy": 1 },
+    { "slot": "hand_R", "asset": "@engine/assets/generated/pen.png", "from": 4, "to": 28, "dy": -4 }
+  ],
+  "marks": [{ "f": 8, "name": "sign" }]
+}

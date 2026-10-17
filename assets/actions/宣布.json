@@ -1,0 +1,18 @@
+{
+  "name": "宣布",
+  "_comment": "正面：右手把手持話筒舉到嘴邊、左手高舉，張嘴宣布（第 8 幀，mark announce），身體隨說話小幅上下；之後一直維持",
+  "views": ["front"],
+  "duration": 30,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "pose": { "arm_R_upper": 15, "arm_R_lower": -150, "hand_R": 0, "arm_L_upper": 140, "arm_L_lower": 20, "head": -3 } },
+    { "f": 8, "face": "surprise" },
+    { "f": 14, "pose": { "arm_L_upper": 150, "arm_L_lower": 10, "head": -5 } },
+    { "f": 20, "pose": { "arm_L_upper": 140, "arm_L_lower": 20, "head": -3 } },
+    { "f": 26, "pose": { "arm_L_upper": 150, "arm_L_lower": 10, "head": -5 } },
+    { "f": 30, "pose": { "arm_L_upper": 145, "arm_L_lower": 15, "head": -4 } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/mic_hand.png", "from": 0, "dy": -4 }],
+  "marks": [{ "f": 8, "name": "announce" }]
+}

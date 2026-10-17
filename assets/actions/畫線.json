@@ -1,0 +1,16 @@
+{
+  "name": "畫線",
+  "_comment": "側面：右手拿粉筆先往後收，再往前橫掃到底畫出一條線（第 8 幀開始畫，mark draw；第 14 幀畫完）",
+  "views": ["side"],
+  "duration": 20,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 5, "ease": "out", "pose": { "arm_R_upper": 25, "arm_R_lower": 50, "hand_R": 0, "torso": { "r": -2, "dx": 0 } } },
+    { "f": 8, "pose": { "arm_R_upper": 40, "arm_R_lower": 30, "hand_R": 0, "torso": { "r": 2, "dx": 0 } } },
+    { "f": 14, "ease": "out", "pose": { "arm_R_upper": 78, "arm_R_lower": 0, "hand_R": 0, "torso": { "r": 8, "dx": 1 } } },
+    { "f": 20, "pose": { "arm_R_upper": 76, "arm_R_lower": 0, "hand_R": 0, "torso": { "r": 6, "dx": 1 } } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/chalk.png", "from": 0, "to": 20, "dy": -2 }],
+  "marks": [{ "f": 8, "name": "draw" }]
+}

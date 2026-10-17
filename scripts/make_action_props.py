@@ -4,6 +4,7 @@
 # 扯衣：tshirt_torn.png（素材庫「愛心T恤」少一袖、褪色、破洞）
 # 掛牌：tag_blank.png（空白小吊牌；時間軸用 prop 換成寫了字的牌）
 # 喊話 / 罵人：mic_hand.png；玩手機 / 遞手機：phone_hand.png；割韭菜：sickle.png
+# 畫線：chalk.png；簽字：pen.png、scroll_open.png
 import os
 from PIL import Image
 
@@ -154,6 +155,39 @@ SICKLE_ROWS = [
 ]
 
 
+# 畫線：chalk.png（白粉筆，橫握、筆頭朝前＝畫面右）
+CHALK = {"k": hexc("#1a1418"), "w": hexc("#f4f2ea"), "g": hexc("#c9c6bc")}
+CHALK_ROWS = [
+    ".kkkkk.",
+    "kgwwwwk",
+    ".kkkkk.",
+]
+
+# 簽字：pen.png（金色鋼筆，筆尖朝下）、scroll_open.png（攤開的黃卷軸，捧在胸前）
+PEN = {"k": hexc("#1a1418"), "y": hexc("#e0a82e"), "d": hexc("#8a5a1c"), "s": hexc("#dfe6ee")}
+PEN_ROWS = [
+    ".k.",
+    "kyk",
+    "kyk",
+    "kdk",
+    "kyk",
+    "kyk",
+    ".s.",
+    ".k.",
+]
+SCROLL = {"k": hexc("#3a2418"), "r": hexc("#a86a2c"), "p": hexc("#f2e5b0"), "l": hexc("#d8c48a")}
+SCROLL_ROWS = [
+    "krrrrrrrrrrrrk",
+    ".kppppppppppk.",
+    ".kpllllllllpk.",
+    ".kppppppppppk.",
+    ".kpllllllppk..",
+    ".kppppppppppk.",
+    ".kppppppppppk.",
+    "krrrrrrrrrrrrk",
+]
+
+
 def torn_tshirt():
     src = Image.open(f"{LIB}/服裝裝飾/衣服服裝時裝/愛心T恤.png").convert("RGBA")
     w, h = src.size
@@ -190,4 +224,7 @@ torn_tshirt().save(os.path.join(OUT, "tshirt_torn.png"))
 draw(MIC_HAND, MIC).save(os.path.join(OUT, "mic_hand.png"))
 draw(PHONE_HAND, PHONE).save(os.path.join(OUT, "phone_hand.png"))
 draw(SICKLE_ROWS, SICKLE).save(os.path.join(OUT, "sickle.png"))
-print("scissors_open / scissors_closed / hand_v / tag_blank / tshirt_torn / mic_hand / phone_hand / sickle")
+draw(CHALK_ROWS, CHALK).save(os.path.join(OUT, "chalk.png"))
+draw(PEN_ROWS, PEN).save(os.path.join(OUT, "pen.png"))
+draw(SCROLL_ROWS, SCROLL).save(os.path.join(OUT, "scroll_open.png"))
+print("scissors_open / scissors_closed / hand_v / tag_blank / tshirt_torn / mic_hand / phone_hand / sickle / chalk / pen / scroll_open")

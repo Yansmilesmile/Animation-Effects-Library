@@ -1,0 +1,16 @@
+{
+  "name": "靈光一閃",
+  "_comment": "側面：抬手拍一下額頭（第 7 幀，mark idea，驚訝臉）→ 手往上舉、伸食指、笑臉",
+  "views": ["side"],
+  "duration": 28,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 5, "ease": "out", "pose": { "arm_R_upper": 140, "arm_R_lower": 70, "hand_R": 0, "head": -4 } },
+    { "f": 7, "face": "surprise", "pose": { "arm_R_upper": 145, "arm_R_lower": 80, "head": 4, "torso": { "r": -2, "dx": 0 } } },
+    { "f": 11, "pose": { "arm_R_upper": 140, "arm_R_lower": 70, "head": 0, "torso": { "r": 0, "dx": 0 } } },
+    { "f": 16, "ease": "out", "face": "smile", "show": ["finger_R"], "pose": { "arm_R_upper": 110, "arm_R_lower": 45, "hand_R": 0, "head": -6 } },
+    { "f": 28, "pose": { "arm_R_upper": 108, "arm_R_lower": 45, "head": -6 } }
+  ],
+  "marks": [{ "f": 7, "name": "idea" }]
+}
