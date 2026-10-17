@@ -1,0 +1,12 @@
+{
+  "name": "掃指",
+  "_comment": "側面：伸出食指，手臂由低往高慢慢掃過一排東西，停在高處",
+  "views": ["side"],
+  "duration": 30,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 5, "ease": "out", "show": ["finger_R"], "pose": { "arm_R_upper": 45, "arm_R_lower": 0, "hand_R": 0, "torso": { "r": 2, "dx": 0 } } },
+    { "f": 26, "ease": "inout", "pose": { "arm_R_upper": 115, "arm_R_lower": 0, "torso": { "r": -2, "dx": 0 } } }
+  ]
+}

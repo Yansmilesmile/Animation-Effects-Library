@@ -1,0 +1,16 @@
+{
+  "name": "掏剪刀",
+  "_comment": "正面：右手伸到背後 → 掏出一把大剪刀 → 扛到右肩上（之後一直拿著）。剪刀圖朝右",
+  "views": ["front"],
+  "duration": 20,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 5, "ease": "out", "pose": { "arm_R_upper": -35, "arm_R_lower": 15, "torso": { "r": -2, "dx": 0 } } },
+    { "f": 8, "pose": { "arm_R_upper": -35, "arm_R_lower": 15 } },
+    { "f": 14, "ease": "out", "pose": { "arm_R_upper": 150, "arm_R_lower": -125, "torso": { "r": 0, "dx": 0 } } },
+    { "f": 16, "face": "smile" }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/scissors_closed.png", "from": 8, "dx": 14 }],
+  "marks": [{ "f": 14, "name": "shoulder" }]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "生氣",
+  "_comment": "正面：雙拳握緊垂在身側、原地連跺三下腳（每次落地揚灰）",
+  "views": ["front"],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": { "root": { "dy": 0 } } },
+    { "f": 3, "ease": "out", "pose": { "root": { "dy": -2 }, "arm_L_upper": -8, "arm_L_lower": -20, "arm_R_upper": -8, "arm_R_lower": -20, "head": 3 } },
+    { "f": 6, "ease": "in", "pose": { "root": { "dy": 0 } } },
+    { "f": 9, "ease": "out", "pose": { "root": { "dy": -2 }, "head": -3 } },
+    { "f": 12, "ease": "in", "pose": { "root": { "dy": 0 } } },
+    { "f": 15, "ease": "out", "pose": { "root": { "dy": -2 }, "head": 3 } },
+    { "f": 18, "ease": "in", "pose": { "root": { "dy": 0 }, "head": 0 } }
+  ],
+  "fx": [{ "f": 6, "type": "dust" }, { "f": 12, "type": "dust" }, { "f": 18, "type": "dust" }]
+}

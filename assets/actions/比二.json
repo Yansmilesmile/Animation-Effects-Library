@@ -1,0 +1,14 @@
+{
+  "name": "比二",
+  "_comment": "正面：右手舉到頭側比 V（手換成 V 手勢圖），笑臉",
+  "views": ["front"],
+  "duration": 14,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 3, "face": "smile" },
+    { "f": 8, "ease": "out", "pose": { "arm_R_upper": 150, "arm_R_lower": -25 } },
+    { "f": 14, "pose": { "arm_R_upper": 150, "arm_R_lower": -25 } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/hand_v.png", "from": 6, "dy": -3 }]
+}

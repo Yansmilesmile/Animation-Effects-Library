@@ -1,0 +1,15 @@
+{
+  "name": "叉腰",
+  "_comment": "側面：雙手叉腰、身體微後仰、低頭往下看；循環時頭輕輕點",
+  "views": ["side"],
+  "duration": 40,
+  "loop": true,
+  "loopFrom": 8,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 8, "ease": "out", "pose": { "arm_R_upper": -40, "arm_R_lower": 85, "arm_L_upper": -40, "arm_L_lower": 85, "torso": { "r": -3, "dx": 0 }, "head": 10 } },
+    { "f": 24, "pose": { "head": 13 } },
+    { "f": 40, "pose": { "head": 10 } }
+  ]
+}

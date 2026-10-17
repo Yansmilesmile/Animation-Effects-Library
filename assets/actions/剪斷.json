@@ -1,0 +1,15 @@
+{
+  "name": "剪斷",
+  "_comment": "側面：張開的大剪刀舉高 → 往前下方一剪（第 8 幀合上，mark cut）→ 收回，剪刀一直拿著",
+  "views": ["side"],
+  "duration": 20,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": { "arm_R_upper": 110, "arm_R_lower": -20, "torso": { "r": -3, "dx": 0 } } },
+    { "f": 8, "ease": "in", "pose": { "arm_R_upper": 50, "arm_R_lower": 0, "torso": { "r": 8, "dx": 1 } } },
+    { "f": 12, "pose": { "arm_R_upper": 50, "arm_R_lower": 0, "torso": { "r": 8, "dx": 1 } } },
+    { "f": 20, "ease": "out", "pose": { "arm_R_upper": 30, "arm_R_lower": 10, "torso": { "r": 2, "dx": 0 } } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/scissors_open.png", "dx": 16, "swap": [{ "f": 8, "asset": "@engine/assets/generated/scissors_closed.png" }], "shake": [8, 12] }],
+  "marks": [{ "f": 8, "name": "cut" }]
+}

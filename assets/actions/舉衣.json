@@ -1,0 +1,16 @@
+{
+  "name": "舉衣",
+  "_comment": "正面：衣服抱在胸前 → 雙手把它舉過頭看一看（之後一直舉著），笑臉",
+  "views": ["front"],
+  "duration": 16,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": { "arm_L_upper": -10, "arm_L_lower": -95, "arm_R_upper": -10, "arm_R_lower": -95 } },
+    { "f": 10, "ease": "out", "face": "smile", "pose": { "arm_L_upper": 150, "arm_L_lower": 15, "arm_R_upper": 150, "arm_R_lower": 15, "head": 0 } },
+    { "f": 16, "pose": { "arm_L_upper": 145, "arm_L_lower": 20, "arm_R_upper": 145, "arm_R_lower": 20 } }
+  ],
+  "props": [
+    { "slot": "chest", "asset": "服裝裝飾/衣服服裝時裝/愛心T恤.png", "from": 0, "to": 6, "dy": 2 },
+    { "slot": "head", "asset": "服裝裝飾/衣服服裝時裝/愛心T恤.png", "from": 6, "dy": -14 }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "扯衣",
+  "_comment": "正面：雙手捏著衣服在胸前 → 往兩邊一扯（第 8 幀，mark rip）衣服換成破的、抖一下，之後一直拿著。袖子掉落由時間軸另加",
+  "views": ["front"],
+  "duration": 18,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": { "arm_L_upper": -10, "arm_L_lower": -95, "arm_R_upper": -10, "arm_R_lower": -95 } },
+    { "f": 5, "pose": { "arm_L_upper": -15, "arm_L_lower": -105, "arm_R_upper": -15, "arm_R_lower": -105 } },
+    { "f": 8, "ease": "out", "face": "surprise", "pose": { "arm_L_upper": 35, "arm_L_lower": -60, "arm_R_upper": 35, "arm_R_lower": -60, "root": { "dy": -1 } } },
+    { "f": 12, "pose": { "root": { "dy": 0 } } },
+    { "f": 18, "pose": { "arm_L_upper": 20, "arm_L_lower": -75, "arm_R_upper": 20, "arm_R_lower": -75 } }
+  ],
+  "props": [{ "slot": "chest", "asset": "服裝裝飾/衣服服裝時裝/愛心T恤.png", "dy": 2, "swap": [{ "f": 8, "asset": "@engine/assets/generated/tshirt_torn.png" }], "shake": [8, 12] }],
+  "marks": [{ "f": 8, "name": "rip" }]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "點頭",
+  "_comment": "疊加（只動頭）：開心地點頭兩下",
+  "views": ["side", "front"],
+  "layer": ["head"],
+  "duration": 22,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": { "head": { "r": 0, "dx": 0, "dy": 0 } } },
+    { "f": 2, "face": "smile" },
+    { "f": 5, "pose": { "head": { "r": 0, "dx": 0, "dy": 1 } } },
+    { "f": 10, "pose": { "head": { "r": 0, "dx": 0, "dy": 0 } } },
+    { "f": 15, "pose": { "head": { "r": 0, "dx": 0, "dy": 1 } } },
+    { "f": 22, "pose": { "head": { "r": 0, "dx": 0, "dy": 0 } } }
+  ]
+}

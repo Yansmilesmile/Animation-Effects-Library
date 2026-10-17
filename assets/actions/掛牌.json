@@ -1,0 +1,16 @@
+{
+  "name": "掛牌",
+  "_comment": "側面：手拿小吊牌往前伸、往下掛 → 第 14 幀放手（mark hang，牌子離手；時間軸在這一幀放上真正的吊牌）→ 收手。prop 可換成寫了字的牌",
+  "views": ["side"],
+  "duration": 22,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 6, "ease": "out", "pose": { "arm_R_upper": 95, "arm_R_lower": -10, "torso": { "r": 5, "dx": 1 } } },
+    { "f": 10, "pose": { "arm_R_upper": 80, "arm_R_lower": 10 } },
+    { "f": 14, "pose": { "arm_R_upper": 70, "arm_R_lower": 10 } },
+    { "f": 22, "pose": { "arm_R_upper": 0, "arm_R_lower": 0, "torso": { "r": 0, "dx": 0 } } }
+  ],
+  "props": [{ "slot": "hand_R", "asset": "@engine/assets/generated/tag_blank.png", "from": 0, "to": 14, "dy": 5 }],
+  "marks": [{ "f": 14, "name": "hang" }]
+}

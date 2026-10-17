@@ -1,0 +1,15 @@
+{
+  "name": "擺手",
+  "_comment": "側面：手臂抬到前上方，前臂左右擺三下（把東西揮散）",
+  "views": ["side"],
+  "duration": 24,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 5, "ease": "out", "pose": { "arm_R_upper": 100, "arm_R_lower": -30, "torso": { "r": 2, "dx": 0 } } },
+    { "f": 9, "pose": { "arm_R_lower": 25 } },
+    { "f": 13, "pose": { "arm_R_lower": -30 } },
+    { "f": 17, "pose": { "arm_R_lower": 25 } },
+    { "f": 21, "pose": { "arm_R_lower": -10 } }
+  ]
+}
