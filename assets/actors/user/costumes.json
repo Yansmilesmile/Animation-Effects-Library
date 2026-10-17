@@ -1,0 +1,119 @@
+{
+  "_comment": "用戶 user 換裝（小米創業思考第 4 段）：綠色連帽衫換色。由 pixel_xiaomi/scripts/make_user_costumes.py 產生。",
+  "hoodie_blue": {
+    "name": "藍色連帽衫",
+    "recolor": [
+      {
+        "bones": [
+          "torso",
+          "arm_L_upper",
+          "arm_R_upper",
+          "arm_L_lower",
+          "arm_R_lower",
+          "hand_L",
+          "hand_R"
+        ],
+        "map": {
+          "#6fbf5a": "#5a94e0",
+          "#58a64a": "#4c7ebe",
+          "#468a3e": "#3f689d",
+          "#3c7a37": "#375b8a",
+          "#346b31": "#315079",
+          "#2a5629": "#274062",
+          "#234a23": "#213753",
+          "#1e401f": "#1d3048",
+          "#19361a": "#18283d",
+          "#142c16": "#142131",
+          "#d9efc6": "#c5daf4"
+        }
+      }
+    ]
+  },
+  "hoodie_red": {
+    "name": "紅色連帽衫",
+    "recolor": [
+      {
+        "bones": [
+          "torso",
+          "arm_L_upper",
+          "arm_R_upper",
+          "arm_L_lower",
+          "arm_R_lower",
+          "hand_L",
+          "hand_R"
+        ],
+        "map": {
+          "#6fbf5a": "#e0604f",
+          "#58a64a": "#be5243",
+          "#468a3e": "#9d4337",
+          "#3c7a37": "#8a3b31",
+          "#346b31": "#79342b",
+          "#2a5629": "#622a22",
+          "#234a23": "#53241d",
+          "#1e401f": "#481f19",
+          "#19361a": "#3d1a15",
+          "#142c16": "#311511",
+          "#d9efc6": "#f4c7c1"
+        }
+      }
+    ]
+  },
+  "hoodie_yellow": {
+    "name": "黃色連帽衫",
+    "recolor": [
+      {
+        "bones": [
+          "torso",
+          "arm_L_upper",
+          "arm_R_upper",
+          "arm_L_lower",
+          "arm_R_lower",
+          "hand_L",
+          "hand_R"
+        ],
+        "map": {
+          "#6fbf5a": "#ecc442",
+          "#58a64a": "#c9a738",
+          "#468a3e": "#a5892e",
+          "#3c7a37": "#917929",
+          "#346b31": "#7f6a24",
+          "#2a5629": "#67551d",
+          "#234a23": "#584919",
+          "#1e401f": "#4c3f15",
+          "#19361a": "#403512",
+          "#142c16": "#342b0f",
+          "#d9efc6": "#f8eabd"
+        }
+      }
+    ]
+  },
+  "hoodie_gray": {
+    "name": "灰色連帽衫",
+    "recolor": [
+      {
+        "bones": [
+          "torso",
+          "arm_L_upper",
+          "arm_R_upper",
+          "arm_L_lower",
+          "arm_R_lower",
+          "hand_L",
+          "hand_R"
+        ],
+        "map": {
+          "#6fbf5a": "#a8acb4",
+          "#58a64a": "#8f9299",
+          "#468a3e": "#76797e",
+          "#3c7a37": "#676a6f",
+          "#346b31": "#5b5d61",
+          "#2a5629": "#494b4e",
+          "#234a23": "#3f4043",
+          "#1e401f": "#36373a",
+          "#19361a": "#2e2f31",
+          "#142c16": "#252628",
+          "#d9efc6": "#e1e2e5"
+        }
+      }
+    ]
+  }
+}

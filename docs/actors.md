@@ -93,6 +93,8 @@ event 的 `duration`：只對 loop 動作有用（循環多久）；不寫 = 循
 |---|---|
 | `tshirt_white` | 西裝換成白 T 恤（短袖、去掉翻領和領帶），領口掛吊牌（骨頭 `tag`，「看吊牌」會翻它） |
 
+`assets/actors/user/costumes.json`（用戶的綠色連帽衫換色）：`hoodie_blue`、`hoodie_red`、`hoodie_yellow`、`hoodie_gray`。
+
 ## 5. 新增動作（動作檔格式）
 
 `assets/actions/<關鍵詞>.json`，檔名就是時間軸的 `action`。改完跑 `npm run assets`（會檢查骨頭名稱、表情、關鍵幀）。
