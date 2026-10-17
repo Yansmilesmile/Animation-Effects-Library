@@ -66,7 +66,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
   // ── 強調 ──
   RingPulse: { component: RingPulse, layer: "world", code: "B1", props: { ...POS, radius: "number", color: "string", duration: "number", dots: "number", flash: "boolean", seed: "number" }, required: ["x", "y"] },
   Tag: { component: Tag, layer: "world", code: "B2/B13/B11", props: { text: "string", ...POS, variant: "string", appear: "string", size: "number" }, required: ["text", "x", "y"] },
-  Stamp: { component: Stamp, layer: "world", code: "B6/B3", props: { ...POS, variant: "string", text: "string", rotate: "number", size: "number", flash: "boolean", holdTint: "number" }, required: ["x", "y"] },
+  Stamp: { component: Stamp, layer: "world", code: "B6/B3", props: { ...POS, variant: "string", text: "string", rotate: "number", size: "number", flash: "boolean", holdTint: "number", tone: "string" }, required: ["x", "y"], check: (p) => oneOf("tone", p.tone, ["red", "gold"]) },
   SunBurst: { component: SunBurst, layer: "world", code: "B5", props: { ...POS, radius: "number", color: "string", rays: "number", speed: "number", opacity: "number" }, required: ["x", "y"] },
   GlowText: {
     component: GlowText,

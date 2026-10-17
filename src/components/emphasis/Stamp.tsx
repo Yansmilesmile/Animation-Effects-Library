@@ -25,6 +25,8 @@ export type StampProps = {
   size?: number;
   flash?: boolean;
   holdTint?: number;
+  /** 印章顏色（variant = stamp）：red 預設 / gold（正面結論，例如「幫」） */
+  tone?: "red" | "gold";
 };
 
 const SLAM = [
@@ -33,8 +35,10 @@ const SLAM = [
   { s: 0.94, o: 1 },
 ];
 
-export const Stamp: React.FC<StampProps> = ({ x, y, variant = "stamp", text = "", rotate = -12, size = 2, flash, holdTint = 0 }) => {
+export const Stamp: React.FC<StampProps> = ({ x, y, variant = "stamp", text = "", rotate = -12, size = 2, flash, holdTint = 0, tone = "red" }) => {
   const f = useCurrentFrame();
+  const ink = tone === "gold" ? color.gold : color.red;
+  const inkRgb = tone === "gold" ? "232,176,74" : "217,68,58";
   if (f < 0) return null;
   const doFlash = flash ?? variant === "x";
   const slam = SLAM[f] ?? { s: 1, o: 1 };
@@ -65,16 +69,16 @@ export const Stamp: React.FC<StampProps> = ({ x, y, variant = "stamp", text = ""
           <div
             style={{
               padding: `${size}px ${3 * size}px`,
-              border: `${size}px solid ${color.red}`,
-              outline: `1px solid ${color.red}`,
+              border: `${size}px solid ${ink}`,
+              outline: `1px solid ${ink}`,
               outlineOffset: 1,
-              color: color.red,
+              color: tone === "gold" ? color.goldLight : ink,
               fontFamily: FONT_PIXEL,
               fontSize: 12 * size,
               lineHeight: 1,
               whiteSpace: "nowrap",
-              background: "rgba(217,68,58,0.10)",
-              textShadow: `0 0 2px rgba(217,68,58,0.6)`,
+              background: `rgba(${inkRgb},0.10)`,
+              textShadow: `0 0 2px rgba(${inkRgb},0.6)`,
             }}
           >
             {text}

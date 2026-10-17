@@ -9,7 +9,7 @@
 | Ambience | G | world | 氛圍層 | layers*: dust / snow / lamp{x,y} / stars / beam{x} / confetti / zzz{x,y} | 持續 |
 | RingPulse | B1 | world | 光環脈衝，對準高亮詞 | x*, y*, radius(34), color | 15 幀 |
 | Tag | B2/B13/B11 | world | 標籤彈出 | text*, x*, y*(標籤底部), variant: red / dark / hang / locked, appear: pop / instant | 3 幀回彈 |
-| Stamp | B6/B3 | world | 蓋章 / ✕ + 畫面泛紅 | x*, y*, variant: stamp / x, text, size(2), holdTint | 3 幀拍下，泛紅 12 幀 |
+| Stamp | B6/B3 | world | 蓋章 / ✕ + 畫面泛紅 | x*, y*, variant: stamp / x, text, size(2), holdTint, tone: red / gold（stamp 的顏色） | 3 幀拍下，泛紅 12 幀 |
 | SunBurst | B5 | world | 放射光（放在目標之前） | x*, y*, radius(90) | 8 幀展開後旋轉 |
 | GlowText | B7 | hud | 發光像素大字、倍數 | text*, x(240), y(108), color: gold / red, size(4), crown, appear: flicker / pop | 6 幀閃亮 |
 | BeamDrop | B12+B4 | world | 核心物件從天而降 | asset*, x(240), groundY(160), scale(2), landAt(26), darken | 約 32 幀 |
