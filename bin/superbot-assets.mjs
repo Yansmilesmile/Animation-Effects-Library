@@ -18,7 +18,7 @@
 //   - "@engine/…"：組件庫自帶的圖（主持人姿勢等），已打包在庫裡，不複製
 import fs from "node:fs";
 import path from "node:path";
-import { collect, ENGINE_ROOT, LIB_ROOT, mkdirp, processAsset, REJECTED, REPLACED } from "../scripts/asset-core.mjs";
+import { collect, ENGINE_ROOT, LIB_ROOT, mkdirp, OLD_LIB_ROOT, processAsset, REJECTED, REPLACED } from "../scripts/asset-core.mjs";
 
 const argv = process.argv.slice(2);
 const rootArg = argv.find((a) => a.startsWith("--root="));
@@ -69,11 +69,23 @@ for (const f of inputs) {
   }
 }
 
+// 動作庫內建的道具（掰書的書、遞錢的金幣、放下獎盃的獎盃…）：時間軸只寫動作名，這裡把動作檔裡的道具一起複製
+const ACTIONS_DIR = path.join(ENGINE_ROOT, "assets", "actions");
+for (const f of fs.existsSync(ACTIONS_DIR) ? fs.readdirSync(ACTIONS_DIR) : []) {
+  if (!f.endsWith(".json")) continue;
+  const a = JSON.parse(fs.readFileSync(path.join(ACTIONS_DIR, f), "utf8"));
+  for (const p of a.props ?? []) {
+    if (p.asset) wanted.add(p.asset);
+    for (const s of p.swap ?? []) if (s.asset) wanted.add(s.asset);
+  }
+}
+
 // 組件庫自帶的圖（src/generated/builtin-assets.ts 的 key）
 const BUILTIN = new Set([...fs.readFileSync(path.join(ENGINE_ROOT, "src", "generated", "builtin-assets.ts"), "utf8").matchAll(/^\s*"(@engine\/[^"]+)": a\d+,/gm)].map((m) => m[1]));
 
 const meta = {};
 const errors = [];
+const fromOldLib = [];
 let builtin = 0;
 for (const raw of wanted) {
   const rel = raw.replace(/\/+$/, "");
@@ -85,6 +97,11 @@ for (const raw of wanted) {
   else if (rel.startsWith("@engine/")) src = path.join(ENGINE_ROOT, rel.slice("@engine/".length));
   else if (rel.startsWith("@")) { errors.push(`素材「${rel}」：不認得的前綴（只支援 @project/、@engine/）`); continue; }
   else src = path.join(LIBRARY, rel);
+  // 新素材庫沒有的（動作庫內建道具等），暫時從舊素材庫複製（和 scripts/copy-assets.mjs 一樣）
+  if (!fs.existsSync(src) && !rel.startsWith("@") && fs.existsSync(path.join(OLD_LIB_ROOT, rel))) {
+    src = path.join(OLD_LIB_ROOT, rel);
+    fromOldLib.push(rel);
+  }
   if (!fs.existsSync(src)) { errors.push(`找不到素材：${rel}（${src}）`); continue; }
   const r = processAsset(raw, src, OUT, !!REPLACED[rel]);
   if (r.error) { errors.push(r.error); continue; }
@@ -95,4 +112,5 @@ for (const raw of wanted) {
 mkdirp(path.dirname(META_FILE));
 fs.writeFileSync(META_FILE, JSON.stringify(meta, null, 1));
 console.log(`掃了 ${inputs.length} 個檔案；複製 ${Object.keys(meta).length} 個素材到 ${path.relative(ROOT, OUT) || "."}，meta → ${path.relative(ROOT, META_FILE)}${builtin ? `（${builtin} 個是組件庫自帶，不必複製）` : ""}`);
+if (fromOldLib.length) console.warn(`注意：${fromOldLib.length} 張素材新素材庫沒有，從舊素材庫（${OLD_LIB_ROOT}）複製（動作庫內建道具）`);
 if (errors.length) { console.error(errors.join("\n")); process.exit(1); }
