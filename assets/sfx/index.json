@@ -1,0 +1,112 @@
+{
+ "_comment": "node scripts/make-sfx.mjs 產生。時間軸事件寫 \"sfx\": \"<中文名或檔名>\"",
+ "sounds": [
+  {
+   "name": "點擊",
+   "file": "click.wav",
+   "seconds": 0.1
+  },
+  {
+   "name": "彈出",
+   "file": "pop.wav",
+   "seconds": 0.13
+  },
+  {
+   "name": "金幣",
+   "file": "coin.wav",
+   "seconds": 0.455
+  },
+  {
+   "name": "錯誤",
+   "file": "error.wav",
+   "seconds": 0.48
+  },
+  {
+   "name": "升級",
+   "file": "levelup.wav",
+   "seconds": 0.72
+  },
+  {
+   "name": "獲得道具",
+   "file": "item.wav",
+   "seconds": 0.472
+  },
+  {
+   "name": "點亮",
+   "file": "light.wav",
+   "seconds": 0.325
+  },
+  {
+   "name": "翻頁",
+   "file": "page.wav",
+   "seconds": 0.16
+  },
+  {
+   "name": "煙霧",
+   "file": "smoke.wav",
+   "seconds": 0.2
+  },
+  {
+   "name": "計數",
+   "file": "count.wav",
+   "seconds": 0.1
+  },
+  {
+   "name": "打字",
+   "file": "type.wav",
+   "seconds": 0.1
+  },
+  {
+   "name": "摔倒",
+   "file": "fall.wav",
+   "seconds": 0.58
+  },
+  {
+   "name": "掉落",
+   "file": "drop.wav",
+   "seconds": 0.58
+  },
+  {
+   "name": "蓋章",
+   "file": "stamp.wav",
+   "seconds": 0.26
+  },
+  {
+   "name": "翻牌",
+   "file": "flip.wav",
+   "seconds": 0.19
+  },
+  {
+   "name": "解鎖",
+   "file": "unlock.wav",
+   "seconds": 0.52
+  },
+  {
+   "name": "轉場",
+   "file": "swoosh.wav",
+   "seconds": 0.26
+  },
+  {
+   "name": "MISS",
+   "file": "miss.wav",
+   "seconds": 0.66
+  }
+ ],
+ "aliases": {
+  "点击": "點擊",
+  "弹出": "彈出",
+  "金币": "金幣",
+  "错误": "錯誤",
+  "升级": "升級",
+  "获得道具": "獲得道具",
+  "道具": "獲得道具",
+  "点亮": "點亮",
+  "翻页": "翻頁",
+  "烟雾": "煙霧",
+  "计数": "計數",
+  "盖章": "蓋章",
+  "解锁": "解鎖",
+  "转场": "轉場",
+  "miss": "MISS"
+ }
+}

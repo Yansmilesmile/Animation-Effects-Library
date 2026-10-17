@@ -19,6 +19,8 @@ export type Timeline = {
   watermark?: string;
   /** 配音 / 音樂：src 是 public 下的路徑；startFrom = 從音檔第幾秒開始播（對應時間軸第 0 幀） */
   audio?: { src: string; startFrom?: number; volume?: number };
+  /** 音效（事件的 "sfx"）預設音量，預設 0.5（配音是 1） */
+  sfxVolume?: number;
   scenes: Scene[];
 };
 
@@ -111,8 +113,12 @@ export type ActorDecl = {
 };
 
 export type TimelineEvent = {
-  /** 組件名稱，必須是註冊表裡的名字 */
+  /** 組件名稱，必須是註冊表裡的名字；省略 = 只播音效的事件（要有 sfx） */
   component: string;
+  /** 在事件開始那一幀播放的 8-bit 音效：中文名（"金幣"）或檔名（"coin"），清單見 docs/timeline.md「音效」 */
+  sfx?: string;
+  /** 音效音量 0..1，預設 timeline.sfxVolume（0.5） */
+  volume?: number;
   /** 觸發幀（相對 scene），或 "@高亮詞"、"@高亮詞+N" */
   start: number | string;
   /** 顯示多久（幀）；省略 = 到 scene 結束 */

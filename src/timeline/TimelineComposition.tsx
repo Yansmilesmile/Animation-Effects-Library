@@ -24,6 +24,7 @@ import { Actor } from "../actor/Actor";
 import { SMOKE_REVEAL } from "../components/props/SmokePop";
 import { ACTORS } from "../actor/rig";
 import { ActorEv, ActorInit, markFrame, Pt } from "../actor/timeline";
+import { resolveSfx, SFX_VOLUME, SfxAt } from "./sfx";
 
 /**
  * TimelineComposition —— 讀時間軸 JSON 渲染整支片。
@@ -33,7 +34,7 @@ import { ActorEv, ActorInit, markFrame, Pt } from "../actor/timeline";
 /** 跟著 3D 錨點走：refFrame 時的畫面位置是座標基準 */
 type FollowSpec = { anchor: string; refFrame: number; depthScale: boolean; real?: { height: number; basePx: number }; clipBelow?: string };
 type Focus = { at: number; dim?: number; blur?: number; frames?: number };
-type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown>; follow?: FollowSpec; focus?: Focus[] };
+type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown>; follow?: FollowSpec; focus?: Focus[]; sfx?: string };
 
 const S3_EVENTS = new Set(["S3State", "S3Camera", "S3Focus"]);
 const is3d = (v: unknown): v is string => typeof v === "string" && v.startsWith("3d:");
@@ -337,6 +338,17 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     const s = resolveStart(ev.start, scene);
     if (s.error) errs.push(s.error);
     const start = s.frame ?? 0;
+    // 音效："sfx" 在事件開始那一幀播放；沒有 component 的事件只播音效
+    let sfx: string | undefined;
+    if (ev.sfx !== undefined) {
+      const q = resolveSfx(ev.sfx);
+      if (q.error) errs.push(q.error);
+      sfx = q.url;
+    }
+    if (!ev.component) {
+      if (ev.sfx === undefined) errs.push("事件缺少 component（只播音效的事件要寫 sfx）");
+      return { ev, i, start, errors: errs, props: {}, sfx };
+    }
     // props 裡的 "@詞"（at / …At 欄位）→ 相對事件開始的幀；{ target: "名稱" } → { x, y }
     const nested: { out: Record<string, unknown>; name: string }[] = [];
     const deep = (v: unknown, key: string): unknown => {
@@ -450,7 +462,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
       const a = actors.inits.find((x) => x.id === props.actor);
       if (a) props.h = (ACTORS[a.rig]?.views[a.view]?.h ?? 51) * a.scale;
     }
-    return { ev, i, start, errors: errs, props, follow, focus };
+    return { ev, i, start, errors: errs, props, follow, focus, sfx };
   });
 
   // Act / ActorState → 每個角色的事件（站位名稱換成座標）
@@ -490,8 +502,10 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     if (typeof p.actor === "string") actorEvents.get(p.actor)!.push({ kind: "state", start: at, visible: true, at: { x: p.x, y: p.y } });
     for (const id of Array.isArray(p.hide) ? p.hide : []) actorEvents.get(id)!.push({ kind: "state", start: at, visible: false });
   }
-  for (const r of resolved) for (const e of r.errors) errors.push(`[${scene.id}] 事件 #${r.i + 1} ${r.ev.component}：${e}`);
-  const ok = resolved.filter((r) => r.errors.length === 0 && r.ev.component !== "PropFx" && !ACTOR_EVENTS.has(r.ev.component) && !S3_EVENTS.has(r.ev.component));
+  for (const r of resolved) for (const e of r.errors) errors.push(`[${scene.id}] 事件 #${r.i + 1} ${r.ev.component ?? "音效"}：${e}`);
+  // 轉場的凍結畫面（ghost）不重播音效
+  const sounds = ghost ? [] : resolved.filter((r) => r.sfx && r.errors.length === 0);
+  const ok = resolved.filter((r) => r.errors.length === 0 && r.ev.component && r.ev.component !== "PropFx" && !ACTOR_EVENTS.has(r.ev.component) && !S3_EVENTS.has(r.ev.component));
   // PropFx：交給舞台物件自己套用（晃動、發光、消失…）
   const fx: PropFxEntry[] = resolved
     .filter((r) => r.errors.length === 0 && r.ev.component === "PropFx")
@@ -554,6 +568,9 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   return (
     <Stage3DRuntimeContext.Provider value={rt3d ?? null}>
     <PropFxContext.Provider value={fx}>
+    {sounds.map((r) => (
+      <SfxAt key={`sfx${r.i}`} url={r.sfx!} at={r.start} volume={r.ev.volume ?? timeline.sfxVolume ?? SFX_VOLUME} />
+    ))}
     <PixelStage
       background={scene.background ?? rt3d?.module.background ?? stage?.background}
       bloom={scene.bloom}
