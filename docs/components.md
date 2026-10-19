@@ -22,7 +22,7 @@
 | ChestDeal | C24 | world | 寶箱掉落 → 開蓋 → 發牌 | x(240), cards(3), pace(1.5), takeAt[] | pace 1.5 時約 80 幀 |
 | SkillCard | C25/C11/C59 | hud | 技能卡飛入、翻面、示範、收納 | index*, title*, desc, demo: years / daily / future，或 demoAsset（示範框中央播一段素材動畫：資料夾 / 動畫條，翻面完成那一幀開始播）＋ demoScale(1)、demoFps、demoPlay(once), fromChest{index,of}, flipAt(14), collectAt | 依參數 |
 | SkillSummary | C59 | hud | 已習得 N/N | cards*: [{title, desc, demo}] | 12 幀 |
-| GamePopup | C29/C30/B9 | hud | 片尾行動呼籲 | variant*: follow{clickAt,exitAt} / input{question*,answer,title} / achievement{name*,exitAt} / ending{text,exitAt} | follow 約 56 幀 |
+| GamePopup | C29/C30/B9 | hud | 片尾行動呼籲 | variant*: follow{clickAt,exitAt} / input{question*,answer,title,scale（整個框縮放，原寬 340）} / achievement{name*,exitAt} / ending{text,exitAt} | follow 約 56 幀 |
 | NextTeaser | C32 | hud | ??? 下集預告框 | x(418), y(58), label | 持續 |
 | QuestionBubble | B14 | world | 頭頂白底「?」泡泡，可帶一句反問 | x*, y*(泡泡尾巴尖，放頭頂上方), text("?"), question, size(2), ink | 3 幀回彈後輕浮動 |
 | DropStack | C1 | world | 物件一個個掉下、彈跳、揚塵、堆高；count 1 = 單一道具帶彈跳落下 | x*, y*(第一個落地的底部), asset 或 icon: coin / key, tone: gold / red / silver, count(5), every(6), fall(70), fallFrames(9), step, jitter, layout: stack / row, scale, dust | 每個 9 幀落地 + 4 幀彈跳 |

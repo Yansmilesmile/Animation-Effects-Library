@@ -262,7 +262,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     component: GamePopup,
     layer: "hud",
     code: "C29/C30/B9",
-    props: { variant: "string", ...POS, clickAt: "number", exitAt: "number", compact: "boolean", channel: "string", title: "string", question: "string", answer: "string", typeEvery: "number", name: "string", text: "string" },
+    props: { variant: "string", ...POS, clickAt: "number", exitAt: "number", compact: "boolean", channel: "string", title: "string", question: "string", answer: "string", typeEvery: "number", name: "string", text: "string", scale: "number" },
     required: ["variant"],
     check: (p) => {
       const v = ["follow", "input", "achievement", "ending"];

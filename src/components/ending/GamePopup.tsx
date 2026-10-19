@@ -21,7 +21,7 @@ import { popScale } from "../emphasis/common";
  */
 export type GamePopupProps =
   | { variant: "follow"; x?: number; y?: number; clickAt?: number; exitAt?: number; compact?: boolean; channel?: string }
-  | { variant: "input"; title?: string; question: string; answer?: string; typeEvery?: number; x?: number; y?: number }
+  | { variant: "input"; title?: string; question: string; answer?: string; typeEvery?: number; x?: number; y?: number; scale?: number }
   | { variant: "achievement"; name: string; exitAt?: number; y?: number }
   | { variant: "ending"; text?: string; x?: number; y?: number; exitAt?: number };
 
@@ -123,7 +123,7 @@ const Follow: React.FC<Extract<GamePopupProps, { variant: "follow" }>> = ({
 };
 
 // ── input ────────────────────────────────────────
-const Input: React.FC<Extract<GamePopupProps, { variant: "input" }>> = ({ title, question, answer, typeEvery = 2.5, x = LAYOUT.centerX, y = LAYOUT.focusY }) => {
+const Input: React.FC<Extract<GamePopupProps, { variant: "input" }>> = ({ title, question, answer, typeEvery = 2.5, x = LAYOUT.centerX, y = LAYOUT.focusY, scale = 1 }) => {
   const f = useCurrentFrame();
   const q = Array.from(question);
   const a = Array.from(answer ?? "");
@@ -135,7 +135,7 @@ const Input: React.FC<Extract<GamePopupProps, { variant: "input" }>> = ({ title,
   const pop = popScale(f);
   const W = 340;
   return (
-    <div style={{ position: "absolute", left: x, top: y, transform: `translate(-50%, -50%) scale(${pop})` }}>
+    <div style={{ position: "absolute", left: x, top: y, transform: `translate(-50%, -50%) scale(${pop * scale})` }}>
       <div style={{ ...box, width: W, padding: "12px 14px", boxSizing: "border-box" }}>
         {title ? (
           <div style={{ ...font(12, "#8fd0ff"), marginBottom: 10, paddingBottom: 8, borderBottom: `1px solid ${color.navyLight}` }}>{title}</div>
