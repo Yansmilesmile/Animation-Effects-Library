@@ -20,7 +20,7 @@
 | CrowdGrid | A1/A18/A2 | hud | 群像網格（自帶鏡頭，蓋滿畫面） | mode: pull-out / push-in / zoom-out, cols, rows, hero{col,row}, start, duration(45), flashAt, label, labelAt | 依參數 |
 | Spotlight | A13 | world | 聚光燈收窄 | x*, y*, to(38), duration(45) | 45 幀 |
 | ChestDeal | C24 | world | 寶箱掉落 → 開蓋 → 發牌 | x(240), cards(3), pace(1.5), takeAt[] | pace 1.5 時約 80 幀 |
-| SkillCard | C25/C11/C59 | hud | 技能卡飛入、翻面、示範、收納 | index*, title*, desc, demo: years / daily / future, fromChest{index,of}, flipAt(14), collectAt | 依參數 |
+| SkillCard | C25/C11/C59 | hud | 技能卡飛入、翻面、示範、收納 | index*, title*, desc, demo: years / daily / future，或 demoAsset（示範框中央播一段素材動畫：資料夾 / 動畫條，翻面完成那一幀開始播）＋ demoScale(1)、demoFps、demoPlay(once), fromChest{index,of}, flipAt(14), collectAt | 依參數 |
 | SkillSummary | C59 | hud | 已習得 N/N | cards*: [{title, desc, demo}] | 12 幀 |
 | GamePopup | C29/C30/B9 | hud | 片尾行動呼籲 | variant*: follow{clickAt,exitAt} / input{question*,answer,title} / achievement{name*,exitAt} / ending{text,exitAt} | follow 約 56 幀 |
 | NextTeaser | C32 | hud | ??? 下集預告框 | x(418), y(58), label | 持續 |
@@ -35,6 +35,7 @@
 | BigTag | B13 大 / D4 | world | 巨大吊牌：紅繩從上方垂下、衰減擺動；大字或素材；內建 D4 數字翻牌（tone gold = 金字發光） | x*, y*(繩孔＝吊牌頂端中心), text 或 asset, textSize(3), tone: plain（米白底黑字，預設）/ red / gold, w(96), h(120), ropeTop(y-120), dropFrames(10), swing(5°), flips[{at, text, tone, glow}], swings[{at, amount}] | 落下 10 幀，翻牌 6 幀 |
 | CoinFlight | C39 | world | 一把金幣（或素材）從起點一個個沿弧線飛向多個目標，依 share 分流，到達閃一下 | x*, y*(起點), to*[{x, y, share} 或 {target, anchor, offset, share}], count(12), every(1.5), flyFrames(14), arc(30), spread(4), asset, scale, tone: gold / red / silver, trail(true), seed | 每個 14 幀 |
 | BookUnfold | NEW-1 | world | 書從中間裂成兩半往左右推開，拉出橫向時間軸，刻度從左到右依次亮（金）並標年份；和 ACT「掰書」同步：start 寫 `"@詞+mark:open"`、target 角色 + anchor bottom + offset y -15（胸前） | x*, y*(書的中心), from(2010), to(2020), step(1), labelEvery(5；首尾一定標), labels[每格文字，"" = 不標；寫了就不用 from/to], width(220), openFrames(10), tickEvery(3), pageH(22), cover | 推開 10 幀，之後每 3 幀亮一格 |
+| BossBar | F5/NEW-2 | hud | 左上 BOSS 血條（名牌「BOSS・名稱」＋ N 格血條＋N/N）；名牌碎裂、改寫，扣血 | name*, prefix("BOSS・"), max(3), hp(=max), breakAt[幀…]（名稱碎成像素往下掉，之後名牌空白、紅框閃）, renames[{at, text}]（逐字打出新名稱，打完血條逐格填滿）, hits[{at, hp}]（不寫 hp = 扣 1 格：那格閃白掉落、整條抖）, exitAt（往左滑出）, x(8), y(34), w(150) | 滑入 8 幀；碎裂 14 幀；打字每字 3 幀 |
 | Inventory | F7 | hud | 左上角道具欄：空格依次彈出，道具在 at 幀放進格子 + 光環 + 下方小標籤 | slots*, items[{at*, slot, icon / asset, tone, label}], x(8), y(8), size(20), gap(3), enter(true；從上個 scene 接過來寫 false) | 空格每 3 幀；標籤 45 幀 |
 | PropFx | 道具動畫 | （舞台物件 / 有 id 的事件） | 讓舞台上已擺好的物件、角色，或**寫了 `id` 的事件組件**本身動（以組件的 x, y 為軸；glow / tint 只對舞台物件有效）：必須有 event 的 target | effect*: shake / bounce / pulse / glow / tint / hide / show / move；amount, height, times, period, color, dx, dy | 依 effect |
 | Act | ACT | （角色） | 讓 scene.actors 宣告的角色做動作（分鏡 `fx: ACT`） | actor*, action*(動作關鍵詞，見 docs/actors.md), view, facing, loop, from, to, prop, speed | 依動作 |

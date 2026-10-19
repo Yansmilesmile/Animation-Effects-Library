@@ -1,0 +1,13 @@
+{
+  "name": "備戰",
+  "_comment": "側面：往後退一步、壓低重心、身體前傾，雙拳舉在胸前（之後一直保持）",
+  "views": ["side"],
+  "duration": 14,
+  "end": "hold",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 4, "ease": "out", "pose": { "root": { "r": 0, "dx": -3, "dy": -1 }, "leg_L": -12, "leg_R": 10 } },
+    { "f": 9, "ease": "out", "pose": { "root": { "r": 0, "dx": -3, "dy": 1 }, "leg_L": -18, "leg_R": 16, "torso": { "r": 8, "dx": 1 }, "head": -4, "arm_R_upper": 45, "arm_R_lower": 85, "arm_L_upper": 30, "arm_L_lower": 95 } },
+    { "f": 14, "pose": { "root": { "r": 0, "dx": -3, "dy": 1 }, "leg_L": -18, "leg_R": 16, "torso": { "r": 8, "dx": 1 }, "head": -4, "arm_R_upper": 45, "arm_R_lower": 85, "arm_L_upper": 30, "arm_L_lower": 95 } }
+  ]
+}

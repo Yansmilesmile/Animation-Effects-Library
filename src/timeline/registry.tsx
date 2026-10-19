@@ -3,12 +3,12 @@ import { Ambience } from "../components/Ambience";
 import { CameraState, worldToScreen } from "../components/Camera";
 import { ChoiceDialog, ChoiceMenu, DialogBox } from "../components/dialog";
 import { BeamDrop, GlowText, MissPop, QuestionBubble, RingPulse, Stamp, SunBurst, Tag } from "../components/emphasis";
-import { Inventory, ProfileCard, QuestionCard } from "../components/panels";
+import { BossBar, Inventory, ProfileCard, QuestionCard } from "../components/panels";
 import { BigTag, BookUnfold, CoinFlight, PriceTower, towerTargets } from "../components/data";
 import { DropStack, KeyDrop, PropSwap, SmokePop } from "../components/props";
 import { ICONS, TONES } from "../components/props/bitmaps";
 import { EASE_NAMES, MOVE_NAMES } from "../three/stage3d/runtime";
-import { ChestDeal, chestFanPosition, GamePopup, NextTeaser, SkillCard, SkillSummary, SKILL_DEMOS } from "../components/ending";
+import { ChestDeal, chestFanPosition, DemoAsset, GamePopup, NextTeaser, SkillCard, SkillSummary, SKILL_DEMOS } from "../components/ending";
 import { Host } from "../components/Host";
 import { PLAY_MODES, Sprite } from "../components/Sprite";
 import { Counter, CrowdGrid, LevelTitleCard, LevelTransition, Spotlight } from "../components/structure";
@@ -189,6 +189,18 @@ export const REGISTRY: Record<string, RegistryEntry> = {
   },
 
   // ── 常駐 UI ──
+  BossBar: {
+    component: BossBar,
+    layer: "hud",
+    code: "F5/NEW-2",
+    props: { ...POS, w: "number", name: "string", prefix: "string", max: "number", hp: "number", breakAt: "array", renames: "array", hits: "array", exitAt: "number" },
+    required: ["name"],
+    check: (p) => [
+      ...(Array.isArray(p.breakAt) ? p.breakAt.flatMap((v: any, k: number) => (typeof v === "number" ? [] : [`breakAt[${k}] 要是幀數`])) : []),
+      ...(Array.isArray(p.renames) ? p.renames.flatMap((r: any, k: number) => (typeof r?.at === "number" && typeof r?.text === "string" ? [] : [`renames[${k}] 要有 at（幀數）和 text`])) : []),
+      ...(Array.isArray(p.hits) ? p.hits.flatMap((h: any, k: number) => (typeof h?.at === "number" ? [] : [`hits[${k}] 缺少 at（幀數）`])) : []),
+    ],
+  },
   Inventory: {
     component: Inventory,
     layer: "hud",
@@ -210,16 +222,18 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     component: SkillCard,
     layer: "hud",
     code: "C25/C11/C59",
-    props: { index: "number", title: "string", desc: "string", demo: "string", fromChest: "object", from: "object", enterDuration: "number", flipAt: "number", collectAt: "number", slot: "number", ...POS },
+    props: { index: "number", title: "string", desc: "string", demo: "string", demoAsset: "string", demoScale: "number", demoFps: "number", demoPlay: "string", fromChest: "object", from: "object", enterDuration: "number", flipAt: "number", collectAt: "number", slot: "number", ...POS },
     required: ["index", "title"],
-    check: (p) => demoCheck(p.demo),
+    check: (p) => [...demoCheck(p.demo), ...(p.demo && p.demoAsset ? ["demo 和 demoAsset 只能寫一個"] : []), ...oneOf("demoPlay", p.demoPlay, PLAY_MODES)],
     prepare: (p, ctx) => {
-      const { demo, fromChest, ...rest } = p;
+      const { demo, demoAsset, demoScale, demoFps, demoPlay, fromChest, ...rest } = p;
       const out: Record<string, any> = { ...rest };
       if (demo) {
         const Demo = SKILL_DEMOS[demo];
         out.renderDemo = (t: number) => (t >= 0 ? <Demo t={t} /> : null);
       }
+      // demoAsset：示範框中央播一段素材動畫（自畫的動畫條 / 資料夾），翻面完成那一幀開始播
+      if (demoAsset) out.renderDemo = (t: number) => (t >= 0 ? <DemoAsset t={t} asset={demoAsset} scale={demoScale} animFps={demoFps} play={demoPlay} /> : null);
       // fromChest: { index, of, x? }：從寶箱上方的扇形位置飛出來（自動換算成畫面座標）
       if (fromChest && !rest.from) {
         const fan = chestFanPosition(fromChest.index ?? 0, fromChest.of ?? 3, fromChest.x ?? WORLD.centerX, fromChest.groundY ?? WORLD.groundY);

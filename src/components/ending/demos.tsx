@@ -1,4 +1,5 @@
 import React from "react";
+import { Sequence, useCurrentFrame } from "remotion";
 import { color, FONT_PIXEL } from "../../theme";
 import { Sprite } from "../Sprite";
 
@@ -80,6 +81,19 @@ const DemoFuture: React.FC<{ t: number }> = ({ t }) => {
       </div>
       {future ? <div style={{ position: "absolute", left: 0, right: 0, top: 72, textAlign: "center", ...demoText("", color.goldLight) }}>一年後</div> : null}
     </>
+  );
+};
+
+/**
+ * 自訂示範：在示範框中央播一段素材動畫（時間軸 SkillCard 的 demoAsset；資料夾 / 動畫條都可以）。
+ * 動畫從翻面完成那一幀開始播（用 Sequence 把子層的幀數對齊成 t），play 預設 once（播完停在最後一格）。
+ */
+export const DemoAsset: React.FC<{ t: number; asset: string; scale?: number; animFps?: number; play?: "loop" | "once" }> = ({ t, asset, scale = 1, animFps, play = "once" }) => {
+  const f = useCurrentFrame();
+  return (
+    <Sequence from={f - t} layout="none">
+      <Sprite asset={asset} x={63} y={42} anchor="center" scale={scale} animFps={animFps} play={play} />
+    </Sequence>
   );
 };
 

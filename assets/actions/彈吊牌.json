@@ -1,0 +1,15 @@
+{
+  "name": "彈吊牌",
+  "_comment": "正面：右手（畫面右）伸到身體右側 → 手指往後扣 → 一彈（第 11 幀，mark flick），露出微笑 → 回到待機",
+  "views": ["front"],
+  "duration": 22,
+  "end": "idle",
+  "keys": [
+    { "f": 0, "pose": {} },
+    { "f": 5, "ease": "out", "pose": { "arm_R_upper": 70, "arm_R_lower": 25, "hand_R": 0 } },
+    { "f": 9, "pose": { "arm_R_upper": 70, "arm_R_lower": 35, "hand_R": -35 } },
+    { "f": 11, "ease": "step", "face": "smile", "pose": { "hand_R": 35 } },
+    { "f": 17, "pose": { "arm_R_upper": 70, "arm_R_lower": 25, "hand_R": 30 } }
+  ],
+  "marks": [{ "f": 11, "name": "flick" }]
+}
