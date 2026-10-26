@@ -205,7 +205,7 @@
    "head_height": 26,
    "width": 28,
    "height": 51,
-   "file": "@engine/assets/host/legacy/full_surprised_explain.png"
+   "file": "@engine/public/svgAll/svg_host/svg/full_surprised_explain.svg"
   },
   {
    "name": "full_point_happy",
@@ -223,7 +223,7 @@
    "head_height": 26,
    "width": 31,
    "height": 51,
-   "file": "@engine/assets/host/legacy/full_point_happy.png"
+   "file": "@engine/public/svgAll/svg_host/svg/full_point_happy.svg"
   },
   {
    "name": "full_laugh_clasp",
@@ -331,7 +331,7 @@
    "head_height": 26,
    "width": 31,
    "height": 51,
-   "file": "@engine/assets/host/legacy/full_point_nervous.png"
+   "file": "@engine/public/svgAll/svg_host/svg/full_point_nervous.svg"
   },
   {
    "name": "full_crouch_cry",
@@ -385,7 +385,7 @@
    "head_height": 23,
    "width": 26,
    "height": 40,
-   "file": "@engine/assets/host/legacy/half_phone_call.png"
+   "file": "@engine/public/svgAll/svg_host/svg/half_phone_call.svg"
   },
   {
    "name": "half_phone_call_alt",
@@ -421,7 +421,7 @@
    "head_height": 20,
    "width": 22,
    "height": 32,
-   "file": "@engine/assets/host/legacy/half_read_paper.png"
+   "file": "@engine/public/svgAll/svg_host/svg/half_read_paper.svg"
   },
   {
    "name": "half_present_coffee",
@@ -475,7 +475,7 @@
    "head_height": 18,
    "width": 34,
    "height": 27,
-   "file": "@engine/assets/host/legacy/half_desk_sleep_side.png"
+   "file": "@engine/public/svgAll/svg_host/svg/half_desk_sleep_side.svg"
   },
   {
    "name": "half_desk_sleep",

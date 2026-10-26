@@ -1,0 +1,52 @@
+{
+ "name": "home",
+ "wall": {
+  "color": "#141c3c"
+ },
+ "floor": {
+  "y": 146,
+  "color": "#24170f",
+  "planks": true
+ },
+ "items": [
+  {
+   "id": "imvl84ny01",
+   "name": "木箱（無蓋）",
+   "asset": "_自動拆分/Interior_Decoration_室内装饰/Interior_1/Interior_1_036.png",
+   "x": 222,
+   "y": 194,
+   "scale": 1,
+   "flipX": false,
+   "depth": "front"
+  },
+  {
+   "id": "imvl85xff2",
+   "name": "白貓幼崽",
+   "asset": "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合4_png/97.png",
+   "x": 308,
+   "y": 162,
+   "scale": 1,
+   "flipX": false,
+   "depth": "main"
+  }
+ ],
+ "lights": [],
+ "host": {
+  "pose": "full_front",
+  "x": 225,
+  "y": 152,
+  "scale": 1,
+  "flipX": false
+ },
+ "bg3d": {
+  "html": "scenes3d/金色頂層辦公室.html",
+  "image": "bg3d/金色頂層辦公室-480x270.png",
+  "w": 480,
+  "h": 270,
+  "keepWallFloor": false,
+  "x": -10,
+  "y": -46,
+  "scale": 1,
+  "locked": false
+ }
+}

@@ -1000,9 +1000,85 @@
   ],
   "fps": 8
  },
+ "@engine/assets/generated/scissors_open.png": {
+  "w": 44,
+  "h": 18,
+  "kind": "single"
+ },
+ "@engine/assets/generated/scissors_closed.png": {
+  "w": 44,
+  "h": 12,
+  "kind": "single"
+ },
+ "@engine/assets/generated/sickle.png": {
+  "w": 12,
+  "h": 13,
+  "kind": "single"
+ },
+ "@engine/assets/generated/mic_hand.png": {
+  "w": 5,
+  "h": 12,
+  "kind": "single"
+ },
+ "服裝裝飾/衣服服裝時裝/愛心T恤.png": {
+  "w": 32,
+  "h": 32,
+  "kind": "single"
+ },
+ "@engine/assets/generated/tshirt_torn.png": {
+  "w": 32,
+  "h": 32,
+  "kind": "single"
+ },
+ "小素材/鑰匙/橙色.png": {
+  "w": 17,
+  "h": 12,
+  "kind": "single"
+ },
  "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_ssff-收集整理 (13)_png/19.png": {
   "w": 11,
   "h": 14,
+  "kind": "single"
+ },
+ "@engine/assets/generated/tag_blank.png": {
+  "w": 8,
+  "h": 11,
+  "kind": "single"
+ },
+ "小素材/黃色卷軸.png": {
+  "w": 16,
+  "h": 19,
+  "kind": "single"
+ },
+ "Seamless Loop/Flag_Red/Frames/Flag_red1.png": {
+  "w": 16,
+  "h": 16,
+  "kind": "single",
+  "fps": 10
+ },
+ "@engine/assets/generated/hand_v.png": {
+  "w": 6,
+  "h": 9,
+  "kind": "single"
+ },
+ "@engine/assets/generated/phone_hand.png": {
+  "w": 6,
+  "h": 9,
+  "kind": "single"
+ },
+ "@engine/assets/generated/chalk.png": {
+  "w": 7,
+  "h": 3,
+  "kind": "single"
+ },
+ "@engine/assets/generated/scroll_open.png": {
+  "w": 14,
+  "h": 8,
+  "kind": "single"
+ },
+ "@engine/assets/generated/pen.png": {
+  "w": 3,
+  "h": 8,
   "kind": "single"
  },
  "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合1_png/287.png": {
@@ -1060,6 +1136,114 @@
   "h": 16,
   "kind": "single"
  },
+ "@pixel_newApply/videos/小米創業思考/assets/generated/tag_300.png": {
+  "w": 21,
+  "h": 11,
+  "kind": "single"
+ },
+ "@pixel_newApply/videos/小米創業思考/assets/generated/book_cover.png": {
+  "w": 30,
+  "h": 40,
+  "kind": "single"
+ },
+ "@pixel_newApply/videos/小米創業思考/assets/generated/xiaomi_logo_16.png": {
+  "w": 16,
+  "h": 16,
+  "kind": "single"
+ },
+ "小素材/鑰匙/藍.png": {
+  "w": 17,
+  "h": 12,
+  "kind": "single"
+ },
+ "小素材/鑰匙/綠.png": {
+  "w": 17,
+  "h": 12,
+  "kind": "single"
+ },
+ "@pixel_newApply/videos/小米創業思考/assets/generated/factory_icon.png": {
+  "w": 16,
+  "h": 16,
+  "kind": "single"
+ },
+ "@pixel_newApply/videos/小米創業思考/assets/generated/cloth.png": {
+  "w": 16,
+  "h": 16,
+  "kind": "single"
+ },
+ "@pixel_newApply/videos/小米創業思考/assets/generated/thread.png": {
+  "w": 16,
+  "h": 16,
+  "kind": "single"
+ },
+ "小素材/錢袋.png": {
+  "w": 18,
+  "h": 19,
+  "kind": "single"
+ },
+ "Seamless Loop/Flag_Red": {
+  "w": 16,
+  "h": 16,
+  "kind": "loop",
+  "frames": [
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red1.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red2.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red3.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red4.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red5.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red6.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red7.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red8.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red9.png",
+    "w": 16,
+    "h": 16
+   },
+   {
+    "src": "Seamless Loop/Flag_Red/Frames/Flag_red10.png",
+    "w": 16,
+    "h": 16
+   }
+  ],
+  "fps": 10
+ },
+ "@pixel_newApply/videos/小米創業思考/assets/generated/crack.png": {
+  "w": 4,
+  "h": 24,
+  "kind": "single"
+ },
  "@engine/public/svgAll/svg_host/svg/full_front.svg": {
   "w": 27,
   "h": 51,
@@ -1105,12 +1289,12 @@
   "h": 51,
   "kind": "single"
  },
- "@engine/assets/host/legacy/full_surprised_explain.png": {
+ "@engine/public/svgAll/svg_host/svg/full_surprised_explain.svg": {
   "w": 28,
   "h": 51,
   "kind": "single"
  },
- "@engine/assets/host/legacy/full_point_happy.png": {
+ "@engine/public/svgAll/svg_host/svg/full_point_happy.svg": {
   "w": 31,
   "h": 51,
   "kind": "single"
@@ -1140,7 +1324,7 @@
   "h": 51,
   "kind": "single"
  },
- "@engine/assets/host/legacy/full_point_nervous.png": {
+ "@engine/public/svgAll/svg_host/svg/full_point_nervous.svg": {
   "w": 31,
   "h": 51,
   "kind": "single"
@@ -1155,7 +1339,7 @@
   "h": 40,
   "kind": "single"
  },
- "@engine/assets/host/legacy/half_phone_call.png": {
+ "@engine/public/svgAll/svg_host/svg/half_phone_call.svg": {
   "w": 26,
   "h": 40,
   "kind": "single"
@@ -1165,7 +1349,7 @@
   "h": 40,
   "kind": "single"
  },
- "@engine/assets/host/legacy/half_read_paper.png": {
+ "@engine/public/svgAll/svg_host/svg/half_read_paper.svg": {
   "w": 22,
   "h": 32,
   "kind": "single"
@@ -1180,7 +1364,7 @@
   "h": 32,
   "kind": "single"
  },
- "@engine/assets/host/legacy/half_desk_sleep_side.png": {
+ "@engine/public/svgAll/svg_host/svg/half_desk_sleep_side.svg": {
   "w": 34,
   "h": 27,
   "kind": "single"

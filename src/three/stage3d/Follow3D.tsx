@@ -29,7 +29,9 @@ export const Follow3D: React.FC<{
   const p0 = rt.project(refFrame, a0);
   const p = rt.project(f, a);
   if (!p.visible) return null;
-  const s = real ? (p.unit * real.height) / real.basePx : depthScale && p0.unit > 0 ? p.unit / p0.unit : 1;
+  // 真實尺寸縮放最多 1 倍：角色已經是柵格化的像素圖，放大會讓像素格比 3D 背景粗（遠景縮小可以）。
+  // 近景要角色更大：舞台用較大的 pixelSize、角色用同倍數的整數 scale，讓兩邊一格一樣大。
+  const s = real ? Math.min(1, (p.unit * real.height) / real.basePx) : depthScale && p0.unit > 0 ? p.unit / p0.unit : 1;
   const inner = (
     <div
       style={{
