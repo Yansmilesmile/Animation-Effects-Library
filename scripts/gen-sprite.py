@@ -13,6 +13,7 @@
 #   --height N     必填（或 --width）：物件在原生像素裡的高度（世界座標，主持人約 51、畫面高 270）。
 #                  動畫是全部格子聯集的高度；精靈圖是最高那格的高度。
 #   --palette      調色盤：#hex 逗號清單，或有 "palette" 欄位的 JSON 檔；省略 = 自動挑 --colors 色（預設 16）
+#   --no-key       原圖已經是透明背景（例如官方 logo）：不去綠幕，只用原本的透明度（綠色 logo 一定要加）
 #   --out DIR      輸出資料夾，預設 assets/generated（影片專案用自己的 assets/generated）
 #   --for / --source  登記到 manifest 的用途、來源（預設 "Codex imagegen（gpt-image-2）"）
 # 另外輸出 out/gen-preview/<name>.png（放大 6 倍、棋盤格底）給人或 Read 工具檢查。
@@ -36,6 +37,7 @@ ap.add_argument("--height", type=int)
 ap.add_argument("--width", type=int)
 ap.add_argument("--palette", default="")
 ap.add_argument("--colors", type=int, default=16)
+ap.add_argument("--no-key", action="store_true")
 ap.add_argument("--out", default=os.path.join(ROOT, "assets", "generated"))
 ap.add_argument("--for", dest="purpose", default="")
 ap.add_argument("--source", default="Codex imagegen（gpt-image-2）")
@@ -50,10 +52,10 @@ if labels and len(labels) != cols * rows:
 # ── 1. 去綠幕：綠色明顯壓過紅藍的像素 → 透明；物件邊緣（離透明 2 像素內）去綠邊 ──
 im = np.asarray(Image.open(args.src).convert("RGBA")).astype(np.int16)
 r, g, b, a = im[..., 0], im[..., 1], im[..., 2], im[..., 3]
-key = (g > 90) & (g - np.maximum(r, b) > 60)
+key = np.zeros_like(a, bool) if args.no_key else (g > 90) & (g - np.maximum(r, b) > 60)
 alpha = np.where(key | (a < 128), 0, 255).astype(np.uint8)
 inner = np.asarray(Image.fromarray(alpha).filter(ImageFilter.MinFilter(5)))
-edge = (alpha > 0) & (inner == 0)
+edge = (alpha > 0) & (inner == 0) & (not args.no_key)
 cap = np.maximum(r, b)
 im[..., 1] = np.where(edge & (g > cap), cap, g)
 im[..., 3] = alpha
