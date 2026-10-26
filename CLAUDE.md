@@ -57,6 +57,7 @@ node scripts/stills.mjs Timeline 0 45 120 --props-file=timelines/<名稱>.json  
 node scripts/render-timeline.mjs timelines/<名稱>.json    # 渲染成 out/<名稱>.mp4
 npm run typecheck
 node scripts/host-rig.mjs                                 # 改了 assets/host-svg 或骨架設定後重產主持人說話骨架
+python scripts/gen-sprite.py <生圖.png> --name <名稱> --height <N> [--grid 2x2 --anim]   # AI 生圖 → 像素素材（見「自己做素材」第 4 點）
 ```
 
 ## 自檢
@@ -104,6 +105,15 @@ node scripts/host-rig.mjs                                 # 改了 assets/host-s
 1. **簡單的道具、圖示**（價簽、金幣、書、鑰匙、標籤底框）：用程式畫像素圖（canvas、SVG 或 PixiJS），在原生小尺寸（例如 16×16、32×32）上畫，再整數倍放大；顏色取自該舞台的 `palette`。
 2. **3D 場景裡的物件**：直接在 three.js 裡建模（分鏡的 `scene3d.layout` 已有尺寸）。
 3. **複雜的東西**（特定場景、人物以外的寫實物件）：可以上網找圖，下載後縮小並量化到調色盤，讓它和其他像素素材的「一格」一樣大。
+4. **分鏡寫「生圖：」「生圖動畫：」「生圖精靈圖：」**：用 Codex CLI 的 imagegen 生圖，再用 `scripts/gen-sprite.py` 處理成像素素材。
+   - **先確認能用**：`codex login status` 要顯示用 ChatGPT 登入（算會員額度）；沒登入或沒有會員就**不要生圖**，改用方法 1–3 或素材庫最接近的圖代替，記進對照報告。
+     呼叫 Codex 前在同一個指令裡清掉 API key（`$env:OPENAI_API_KEY = $null; codex exec ...`），否則會改走 API 付費。
+   - **給 Codex 的描述**：純綠 `#00FF00` 背景、像素風、物件不要用亮綠色；宮格圖寫明幾欄幾列、每格內容，各格物件大小、位置、視角一致、不碰格線。
+   - **處理**：`python scripts/gen-sprite.py <生圖.png> --name <名稱> --height <原生高度>`，加 `--grid 2x2`（宮格）、`--anim`（動畫）或 `--labels a,b,…`（精靈圖每格名稱）、`--for "shot 12 …"`。參數說明在腳本開頭。
+     - 動畫輸出資料夾 `<名稱>/1.png…`，時間軸 `asset` 寫資料夾 `@engine/assets/generated/<名稱>`，速度用 `animFps`、播一次用 `play: "once"`。
+     - 精靈圖、單張輸出 `<名稱>_<標籤>.png` / `<名稱>.png`。
+     - 腳本會自動登記 manifest；照它印出的路徑加進 `assets.list.json` 再跑 `npm run assets`。
+   - **檢查**：用 Read 看 `out/gen-preview/<名稱>.png`。物件被切掉、邊緣有雜點或綠邊、動畫各格跳動，就調整描述重生一次。
 
 自製的素材放在 `assets/generated/`，每一張都要登記在 `assets/generated/manifest.json`：
 
