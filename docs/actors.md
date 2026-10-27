@@ -138,6 +138,8 @@ event 的 `duration`：只對 loop 動作有用（循環多久）；不寫 = 循
 | `rig.json` | 骨頭：認領哪些部位的像素（可限範圍）、父子關係、樞紐、圖層順序、道具 slot、表情與嘴型的像素替換 |
 | `costumes.json` | 換裝：換色（可限範圍）、加骨頭 |
 
+新角色不要手寫這些檔：照 `docs/新角色規格.md` 交 SVG，跑 `python scripts/auto-rig.py <資料夾> --id <id>` 自動產生（之後要微調再改 `rig.json`）。
+
 `npm run assets` 會跑 `scripts/actors.mjs` 產生 `src/generated/actors.json`、`actions.json`；有部位像素沒被骨頭認領、骨頭名稱寫錯都會報錯。
 
 ## 7. 雷軍（`leijun`）
