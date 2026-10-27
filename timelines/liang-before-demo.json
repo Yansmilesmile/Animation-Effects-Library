@@ -1,0 +1,69 @@
+{
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "liang-before-front",
+      "duration": 90,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "cameraInitial": { "x": 240, "y": 135, "zoom": 1 },
+      "actors": [
+        { "id": "liang_before", "anchor": { "x": 50, "y": 165 } },
+        { "id": "b2", "rig": "liang_before", "anchor": { "x": 115, "y": 165 } },
+        { "id": "b3", "rig": "liang_before", "anchor": { "x": 180, "y": 165 } },
+        { "id": "b4", "rig": "liang_before", "anchor": { "x": 245, "y": 165 } },
+        { "id": "b5", "rig": "liang_before", "anchor": { "x": 310, "y": 165 }, "silhouette": true },
+        { "id": "b6", "rig": "liang_before", "anchor": { "x": 375, "y": 165 }, "dim": true, "talk": true }
+      ],
+      "events": [
+        { "component": "Act", "start": 10, "props": { "actor": "liang_before", "action": "愣住" } },
+        { "component": "Act", "start": 10, "props": { "actor": "b2", "action": "招手" } },
+        { "component": "Act", "start": 10, "props": { "actor": "b3", "action": "介紹" } },
+        { "component": "Act", "start": 10, "props": { "actor": "b4", "action": "抱胸" } },
+        { "component": "Act", "start": 30, "props": { "actor": "b4", "action": "搖頭" } },
+        { "component": "ActorState", "start": 50, "props": { "actor": "b5", "silhouette": false } },
+        { "component": "Act", "start": 55, "props": { "actor": "b5", "action": "驚嚇" } }
+      ]
+    },
+    {
+      "id": "liang-before-side",
+      "duration": 90,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "cameraInitial": { "x": 240, "y": 135, "zoom": 1 },
+      "actors": [
+        { "id": "walker", "rig": "liang_before", "anchor": { "x": 30, "y": 165 }, "view": "side" },
+        { "id": "pointer", "rig": "liang_before", "anchor": { "x": 190, "y": 165 }, "view": "side" },
+        { "id": "crossed", "rig": "liang_before", "anchor": { "x": 260, "y": 165 }, "view": "side", "facing": "left" },
+        { "id": "trophy", "rig": "liang_before", "anchor": { "x": 330, "y": 165 }, "view": "side" },
+        { "id": "faller", "rig": "liang_before", "anchor": { "x": 375, "y": 165 }, "view": "side", "talk": true }
+      ],
+      "events": [
+        { "component": "Act", "start": 5, "props": { "actor": "walker", "action": "走路", "to": { "x": 120, "y": 165 } } },
+        { "component": "Act", "start": 10, "props": { "actor": "pointer", "action": "指" } },
+        { "component": "Act", "start": 10, "props": { "actor": "crossed", "action": "抱胸" } },
+        { "component": "Act", "start": 30, "props": { "actor": "crossed", "action": "搖頭" } },
+        { "component": "Act", "start": 10, "props": { "actor": "trophy", "action": "放下獎盃" } },
+        { "component": "Act", "start": 45, "props": { "actor": "faller", "action": "摔倒" } }
+      ]
+    }
+    ,{
+      "id": "liang_before-static",
+      "duration": 160,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "cameraInitial": { "x": 240, "y": 135, "zoom": 1 },
+      "actors": [{ "id": "liang_before", "anchor": { "x": 240, "y": 190 } }],
+      "events": [
+        { "component": "ActorState", "start": 15, "props": { "actor": "liang_before", "visible": false } },
+        { "component": "Sprite", "start": 15, "duration": 30, "props": { "asset": "@engine/assets/generated/liang_before_wave.png", "x": 240, "y": 190 } },
+        { "component": "ActorState", "start": 45, "props": { "actor": "liang_before", "visible": true } },
+        { "component": "ActorState", "start": 60, "props": { "actor": "liang_before", "visible": false } },
+        { "component": "Sprite", "start": 60, "duration": 30, "props": { "asset": "@engine/assets/generated/liang_before_walk_wave_1.png", "x": 240, "y": 190 } },
+        { "component": "ActorState", "start": 90, "props": { "actor": "liang_before", "visible": true } },
+        { "component": "ActorState", "start": 105, "props": { "actor": "liang_before", "visible": false } },
+        { "component": "Sprite", "start": 105, "duration": 30, "props": { "asset": "@engine/assets/generated/liang_before_sit.png", "x": 240, "y": 190 } },
+        { "component": "ActorState", "start": 135, "props": { "actor": "liang_before", "visible": true } }
+      ]
+    }  ]
+}

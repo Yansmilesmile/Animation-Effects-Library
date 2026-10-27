@@ -16,7 +16,7 @@
 | 參數 | 說明 | 預設 |
 |---|---|---|
 | `id` | 角色 id，`Act` 的 `actor` 用它；也能當 `target` 指名（`host` 同時是「主持人」） | 必填 |
-| `rig` | 用哪一套骨架（`assets/actors/<rig>/`）：`host`（超級人機，27×51）、`leijun`（雷軍，西裝，21×64） | id 是骨架名就用 id，否則 `host` |
+| `rig` | 用哪一套骨架（`assets/actors/<rig>/`）：`host`（超級人機，27×51）、`leijun`（雷軍，西裝，21×64）、`liang_before` / `liang_after` / `ds_mascot`（DeepSeek 片，見第 8 節） | id 是骨架名就用 id，否則 `host` |
 | `anchor` | 站位：舞台物件名稱（取底部中心）或 `{ "x": 200, "y": 160 }`（y = 腳底） | host：主持人站位；其他：(240, 160) |
 | `view` | `front` 正面 / `side` 側面 | `front` |
 | `facing` | `right` / `left`（水平翻轉；側面圖本身朝右） | `right`（host 沿用舞台的 flipX） |
@@ -146,3 +146,42 @@ event 的 `duration`：只對 loop 動作有用（循環多久）；不寫 = 循
 - 分鏡要的 8 個動作都驗過：抱胸、搖頭、走路、指、招手、介紹、放下獎盃、摔倒（`timelines/leijun-demo.json`）。其他動作也能跑，但沒逐一調過。
 - 剪影 / 壓暗：`silhouette`、`dim`（同 host）。沒有換裝。
 - 資料卡頭像：`@engine/assets/generated/leijun_avatar.png`（21×36，同一套 SVG 柵格化），ProfileCard 寫 `avatar` + `avatarScale: 1`。
+
+## 8. DeepSeek 片：梁文鋒 before / after、DeepSeek 吉祥物
+
+使用者畫的像素圖，原生大小直接用（沒有縮），比主持人、雷軍大：寬鏡頭（`cameraInitial` zoom 1）下 after 約佔畫面高 1/3。和主持人同框時差 1.5–1.9 倍，是刻意的，不要用 `scale` 硬拉（scale 只能整數倍）。
+SVG 由 `D:/桌面/pixel_deepseek/scripts/make_actors.py` 從原圖產生（`<g id>` 就是骨頭名）；改骨頭切法、重產靜態圖都改那支再跑 `npm run assets`。
+
+| 角色 id | 誰 | 正面 / 側面（像素） | 畫布、root |
+|---|---|---|---|
+| `liang_before` | 梁文鋒（創業前），西裝、眼鏡 | 27×76 / 23×76 | 45×80，root (22.5, 78) |
+| `liang_after` | 梁文鋒（做出 DeepSeek 後），壯碩深藍西裝 | 48×85 / 約 36×85 | 67×88，root (32.5, 87) |
+| `ds_mascot` | DeepSeek 吉祥物（藍髮女僕、魚鰭、鯨魚尾巴） | 91×97（含尾巴）/ 約 74×96 | 98×101，root (42.5, 100) |
+
+- 骨頭沿用標準那套，現有動作檔都能跑；逐一看過：走路、招手、介紹、指、抱胸、搖頭、愣住、驚嚇、放下獎盃、摔倒、比二、生氣（`timelines/liang-before-demo.json`、`liang-after-demo.json`、`ds-mascot-demo.json`）。
+- 表情：`blink`、`smile`、`surprise`、說話嘴型三階（`talk`）；梁文鋒另有 `lookdown`。剪影 / 壓暗：`silhouette`、`dim`。沒有換裝。
+- 原圖的側面都是走路姿勢，產生時已改成站姿（腿併攏、手垂下）、一律朝右。
+- 吉祥物原圖沒有待機：正面用「揮手」把舉起的手改成垂下（左右鏡像）；手臂大半藏在頭髮裡，抬手時身後補的是頭髮紋理。吉祥物的「比耶」用 `比二`（單手）。
+- 側面手臂往前伸時，後面那隻手（壓暗的複製）會在腰側露出一點，和雷軍一樣。
+
+**靜態姿勢圖**（骨架做不出來的姿勢）：`@engine/assets/generated/<檔名>`。圖的水平中心對齊角色正面 root、底邊是腳底，所以 Sprite 用預設 `anchor: "bottom"`、`x / y` 寫角色的站位，就和角色同位置同大小。切換寫法（demo 第 3 段）：
+
+```jsonc
+{ "component": "ActorState", "start": "@詞", "props": { "actor": "liang_after", "visible": false } },
+{ "component": "Sprite", "start": "@詞", "duration": 30, "props": { "asset": "@engine/assets/generated/liang_after_victory.png", "x": 240, "y": 190 } },
+{ "component": "ActorState", "start": "@詞+30", "props": { "actor": "liang_after", "visible": true } }
+```
+
+| 角色 | 檔名 | 姿勢 |
+|---|---|---|
+| liang_before | `liang_before_wave.png` | 揮手（骨架用「招手」也可以） |
+| | `liang_before_walk_wave_1.png`、`_2.png` | 邊走邊揮手兩格（側面朝右，交替播放 = 邊走邊揮） |
+| | `liang_before_sit.png` | 坐下 |
+| liang_after | `liang_after_stop.png` | 伸手阻止 |
+| | `liang_after_arms_crossed.png` | 抱臂（骨架用「抱胸」也可以，原圖比較好看） |
+| | `liang_after_run.png` | 奔跑（側面朝右） |
+| | `liang_after_victory.png` | 舉拳勝利 |
+| ds_mascot | `ds_mascot_wave.png`、`ds_mascot_hello.png` | 揮手、舉手打招呼（原圖） |
+| | `ds_mascot_arms_crossed.png` | 抱臂嘟嘴 |
+| | `ds_mascot_shy.png` | 雙手合握害羞 |
+| | `ds_mascot_cheer.png` | 歡呼比耶眨眼（雙手） |

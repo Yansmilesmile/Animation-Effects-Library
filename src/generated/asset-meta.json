@@ -104,9 +104,79 @@
   "h": 36,
   "kind": "single"
  },
+ "@engine/assets/generated/liang_before_wave.png": {
+  "w": 37,
+  "h": 77,
+  "kind": "single"
+ },
+ "@engine/assets/generated/liang_before_walk_wave_1.png": {
+  "w": 41,
+  "h": 73,
+  "kind": "single"
+ },
+ "@engine/assets/generated/liang_before_walk_wave_2.png": {
+  "w": 43,
+  "h": 73,
+  "kind": "single"
+ },
+ "@engine/assets/generated/liang_before_sit.png": {
+  "w": 35,
+  "h": 73,
+  "kind": "single"
+ },
+ "@engine/assets/generated/liang_after_stop.png": {
+  "w": 51,
+  "h": 85,
+  "kind": "single"
+ },
+ "@engine/assets/generated/liang_after_arms_crossed.png": {
+  "w": 43,
+  "h": 79,
+  "kind": "single"
+ },
+ "@engine/assets/generated/liang_after_run.png": {
+  "w": 67,
+  "h": 78,
+  "kind": "single"
+ },
+ "@engine/assets/generated/liang_after_victory.png": {
+  "w": 61,
+  "h": 78,
+  "kind": "single"
+ },
+ "@engine/assets/generated/ds_mascot_wave.png": {
+  "w": 103,
+  "h": 97,
+  "kind": "single"
+ },
+ "@engine/assets/generated/ds_mascot_hello.png": {
+  "w": 105,
+  "h": 97,
+  "kind": "single"
+ },
+ "@engine/assets/generated/ds_mascot_arms_crossed.png": {
+  "w": 105,
+  "h": 98,
+  "kind": "single"
+ },
+ "@engine/assets/generated/ds_mascot_shy.png": {
+  "w": 107,
+  "h": 99,
+  "kind": "single"
+ },
+ "@engine/assets/generated/ds_mascot_cheer.png": {
+  "w": 105,
+  "h": 98,
+  "kind": "single"
+ },
  "_自動拆分/Interior_Decoration_室内装饰/Interior_1/Interior_1_036.png": {
   "w": 64,
   "h": 57,
+  "kind": "single"
+ },
+ "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合4_png/97.png": {
+  "w": 27,
+  "h": 22,
   "kind": "single"
  },
  "other_其他素材3万多张/xs004-像素小图标整理【31000多张】/3-小道具-等其他【5600多张】/子图拆分-对应图片名找文件夹/子图_小道具整合_png/74.png": {

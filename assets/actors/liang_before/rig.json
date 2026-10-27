@@ -1,0 +1,81 @@
+{
+  "_comment": "梁文鋒 before（創業前，西裝，正面 27×76 / 側面 23×76，畫布 45×80）。SVG 由 D:/桌面/pixel_deepseek/scripts/make_actors.py 從使用者的像素 SVG 產生：<g id> 就是骨頭（小寫）。側面原圖是走路姿勢，腳本已改成站姿、翻成朝右。",
+  "name": "梁文鋒（創業前）",
+  "views": {
+    "front": {
+      "svg": "front.svg",
+      "root": [22.5, 78],
+      "bones": [
+        { "id": "torso", "parent": "root", "pivot": [22.5, 56], "take": [{ "parts": ["torso"] }] },
+        { "id": "head", "parent": "torso", "pivot": [22.5, 29.5], "take": [{ "parts": ["head"] }] },
+        { "id": "arm_L_upper", "parent": "torso", "pivot": [11, 33], "sign": 1, "take": [{ "parts": ["arm_l_upper"] }] },
+        { "id": "arm_L_lower", "parent": "arm_L_upper", "pivot": [11, 43], "sign": 1, "take": [{ "parts": ["arm_l_lower"] }] },
+        { "id": "hand_L", "parent": "arm_L_lower", "pivot": [11.5, 53], "sign": 1, "take": [{ "parts": ["hand_l"] }] },
+        { "id": "arm_R_upper", "parent": "torso", "pivot": [33.5, 33], "sign": -1, "take": [{ "parts": ["arm_r_upper"] }] },
+        { "id": "arm_R_lower", "parent": "arm_R_upper", "pivot": [33.5, 43], "sign": -1, "take": [{ "parts": ["arm_r_lower"] }] },
+        { "id": "hand_R", "parent": "arm_R_lower", "pivot": [33, 53], "sign": -1, "take": [{ "parts": ["hand_r"] }] },
+        { "id": "leg_L", "parent": "root", "pivot": [18.5, 57], "take": [{ "parts": ["leg_l"] }] },
+        { "id": "foot_L", "parent": "leg_L", "pivot": [18, 74], "take": [{ "parts": ["foot_l"] }] },
+        { "id": "leg_R", "parent": "root", "pivot": [26.5, 57], "take": [{ "parts": ["leg_r"] }] },
+        { "id": "foot_R", "parent": "leg_R", "pivot": [27, 74], "take": [{ "parts": ["foot_r"] }] }
+      ],
+      "z": ["leg_L", "foot_L", "leg_R", "foot_R", "torso", "head", "arm_L_upper", "arm_L_lower", "hand_L", "arm_R_upper", "arm_R_lower", "hand_R"],
+      "slots": {
+        "hand_L": { "bone": "hand_L", "at": [11.5, 56] },
+        "hand_R": { "bone": "hand_R", "at": [33, 56] },
+        "chest": { "bone": "torso", "at": [22.5, 45] },
+        "head": { "bone": "head", "at": [22.5, 2] }
+      },
+      "faces": {
+        "blink": [[17, 18, "#fce6af"], [18, 18, "#fce6af"], [26, 18, "#fce6af"], [27, 18, "#fce6af"]],
+        "smile": [[17, 19, "#fce6af"], [18, 19, "#fce6af"], [26, 19, "#fce6af"], [27, 19, "#fce6af"],
+                  [21, 22, "#fee2a9"], [22, 22, "#fee2a9"], [23, 22, "#fee2a9"], [20, 22, "#c9765a"], [24, 22, "#c9765a"], [21, 23, "#c9765a"], [22, 23, "#c9765a"], [23, 23, "#c9765a"]],
+        "surprise": [[17, 20, "#020303"], [18, 20, "#020303"], [26, 20, "#020303"], [27, 20, "#020303"],
+                     [21, 22, "#e1a47c"], [22, 22, "#5a2620"], [23, 22, "#e1a47c"], [22, 23, "#5a2620"]],
+        "lookdown": [[17, 18, "#fce6af"], [18, 18, "#fce6af"], [26, 18, "#fce6af"], [27, 18, "#fce6af"], [17, 20, "#020303"], [18, 20, "#020303"], [26, 20, "#020303"], [27, 20, "#020303"]]
+      },
+      "mouths": [
+        [],
+        [[21, 22, "#a0523f"], [22, 22, "#a0523f"], [23, 22, "#a0523f"]],
+        [[21, 22, "#5a2620"], [22, 22, "#5a2620"], [23, 22, "#5a2620"], [21, 23, "#5a2620"], [22, 23, "#c96f63"], [23, 23, "#5a2620"]]
+      ]
+    },
+    "side": {
+      "svg": "side.svg",
+      "root": [23, 78],
+      "bones": [
+        { "id": "hand_R", "parent": "arm_R_lower", "pivot": [21.5, 53], "sign": -1, "take": [{ "parts": ["hand_r"] }] },
+        { "id": "arm_R_upper", "parent": "torso", "pivot": [20.5, 34], "sign": -1, "take": [{ "parts": ["arm_r_upper"] }] },
+        { "id": "arm_R_lower", "parent": "arm_R_upper", "pivot": [20.5, 43], "sign": -1, "take": [{ "parts": ["arm_r_lower"] }] },
+        { "id": "finger_R", "parent": "hand_R", "pivot": [21.5, 53], "hidden": true, "pixels": [[22, 58, "#fce6af"], [22, 59, "#e1a47c"]] },
+        { "id": "torso", "parent": "root", "pivot": [23, 56], "take": [{ "parts": ["torso"] }], "fill": [[17, 33, 24, 55, "#2d4875"], [18, 53, 25, 55, "#2d4875"], [17, 56, 25, 56, "#050708"]] },
+        { "id": "head", "parent": "torso", "pivot": [24, 29.5], "take": [{ "parts": ["head"] }] },
+        { "id": "arm_L_upper", "parent": "torso", "pivot": [20.5, 34], "sign": -1, "clone": "arm_R_upper", "shade": 0.62 },
+        { "id": "arm_L_lower", "parent": "arm_L_upper", "pivot": [20.5, 43], "sign": -1, "clone": "arm_R_lower", "shade": 0.62 },
+        { "id": "hand_L", "parent": "arm_L_lower", "pivot": [21.5, 53], "sign": -1, "clone": "hand_R", "shade": 0.62 },
+        { "id": "leg_L", "parent": "root", "pivot": [21, 57], "take": [{ "parts": ["leg_l"] }] },
+        { "id": "foot_L", "parent": "leg_L", "pivot": [21, 74], "take": [{ "parts": ["foot_l"] }] },
+        { "id": "leg_R", "parent": "root", "pivot": [23, 57], "take": [{ "parts": ["leg_r"] }], "fill": [[23, 57, 23, 57, "#355280"], [19, 57, 19, 57, "#020303"], [20, 57, 22, 57, "#3a5685"], [24, 57, 24, 57, "#36517f"], [25, 57, 25, 57, "#334e78"]] },
+        { "id": "foot_R", "parent": "leg_R", "pivot": [23, 74], "take": [{ "parts": ["foot_r"] }] }
+      ],
+      "z": ["arm_L_upper", "arm_L_lower", "hand_L", "leg_L", "foot_L", "leg_R", "foot_R", "torso", "head", "arm_R_upper", "arm_R_lower", "hand_R", "finger_R"],
+      "slots": {
+        "hand_R": { "bone": "hand_R", "at": [21.5, 56] },
+        "hand_L": { "bone": "hand_L", "at": [21.5, 56] },
+        "chest": { "bone": "torso", "at": [27, 44] },
+        "head": { "bone": "head", "at": [24, 2] }
+      },
+      "faces": {
+        "blink": [[32, 19, "#fce6af"]],
+        "smile": [[32, 20, "#fee2a9"], [32, 26, "#c9765a"], [33, 25, "#c9765a"]],
+        "surprise": [[32, 21, "#020303"], [32, 26, "#5a2620"], [33, 26, "#5a2620"]],
+        "lookdown": [[32, 19, "#fce6af"], [32, 21, "#020303"]]
+      },
+      "mouths": [
+        [],
+        [[32, 26, "#a0523f"], [33, 26, "#a0523f"]],
+        [[32, 26, "#5a2620"], [33, 26, "#5a2620"], [33, 27, "#c96f63"]]
+      ]
+    }
+  }
+}

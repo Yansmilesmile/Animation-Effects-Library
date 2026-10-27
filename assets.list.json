@@ -19,6 +19,19 @@
     "Skill_Icons_技能图标/技能图标/0267.png",
     "Characters_角色人物/monster/Plant/Idle (44x42).png",
     "Characters_角色人物/monster/Slime/Idle-Run (44x30).png",
-    "@engine/assets/generated/leijun_avatar.png"
+    "@engine/assets/generated/leijun_avatar.png",
+    "@engine/assets/generated/liang_before_wave.png",
+    "@engine/assets/generated/liang_before_walk_wave_1.png",
+    "@engine/assets/generated/liang_before_walk_wave_2.png",
+    "@engine/assets/generated/liang_before_sit.png",
+    "@engine/assets/generated/liang_after_stop.png",
+    "@engine/assets/generated/liang_after_arms_crossed.png",
+    "@engine/assets/generated/liang_after_run.png",
+    "@engine/assets/generated/liang_after_victory.png",
+    "@engine/assets/generated/ds_mascot_wave.png",
+    "@engine/assets/generated/ds_mascot_hello.png",
+    "@engine/assets/generated/ds_mascot_arms_crossed.png",
+    "@engine/assets/generated/ds_mascot_shy.png",
+    "@engine/assets/generated/ds_mascot_cheer.png"
   ]
 }

@@ -82,7 +82,7 @@ python scripts/gen-sprite.py <生圖.png> --name <名稱> --height <N> [--grid 2
 
 - 素材庫：`D:/桌面/素材庫/PixelSRPG-Forge-main`，**只讀**。
 - 素材清單：`D:/桌面/agents/素材使用清單_SpriteSheet與SeamlessLoop.md`。挑素材、播放素材都以它為準。
-- 人物：`public/svgAll/`（`svg_host` 主持人、`svg_leijun` 雷軍），只讀取，不修改。
+- 人物：`public/svgAll/`（`svg_host` 主持人、`svg_leijun` 雷軍），只讀取，不修改。DeepSeek 片的梁文鋒 before / after、DeepSeek 吉祥物是角色骨架 `liang_before`、`liang_after`、`ds_mascot`（`assets/actors/`），靜態姿勢圖在 `assets/generated/`，見 `docs/actors.md` 第 8 節。
 - 不使用向量搜尋（舊的 `asset_index`、`search.py` 已停用）。分鏡裡的 `asset_query` 只是描述想要的樣子，當備註看，不拿去搜尋。
 - 時間軸裡一律寫 `asset`（相對素材庫根目錄的 path）。
 

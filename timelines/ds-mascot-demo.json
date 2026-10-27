@@ -1,0 +1,66 @@
+{
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "ds-mascot-front",
+      "duration": 90,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "cameraInitial": { "x": 240, "y": 135, "zoom": 1 },
+      "actors": [
+        { "id": "ds_mascot", "anchor": { "x": 50, "y": 190 }, "talk": true },
+        { "id": "m2", "rig": "ds_mascot", "anchor": { "x": 145, "y": 190 } },
+        { "id": "m3", "rig": "ds_mascot", "anchor": { "x": 240, "y": 190 } },
+        { "id": "m4", "rig": "ds_mascot", "anchor": { "x": 335, "y": 190 }, "silhouette": true },
+        { "id": "m5", "rig": "ds_mascot", "anchor": { "x": 430, "y": 190 }, "dim": true }
+      ],
+      "events": [
+        { "component": "Act", "start": 10, "props": { "actor": "ds_mascot", "action": "愣住" } },
+        { "component": "Act", "start": 10, "props": { "actor": "m2", "action": "招手" } },
+        { "component": "Act", "start": 10, "props": { "actor": "m3", "action": "抱胸" } },
+        { "component": "Act", "start": 30, "props": { "actor": "m3", "action": "搖頭" } },
+        { "component": "ActorState", "start": 50, "props": { "actor": "m4", "silhouette": false } },
+        { "component": "Act", "start": 55, "props": { "actor": "m4", "action": "驚嚇" } },
+        { "component": "Act", "start": 10, "props": { "actor": "m5", "action": "介紹" } }
+      ]
+    },
+    {
+      "id": "ds-mascot-side",
+      "duration": 90,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "cameraInitial": { "x": 240, "y": 135, "zoom": 1 },
+      "actors": [
+        { "id": "walker", "rig": "ds_mascot", "anchor": { "x": 40, "y": 190 }, "view": "side" },
+        { "id": "pointer", "rig": "ds_mascot", "anchor": { "x": 230, "y": 190 }, "view": "side", "talk": true },
+        { "id": "crossed", "rig": "ds_mascot", "anchor": { "x": 305, "y": 190 }, "view": "side", "facing": "left" },
+        { "id": "faller", "rig": "ds_mascot", "anchor": { "x": 425, "y": 190 }, "view": "side" }
+      ],
+      "events": [
+        { "component": "Act", "start": 5, "props": { "actor": "walker", "action": "走路", "to": { "x": 130, "y": 190 } } },
+        { "component": "Act", "start": 10, "props": { "actor": "pointer", "action": "指" } },
+        { "component": "Act", "start": 10, "props": { "actor": "crossed", "action": "抱胸" } },
+        { "component": "Act", "start": 30, "props": { "actor": "crossed", "action": "搖頭" } },
+        { "component": "Act", "start": 45, "props": { "actor": "faller", "action": "摔倒" } }
+      ]
+    }
+    ,{
+      "id": "ds_mascot-static",
+      "duration": 160,
+      "stage": "void",
+      "background": "#3a4a6a",
+      "cameraInitial": { "x": 240, "y": 135, "zoom": 1 },
+      "actors": [{ "id": "ds_mascot", "anchor": { "x": 240, "y": 190 } }],
+      "events": [
+        { "component": "ActorState", "start": 15, "props": { "actor": "ds_mascot", "visible": false } },
+        { "component": "Sprite", "start": 15, "duration": 30, "props": { "asset": "@engine/assets/generated/ds_mascot_cheer.png", "x": 240, "y": 190 } },
+        { "component": "ActorState", "start": 45, "props": { "actor": "ds_mascot", "visible": true } },
+        { "component": "ActorState", "start": 60, "props": { "actor": "ds_mascot", "visible": false } },
+        { "component": "Sprite", "start": 60, "duration": 30, "props": { "asset": "@engine/assets/generated/ds_mascot_shy.png", "x": 240, "y": 190 } },
+        { "component": "ActorState", "start": 90, "props": { "actor": "ds_mascot", "visible": true } },
+        { "component": "ActorState", "start": 105, "props": { "actor": "ds_mascot", "visible": false } },
+        { "component": "Sprite", "start": 105, "duration": 30, "props": { "asset": "@engine/assets/generated/ds_mascot_arms_crossed.png", "x": 240, "y": 190 } },
+        { "component": "ActorState", "start": 135, "props": { "actor": "ds_mascot", "visible": true } }
+      ]
+    }  ]
+}
