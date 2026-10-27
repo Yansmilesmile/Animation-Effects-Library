@@ -5,7 +5,7 @@ import { Camera, CAMERA_HOME, CAMERA_WIDE, CameraState, worldToScreen } from "..
 import { PIXEL } from "../theme";
 import { buildRuntime, Follow3D, Stage3DRuntime, Stage3DRuntimeContext, Stage3DView, STAGES_3D } from "../three/stage3d";
 import type { S3CameraEvent, S3FocusEvent, S3StateEvent } from "../three/stage3d";
-import { Layer3D, pointIn, PreparedScene, prepareScene } from "../three/layer3d";
+import { FollowLayer3D, Layer3D, pointIn, PreparedScene, prepareScene } from "../three/layer3d";
 import type { Animate, CameraMove } from "../three/layer3d";
 import { Host } from "../components/Host";
 import { PixelStage } from "../components/PixelStage";
@@ -33,8 +33,10 @@ import { resolveSfx, SFX_VOLUME, SfxAt } from "./sfx";
 
 /** 跟著 3D 錨點走：refFrame 時的畫面位置是座標基準 */
 type FollowSpec = { anchor: string; refFrame: number; depthScale: boolean; real?: { height: number; basePx: number }; clipBelow?: string };
+/** 跟著 Layer3D 的命名點走（只平移）：refFrame 時的畫面位置是座標基準 */
+type FollowL3 = { prep: PreparedScene; point: string; refFrame: number; clipBelow?: string };
 type Focus = { at: number; dim?: number; blur?: number; frames?: number };
-type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown>; follow?: FollowSpec; focus?: Focus[]; sfx?: string };
+type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown>; follow?: FollowSpec; followL3?: FollowL3; focus?: Focus[]; sfx?: string };
 
 const S3_EVENTS = new Set(["S3State", "S3Camera", "S3Focus"]);
 const is3d = (v: unknown): v is string => typeof v === "string" && v.startsWith("3d:");
@@ -259,10 +261,15 @@ const EventView: React.FC<{ r: Resolved; scene: Scene; camera: CameraState }> = 
   const props = entry.prepare ? entry.prepare(raw as Record<string, any>, { camera }) : raw;
   const C = entry.component;
   const dur = r.ev.duration ?? Math.max(1, scene.duration - r.start);
+  const fl = r.followL3;
   const body = r.follow ? (
     <Follow3D anchor={r.follow.anchor} refFrame={r.follow.refFrame} from={r.start} depthScale={r.follow.depthScale}>
       <C {...props} />
     </Follow3D>
+  ) : fl ? (
+    <FollowLayer3D prep={fl.prep} point={fl.point} refFrame={fl.refFrame} from={r.start} view={camera} clipBelow={fl.clipBelow}>
+      <C {...props} />
+    </FollowLayer3D>
   ) : (
     <C {...props} />
   );
@@ -322,8 +329,73 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     }
   }
 
+  /**
+   * follow（跟隨 Layer3D 鏡頭）：own = 角色 / 事件自己寫的，pt = 它的站位 / target。
+   * 回傳要跟的點（undefined = 不跟）。沒寫 follow 的時間軸完全不經過這裡的分支，輸出和以前相同。
+   */
+  const followPoint = (own: unknown, pt: unknown, errs: string[]): string | undefined => {
+    if (own === undefined && !l3d?.prep) return undefined;
+    if (own !== undefined && !l3d) {
+      errs.push(`follow 需要 scene 有 layer3d（${rt3d ? "stage3d 的 3D 錨點本來就會跟著鏡頭走，不用寫" : "這個 scene 沒有 3D 層"}）`);
+      return undefined;
+    }
+    if (!(own ?? scene.layer3d?.follow)) return undefined;
+    if (typeof own === "string") {
+      if (!is3d(own)) {
+        errs.push(`follow 要寫 true、false 或 "3d:<點>"，收到 ${JSON.stringify(own)}`);
+        return undefined;
+      }
+      const id = own.slice(3);
+      const p = pointIn(l3d!.prep, id, 0);
+      if (p.error) errs.push(`follow：${p.error}`);
+      return p.error ? undefined : id;
+    }
+    if (typeof own !== "boolean" && own !== undefined) {
+      errs.push(`follow 要寫 true、false 或 "3d:<點>"，收到 ${JSON.stringify(own)}`);
+      return undefined;
+    }
+    if (is3d(pt)) return pt.slice(3);
+    if (own === true) errs.push(`follow: true 要搭配 "3d:<點>" 的站位 / target；用 x / y 擺的請寫 follow: "3d:<點>" 指定跟哪個點`);
+    return undefined;
+  };
+  const clipPoint = (v: unknown, following: boolean, errs: string[]): string | undefined => {
+    if (v === undefined || !l3d || rt3d) return undefined;
+    if (!is3d(v)) {
+      errs.push(`clipBelow 要寫 "3d:<點>"，收到 ${JSON.stringify(v)}`);
+      return undefined;
+    }
+    if (!following) {
+      errs.push("clipBelow 在 layer3d 的 scene 要搭配 follow（遮擋線跟著鏡頭動，人也要跟）");
+      return undefined;
+    }
+    const p = pointIn(l3d.prep, v.slice(3), 0);
+    if (p.error) errs.push(`clipBelow：${p.error}`);
+    return p.error ? undefined : v.slice(3);
+  };
+
+  // 跟隨 Layer3D 的角色：站位（"3d:<點>"）改用參考幀 followAt 的畫面位置
+  const actorL3 = new Map<string, FollowL3>();
+  const decls = (scene.actors ?? []).map((d) => {
+    const errs: string[] = [];
+    const point = followPoint(d.follow, d.anchor, errs);
+    const clip = clipPoint(d.clipBelow, !!point, errs);
+    if (d.followAt !== undefined && !point) errs.push("followAt 要搭配 follow");
+    for (const e of errs) errors.push(`[${scene.id}] 角色 ${d.id}：${e}`);
+    if (!point) return d;
+    let ref = 0;
+    if (d.followAt !== undefined) {
+      const r = resolveStart(d.followAt, scene);
+      if (r.error) errors.push(`[${scene.id}] 角色 ${d.id}：followAt：${r.error}`);
+      ref = r.frame ?? 0;
+    }
+    actorL3.set(d.id, { prep: l3d!.prep, point, refFrame: ref, clipBelow: clip });
+    if (!is3d(d.anchor)) return d;
+    const w = point3d(d.anchor.slice(3), ref);
+    return "error" in w ? d : { ...d, anchor: { x: w.x, y: w.y } };
+  });
+
   // 角色：站位要用舞台物件，所以在 targets 之後；角色本身也可以被 target 指名（id；host 同時是「主持人」）
-  const actors = buildActors(scene.actors ?? [], targets, h, rt3d ? { rt: rt3d, cam: camera, duration: scene.duration } : undefined);
+  const actors = buildActors(decls, targets, h, rt3d ? { rt: rt3d, cam: camera, duration: scene.duration } : undefined);
   for (const e of actors.errors) errors.push(`[${scene.id}] ${e}`);
   const replacesHost = actors.inits.some((a) => a.id === "host");
   for (const a of actors.inits) {
@@ -333,6 +405,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
   }
 
   const idFollow = new Map<string, FollowSpec>();
+  const idFollowL3 = new Map<string, FollowL3>();
   const resolved: Resolved[] = (scene.events ?? []).map((ev, i) => {
     const errs: string[] = [];
     const s = resolveStart(ev.start, scene);
@@ -422,6 +495,26 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
         if (spec.groundY && props.groundY === undefined) props.groundY = Math.round(t.bottom);
       }
     }
+    // Layer3D 跟隨：target 是 "3d:<點>"、跟隨中的角色 / 有 id 的事件，或 follow 指定的點；參考幀 = 擺位那一幀
+    let followL3: FollowL3 | undefined;
+    if (ev.follow !== undefined || ev.clipBelow !== undefined || (l3d && scene.layer3d?.follow)) {
+      const noFollow = ACTOR_EVENTS.has(ev.component) || ev.component === "PropFx" || S3_EVENTS.has(ev.component) || !REGISTRY[ev.component];
+      const hud = !noFollow && (ev.layer ?? REGISTRY[ev.component].layer) === "hud";
+      if (noFollow || hud) {
+        if (ev.follow) errs.push(hud ? "hud 圖層固定在畫面上，不能 follow" : `${ev.component} 不用寫 follow（角色的跟隨寫在 actors 宣告上）`);
+      } else {
+        const tname = ev.target === "主持人" ? "host" : ev.target;
+        const inherited = tname && typeof ev.follow !== "string" && (ev.follow ?? scene.layer3d?.follow) ? actorL3.get(tname) ?? idFollowL3.get(tname) : undefined;
+        if (inherited) followL3 = { ...inherited, clipBelow: undefined };
+        else {
+          const point = followPoint(ev.follow, ev.target, errs);
+          if (point) followL3 = { prep: l3d!.prep, point, refFrame: start };
+        }
+      }
+      if (ev.clipBelow !== undefined && (!l3d || rt3d)) errs.push("clipBelow（事件）只用在有 layer3d 的 scene");
+      const clip = clipPoint(ev.clipBelow, !!followL3, errs);
+      if (followL3) followL3.clipBelow = clip;
+    }
     // props 裡指名的物件若貼在別的 3D 錨點上：換算到這個事件的座標系（以事件開始那一幀對齊），
     // 例如 CoinFlight 起點跟著角色、終點是跟著另一個錨點的塔
     if (rt3d && nested.length) {
@@ -449,6 +542,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
         const name = k ? `${ev.id}.${k}` : ev.id;
         targets.set(name, box);
         if (follow) idFollow.set(name, follow);
+        if (followL3) idFollowL3.set(name, followL3);
       }
     }
     const smokeActors = ev.component === "SmokePop" ? [props.actor, ...(Array.isArray(props.hide) ? props.hide : [])].filter((a) => a !== undefined) : [];
@@ -462,7 +556,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
       const a = actors.inits.find((x) => x.id === props.actor);
       if (a) props.h = (ACTORS[a.rig]?.views[a.view]?.h ?? 51) * a.scale;
     }
-    return { ev, i, start, errors: errs, props, follow, focus, sfx };
+    return { ev, i, start, errors: errs, props, follow, followL3, focus, sfx };
   });
 
   // Act / ActorState → 每個角色的事件（站位名稱換成座標）
@@ -479,6 +573,14 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
         const w = rt3d ? anchorWorld(rt3d, id, ref, camera) : undefined;
         if (!w) r.errors.push(`${k}：3D 錨點「${id}」不存在或 scene 沒有 stage3d`);
         pts[k] = w ? { x: w.x, y: w.y } : undefined;
+        continue;
+      }
+      const al3 = actorL3.get(p.actor);
+      if (al3 && is3d(p[k])) {
+        // 跟隨 Layer3D 的角色：用角色的參考幀換算，和角色的 FollowLayer3D 同一個座標系
+        const w = point3d(p[k].slice(3), al3.refFrame);
+        if ("error" in w) r.errors.push(`${k}：${w.error}`);
+        pts[k] = "error" in w ? undefined : { x: w.x, y: w.y };
         continue;
       }
       const q = resolvePt(p[k], targets);
@@ -546,10 +648,15 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
       {actors.inits.map((a) => {
         const el = <FxTarget key={a.id} name={a.id === "host" ? "主持人" : a.id} x={a.x} y={a.y} render={() => <Actor init={a} events={actorEvents.get(a.id) ?? []} />} />;
         const fl = actors.follow.get(a.id);
+        const l3 = actorL3.get(a.id);
         return fl ? (
           <Follow3D key={a.id} anchor={fl.anchor} refFrame={fl.refFrame} depthScale={fl.depthScale} real={fl.real} clipBelow={fl.clipBelow}>
             {el}
           </Follow3D>
+        ) : l3 ? (
+          <FollowLayer3D key={a.id} prep={l3.prep} point={l3.point} refFrame={l3.refFrame} view={camera} clipBelow={l3.clipBelow}>
+            {el}
+          </FollowLayer3D>
         ) : (
           el
         );

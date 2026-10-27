@@ -54,6 +54,10 @@
     `back` = 世界座標、畫在主持人 / 角色**後面**（整張背景圖、角色腳下的坑；例如書頁特寫的書頁圖）。
     **數字**（`"layer": -1`、`2`…）= 和 3D 層（scene 的 `layer3d`，z 預設 0）排順序：比 z 小畫在 3D **後面**，大於等於畫在 3D 前面（仍在 back / 角色 / world 之下）。見 `docs/layer3d.md`。
 - **3D 層**：scene 寫 `"layer3d": { "scene": "<場景名>", "camera": …, "animate": … }`，target 可寫 `"3d:<點>"`。詳見 `docs/layer3d.md`。
+  - **跟著 3D 鏡頭走（follow，預設關）**：`layer3d.follow: true` = 整個 scene 掛在 `3d:<點>` 上的 2D 跟著 3D 鏡頭平移（不縮放）。
+    事件 / 角色可以自己寫 `"follow": true | false | "3d:<點>"` 覆寫；`"3d:<點>"` 給用 x / y 擺的東西（前景遮罩）指定跟哪個點。
+    角色另有 `"followAt"`（數字或 `"@詞"`，預設 0）：站位、Act 的 from / to 寫的是這一幀的畫面位置。
+    `"clipBelow": "3d:<點>"`（角色或事件）：這個點以下不畫（站在桌子 / 講台後面），要搭配 follow。hud 不跟。詳見 `docs/layer3d.md` 第 7 節。
 - **構圖**：人物和物品站在地面線上（腳底 / 底部 `y = 160`），字幕不擋人物。
 - **鏡頭**：`camera` 的 `type` 是 `push | pull | pan | tilt-push | cut`；zoom 建議 1、1.25、1.5、2、2.5（像素寬度才均勻）。
 - **素材**：`Sprite` / `BeamDrop` 的 `asset` 是相對素材庫根目錄（`D:/桌面/素材庫/PixelSRPG-Forge-main`）的 path，必須先列進 `assets.list.json` 並執行 `npm run assets`。

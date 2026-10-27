@@ -37,7 +37,7 @@ export type Scene = {
   /**
    * 3D 層（<Layer3D>）：背景或單一主體，畫在數字 layer 的 2D 事件之間（見 docs/layer3d.md）。
    * scene = registerScene3D 註冊的名稱或場景 JSON；camera / animate 的 start 可寫 "@詞"。
-   * target / 角色站位可寫 "3d:<點>"（場景的命名點，換成那一幀的畫面位置，不跟隨）。
+   * target / 角色站位可寫 "3d:<點>"（場景的命名點，換成那一幀的畫面位置；預設不跟隨，layer3d.follow / follow 開啟後跟著 3D 鏡頭平移）。
    */
   layer3d?: Layer3DSceneDecl;
   /** 像素層底色（CSS background） */
@@ -81,7 +81,15 @@ export type Layer3DSceneDecl = {
   outline?: OutlineSpec | false;
   /** 3D 層的排序位置（和事件的數字 layer 比），預設 0 */
   z?: number;
+  /**
+   * true = 掛在 "3d:<點>" 上的 2D（角色、world / 數字 layer 事件）跟著 3D 鏡頭平移（不縮放）；預設 false（只取擺位那一幀的位置）。
+   * 單個角色 / 事件可用自己的 follow 覆寫。hud 不跟。見 docs/layer3d.md 第 7 節
+   */
+  follow?: boolean;
 };
+
+/** 跟隨 Layer3D 鏡頭：true / false 覆寫 scene 的 layer3d.follow；"3d:<點>" = 跟著這個點走（位置用 x / y 或 anchor 照寫） */
+export type FollowDecl = boolean | string;
 
 /** scene.actors 的一個角色。id 寫 "host" = 取代 scene 的主持人（預設站在主持人的位置） */
 export type ActorDecl = {
@@ -94,8 +102,12 @@ export type ActorDecl = {
   depthScale?: boolean;
   /** 站在 3D 錨點上時角色的真實身高（3D 單位），預設 1.8；畫面大小 = 這個身高在該距離投影出來的大小 */
   height3d?: number;
-  /** 被 3D 物件擋住："3d:<錨點>" 投影位置以下不畫（坐在書桌後：錨點寫桌面前緣） */
+  /** 被 3D 物件擋住："3d:<錨點>" 投影位置以下不畫（坐在書桌後：錨點寫桌面前緣）；Layer3D scene 要搭配 follow */
   clipBelow?: string;
+  /** Layer3D scene：跟著 3D 鏡頭平移（見 FollowDecl）；anchor 是 "3d:<點>" 時跟那個點 */
+  follow?: FollowDecl;
+  /** 跟隨的參考幀（數字或 "@詞"，預設 0）：anchor、Act 的 from / to 寫的位置是這一幀的畫面位置 */
+  followAt?: number | string;
   view?: "front" | "side";
   facing?: "left" | "right";
   costume?: string;
@@ -137,6 +149,13 @@ export type TimelineEvent = {
   offset?: { x?: number; y?: number };
   /** target 是 "3d:<錨點>" 時，依錨點深度縮放（道具類用；標籤、文字不要開） */
   depthScale?: boolean;
+  /**
+   * Layer3D scene：跟著 3D 鏡頭平移（覆寫 scene 的 layer3d.follow）。target 是 "3d:<點>" 或跟隨中的角色時跟它走；
+   * 沒有 target（例如用 x / y 擺的前景遮罩）寫 "3d:<點>" 指定跟哪個點。參考幀 = 事件開始那一幀。hud 不能跟
+   */
+  follow?: FollowDecl;
+  /** 跟隨時被 3D 物件擋住："3d:<點>" 投影位置以下不畫 */
+  clipBelow?: string;
   /** 這個事件的名字：組件有可指名的部分（例如 PriceTower 的各層）時，其他事件可以用 target "<id>.<部分>" 指名；要寫在指名它的事件之前 */
   id?: string;
   /** 壓暗 / 模糊（A20 前景虛焦）：[{ at, dim: 0..1, blur: 像素, frames }]，at 是觸發後的相對幀或 "@詞"，frames 幀內漸變 */

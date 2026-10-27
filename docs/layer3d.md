@@ -1,7 +1,7 @@
 # Layer3D：3D 背景 / 單一主體層（給做影片的 AI）
 
 **原則**：3D 只做背景或單一主體（房間、小路、雲中的大手）。講故事的東西（道具、標籤、金幣、角色）一律是 2D 像素組件。
-不做物件狀態機、不讓 2D 跟著 3D 走、不做遮擋。鏡頭只輕微推、拉、搖。
+不做物件狀態機、不做 3D 遮擋。2D 預設不跟著 3D 走（要跟就開 follow，只平移，見第 7 節）。鏡頭只輕微推、拉、搖。
 
 - 程式：`src/three/layer3d/`（`Layer3D.tsx` 組件、`types/` 組件類型、`environment.ts`、`camera.ts`）。
 - 示範：`D:/桌面/pixel_template`：`src/scenes3d/*.json`（場景）、`src/room-demo.json`、`terrain-demo.json`、`hand-demo.json`（時間軸）。
@@ -167,11 +167,39 @@
 | `arm` `scale` `color` `sleeve` `side`（right / left）`flat` | 外觀 |
 | **可補間** | `position`、`rotation`、`reach`、`roll`、`wrist`、`curl`、`spread` |
 
-## 7. point()：3D 點 → 2D 擺位
+## 7. 3D 點 → 2D 擺位、跟隨（follow）
 
-- 時間軸：`"target": "3d:<點>"`，用**事件開始那一幀**的畫面位置（之後不跟著鏡頭走）；角色 `anchor` 用第 0 幀。
+### 7.1 擺位（預設）
+
+- 時間軸：`"target": "3d:<點>"`，用**事件開始那一幀**的畫面位置；角色 `anchor` 用第 0 幀。預設**不跟**鏡頭走。
 - TSX：`layer3dPoint(scene, "lamp_head", { camera, frame })` → `{ x, y, visible }`（像素層座標 480×270）。
-- 鏡頭在動時，把 2D 元素放在鏡頭停下之後。
+
+### 7.2 follow：2D 跟著 3D 鏡頭推、拉、平移
+
+**預設關**，寫了才跟（沒寫的時間軸輸出和以前逐幀相同）：
+
+```jsonc
+"layer3d": { "scene": "…", "camera": [ … ], "follow": true },          // 整個 scene 開
+"actors": [
+  { "id": "host", "anchor": "3d:stand", "clipBelow": "3d:desk_back", "scale": 2 }
+],
+"events": [
+  { "component": "Sprite", "start": 0, "follow": "3d:podium_top", "props": { "asset": "@project/…/podium_front.png", "x": 203, "y": 140 } },
+  { "component": "Tag", "start": 0, "target": "host", "anchor": "top", "props": { "text": "…" } },
+  { "component": "Tag", "start": 0, "target": "3d:lamp_head", "follow": false, "props": { "text": "…" } }
+]
+```
+
+- **誰會跟**：開了 follow 以後，`anchor` 是 `3d:<點>` 的角色（Act 的 from / to 用同一個座標系）、`target` 是 `3d:<點>` 的 world / back / 數字 layer 事件、`target` 指名跟隨中的角色或有 id 的跟隨事件（例如角色頭上的 Tag）。**hud 不跟**。
+- **覆寫**：事件 / 角色寫 `"follow": true | false`。用 x / y 擺的東西（前景遮罩、整張前景圖）沒有 3D 點，寫 `"follow": "3d:<點>"` 指定跟哪個點。
+- **參考幀**：事件 = 事件開始那一幀（x / y、target 都是那一幀的畫面位置）；角色 = `followAt`（數字或 `"@詞"`，預設 0），站位和 Act 的 from / to 都以這一幀換算。之後每幀平移「點現在的位置 − 參考位置」。
+- **只平移，不縮放**：像素格大小不變。推近時 3D 變大、2D 不變，所以推拉仍要輕微（機位差 0.5–1.5 公尺）；推太多角色會顯得變小。
+- **遮擋線 `clipBelow: "3d:<點>"`**（角色或事件）：這個點投影的高度以下不畫，線跟著鏡頭動。只適合正面是水平直線的遮擋物（桌子、講台、攤台）。
+  鏡頭從上往下看桌子時，擋住人的是**桌面後緣**（靠人那一邊），點要放在後緣，不是前緣。要搭配 follow。
+- 點跑到鏡頭後面或出畫時，跟著它的 2D 會隱藏。
+- 做不到：環繞、換成正上方俯視（2D 是平面，只能平移）；cut 換機位時 2D 會跟著跳到新位置（點還在畫面內時）。
+- 報錯：`follow` 寫在沒有 layer3d 的 scene、點不存在、`follow: true` 但沒有 3D 點可跟、hud 寫 follow、`clipBelow` 沒搭配 follow、`followAt` 沒搭配 follow。
+- 示範：`D:/桌面/pixel_template` 的 `follow-demo`（角色站在書桌後＋前景名牌＋Tag，推 → 拉 → 搖）。
 
 ## 8. 決定性與貼圖
 
@@ -203,4 +231,4 @@
 
 ## 10. 報錯（紅框）
 
-不認得的組件類型 / 參數、機位不存在、move / ease 寫錯、animate 的 target 或參數不能補間、燈或天氣的 type 寫錯、`3d:<點>` 不存在、圖片載入失敗、事件 `layer` 寫錯、`outline` 的參數 / `ids` / `width` 寫錯。
+不認得的組件類型 / 參數、機位不存在、move / ease 寫錯、animate 的 target 或參數不能補間、燈或天氣的 type 寫錯、`3d:<點>` 不存在、圖片載入失敗、事件 `layer` 寫錯、`outline` 的參數 / `ids` / `width` 寫錯、`follow` / `clipBelow` / `followAt` 用錯（見 7.2）。
