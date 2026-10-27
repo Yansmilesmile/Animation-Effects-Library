@@ -111,6 +111,15 @@ python scripts/gen-sprite.py <生圖.png> --name <名稱> --height <N> [--grid 2
 4. **分鏡寫「生圖：」「生圖動畫：」「生圖精靈圖：」**：用 Codex CLI 的 imagegen 生圖，再用 `scripts/gen-sprite.py` 處理成像素素材。
    - **先確認能用**：`codex login status` 要顯示用 ChatGPT 登入（算會員額度）；沒登入或沒有會員就**不要生圖**，改用方法 1–3 或素材庫最接近的圖代替，記進對照報告。
      呼叫 Codex 前在同一個指令裡清掉 API key（`$env:OPENAI_API_KEY = $null; codex exec ...`），否則會改走 API 付費。
+   - **呼叫**（工作資料夾用 `out/codex-gen/<名稱>/`，`out/` 不進 git）：
+     ```powershell
+     $d = "out/codex-gen/<名稱>"; New-Item -ItemType Directory -Force $d | Out-Null
+     $env:OPENAI_API_KEY = $null; codex exec --sandbox workspace-write --skip-git-repo-check -C $d -o "$d/reply.txt" "<描述>"
+     ```
+     - 描述開頭寫：`Use your built-in image generation tool to create ONE image, then save it into the current working directory as <名稱>.png. Do not write any code to draw it.`，結尾寫 `When done, reply with only the absolute path of the saved PNG.`。不寫清楚，Codex 可能自己寫程式畫，或把圖只留在 `~/.codex/generated_images/`。
+     - 要附參考圖（例如 `logo角色：` 的官方 logo）：把 `-i <圖.png>` 放在 `codex exec` 後面第一個（`-i` 會吃掉後面的參數，放最後會把描述當成圖檔）。
+     - 一張圖約 1 分鐘。圖存好後讀 `reply.txt` 拿路徑。
+   - **宮格怎麼選**：一次生圖只算一張，宮格越多每格越省額度，但格數越多，各格越容易大小、位置不一致。動畫（同一物件連續動作）用 2×2 或 3×2；精靈圖（一組不同道具）可以用 3×3。
    - **給 Codex 的描述**：純綠 `#00FF00` 背景、像素風、物件不要用亮綠色；宮格圖寫明幾欄幾列、每格內容，各格物件大小、位置、視角一致、不碰格線。
    - **處理**：`python scripts/gen-sprite.py <生圖.png> --name <名稱> --height <原生高度>`，加 `--grid 2x2`（宮格）、`--anim`（動畫）或 `--labels a,b,…`（精靈圖每格名稱）、`--for "shot 12 …"`。參數說明在腳本開頭。
      - 動畫輸出資料夾 `<名稱>/1.png…`，時間軸 `asset` 寫資料夾 `@engine/assets/generated/<名稱>`，速度用 `animFps`、播一次用 `play: "once"`。
@@ -132,5 +141,4 @@ python scripts/gen-sprite.py <生圖.png> --name <名稱> --height <N> [--grid 2
 
 - 每個字幕高亮詞都要觸發一個強調動效（`"start": "@詞"`）。
 - 顏色語義：金 = 好、紅 = 壞 / 否定、金框＋一點點紅 = 高級、深藍 = 普通的你 / 夜晚。只管「表態」的元素，裝飾物顏色不受限。
-- 不使用原片創作者「索爾」的任何元素；主持人是「超級人機」，最後一句固定「這裡是超級人機，我們下一期見」。
 - 改完程式或文件後，先跑 `npm run typecheck`，通過才 commit 並 push 到 `main`（commit 訊息寫成 UTF-8 檔案，用 `git -c i18n.commitEncoding=utf-8 commit -F <檔>`）。typecheck 不過就修好再提交，不要帶著錯誤推上去。
