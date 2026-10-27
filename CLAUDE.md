@@ -142,5 +142,6 @@ python scripts/auto-rig.py <角色資料夾> --id <角色id> [--name 中文名] 
 ## 固定規則
 
 - 每個字幕高亮詞都要觸發一個強調動效（`"start": "@詞"`）。
+- 音效要密：每個舞台鋪環境音（`ambientSound`），物件出現、狀態改變、角色動作、鏡頭大運動都配音效，畫面不要超過 2–3 秒完全沒聲音。細則見 `docs/分鏡翻譯附錄.md` 第六節。
 - 顏色語義：金 = 好、紅 = 壞 / 否定、金框＋一點點紅 = 高級、深藍 = 普通的你 / 夜晚。只管「表態」的元素，裝飾物顏色不受限。
 - 改完程式或文件後，先跑 `npm run typecheck`，通過才 commit 並 push 到 `main`（commit 訊息寫成 UTF-8 檔案，用 `git -c i18n.commitEncoding=utf-8 commit -F <檔>`）。typecheck 不過就修好再提交，不要帶著錯誤推上去。

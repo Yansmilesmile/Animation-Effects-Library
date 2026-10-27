@@ -1,0 +1,582 @@
+{
+ "fps": 30,
+ "scenes": [
+  {
+   "id": "sfx",
+   "duration": 1236,
+   "stage": "void",
+   "background": "#1e2438",
+   "cameraInitial": {
+    "x": 240,
+    "y": 135,
+    "zoom": 1
+   },
+   "events": [
+    {
+     "component": "GlowText",
+     "start": 0,
+     "duration": 18,
+     "layer": "hud",
+     "props": {
+      "text": "新增音效 27 個",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 20,
+     "duration": 45,
+     "layer": "hud",
+     "sfx": "大推近",
+     "volume": 0.6,
+     "props": {
+      "text": "大推近（whoosh_big）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 65,
+     "duration": 57,
+     "layer": "hud",
+     "sfx": "穿雲",
+     "volume": 0.6,
+     "props": {
+      "text": "穿雲（cloud_pass）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 122,
+     "duration": 42,
+     "layer": "hud",
+     "sfx": "拉遠",
+     "volume": 0.6,
+     "props": {
+      "text": "拉遠（zoom_out）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 164,
+     "duration": 30,
+     "layer": "hud",
+     "sfx": "重物落下",
+     "volume": 0.6,
+     "props": {
+      "text": "重物落下（thud）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 194,
+     "duration": 48,
+     "layer": "hud",
+     "sfx": "石頭摩擦",
+     "volume": 0.6,
+     "props": {
+      "text": "石頭摩擦（stone_grind）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 242,
+     "duration": 40,
+     "layer": "hud",
+     "sfx": "吱嘎",
+     "volume": 0.6,
+     "props": {
+      "text": "吱嘎（creak）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 282,
+     "duration": 29,
+     "layer": "hud",
+     "sfx": "鎖上",
+     "volume": 0.6,
+     "props": {
+      "text": "鎖上（lock）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 311,
+     "duration": 31,
+     "layer": "hud",
+     "sfx": "關門",
+     "volume": 0.6,
+     "props": {
+      "text": "關門（door_close）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 342,
+     "duration": 44,
+     "layer": "hud",
+     "sfx": "光柱",
+     "volume": 0.6,
+     "props": {
+      "text": "光柱（beam_up）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 386,
+     "duration": 53,
+     "layer": "hud",
+     "sfx": "蓄力",
+     "volume": 0.6,
+     "props": {
+      "text": "蓄力（charge）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 439,
+     "duration": 36,
+     "layer": "hud",
+     "sfx": "碎裂",
+     "volume": 0.6,
+     "props": {
+      "text": "碎裂（shatter）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 475,
+     "duration": 23,
+     "layer": "hud",
+     "sfx": "閃光",
+     "volume": 0.6,
+     "props": {
+      "text": "閃光（flash）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 498,
+     "duration": 30,
+     "layer": "hud",
+     "sfx": "心跳",
+     "volume": 0.6,
+     "props": {
+      "text": "心跳（heartbeat）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 528,
+     "duration": 61,
+     "layer": "hud",
+     "sfx": "警報",
+     "volume": 0.6,
+     "props": {
+      "text": "警報（alarm）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 589,
+     "duration": 78,
+     "layer": "hud",
+     "sfx": "緊張",
+     "volume": 0.6,
+     "props": {
+      "text": "緊張（tension）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 667,
+     "duration": 26,
+     "layer": "hud",
+     "sfx": "驚嚇",
+     "volume": 0.6,
+     "props": {
+      "text": "驚嚇（startle）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 693,
+     "duration": 48,
+     "layer": "hud",
+     "sfx": "譁然",
+     "volume": 0.6,
+     "props": {
+      "text": "譁然（crowd_gasp）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 741,
+     "duration": 47,
+     "layer": "hud",
+     "sfx": "開機",
+     "volume": 0.6,
+     "props": {
+      "text": "開機（boot）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 788,
+     "duration": 63,
+     "layer": "hud",
+     "sfx": "機器啟動",
+     "volume": 0.6,
+     "props": {
+      "text": "機器啟動（power_up）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 851,
+     "duration": 33,
+     "layer": "hud",
+     "sfx": "故障",
+     "volume": 0.6,
+     "props": {
+      "text": "故障（glitch）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 884,
+     "duration": 63,
+     "layer": "hud",
+     "sfx": "引擎發動",
+     "volume": 0.6,
+     "props": {
+      "text": "引擎發動（engine_start）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 947,
+     "duration": 51,
+     "layer": "hud",
+     "sfx": "引擎熄火",
+     "volume": 0.6,
+     "props": {
+      "text": "引擎熄火（engine_stall）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 998,
+     "duration": 42,
+     "layer": "hud",
+     "sfx": "浪打",
+     "volume": 0.6,
+     "props": {
+      "text": "浪打（wave_hit）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 1040,
+     "duration": 66,
+     "layer": "hud",
+     "sfx": "巨浪",
+     "volume": 0.6,
+     "props": {
+      "text": "巨浪（wave_rise）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 1106,
+     "duration": 54,
+     "layer": "hud",
+     "sfx": "風",
+     "volume": 0.6,
+     "props": {
+      "text": "風（gust）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 1160,
+     "duration": 45,
+     "layer": "hud",
+     "sfx": "沙",
+     "volume": 0.6,
+     "props": {
+      "text": "沙（sand）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    },
+    {
+     "component": "GlowText",
+     "start": 1205,
+     "duration": 21,
+     "layer": "hud",
+     "sfx": "腳步",
+     "volume": 0.6,
+     "props": {
+      "text": "腳步（step）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "amb-clouds_wind",
+   "duration": 150,
+   "stage": "void",
+   "background": "#14202c",
+   "cameraInitial": {
+    "x": 240,
+    "y": 135,
+    "zoom": 1
+   },
+   "events": [
+    {
+     "start": 0,
+     "ambientSound": "雲海風聲",
+     "volume": 0.6
+    },
+    {
+     "component": "GlowText",
+     "start": 0,
+     "layer": "hud",
+     "props": {
+      "text": "環境音：雲海風聲（循環）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "amb-sea_night",
+   "duration": 150,
+   "stage": "void",
+   "background": "#14202c",
+   "cameraInitial": {
+    "x": 240,
+    "y": 135,
+    "zoom": 1
+   },
+   "events": [
+    {
+     "start": 0,
+     "ambientSound": "夜晚海浪",
+     "volume": 0.6
+    },
+    {
+     "component": "GlowText",
+     "start": 0,
+     "layer": "hud",
+     "props": {
+      "text": "環境音：夜晚海浪（循環）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "amb-wasteland_night",
+   "duration": 150,
+   "stage": "void",
+   "background": "#14202c",
+   "cameraInitial": {
+    "x": 240,
+    "y": 135,
+    "zoom": 1
+   },
+   "events": [
+    {
+     "start": 0,
+     "ambientSound": "荒原夜風",
+     "volume": 0.6
+    },
+    {
+     "component": "GlowText",
+     "start": 0,
+     "layer": "hud",
+     "props": {
+      "text": "環境音：荒原夜風（循環）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "amb-server_room",
+   "duration": 150,
+   "stage": "void",
+   "background": "#14202c",
+   "cameraInitial": {
+    "x": 240,
+    "y": 135,
+    "zoom": 1
+   },
+   "events": [
+    {
+     "start": 0,
+     "ambientSound": "機房嗡鳴",
+     "volume": 0.6
+    },
+    {
+     "component": "GlowText",
+     "start": 0,
+     "layer": "hud",
+     "props": {
+      "text": "環境音：機房嗡鳴（循環）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "amb-room_tone",
+   "duration": 150,
+   "stage": "void",
+   "background": "#14202c",
+   "cameraInitial": {
+    "x": 240,
+    "y": 135,
+    "zoom": 1
+   },
+   "events": [
+    {
+     "start": 0,
+     "ambientSound": "室內安靜",
+     "volume": 0.6
+    },
+    {
+     "component": "GlowText",
+     "start": 0,
+     "layer": "hud",
+     "props": {
+      "text": "環境音：室內安靜（循環）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    }
+   ]
+  },
+  {
+   "id": "amb-rain",
+   "duration": 150,
+   "stage": "void",
+   "background": "#14202c",
+   "cameraInitial": {
+    "x": 240,
+    "y": 135,
+    "zoom": 1
+   },
+   "events": [
+    {
+     "start": 0,
+     "ambientSound": "雨聲",
+     "volume": 0.6
+    },
+    {
+     "component": "GlowText",
+     "start": 0,
+     "layer": "hud",
+     "props": {
+      "text": "環境音：雨聲（循環）",
+      "x": 240,
+      "y": 135,
+      "size": 2
+     }
+    }
+   ]
+  }
+ ]
+}

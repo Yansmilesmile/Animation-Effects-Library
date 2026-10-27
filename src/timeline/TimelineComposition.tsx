@@ -25,7 +25,7 @@ import { Actor } from "../actor/Actor";
 import { SMOKE_REVEAL } from "../components/props/SmokePop";
 import { ACTORS } from "../actor/rig";
 import { ActorEv, ActorInit, markFrame, Pt } from "../actor/timeline";
-import { resolveSfx, SFX_VOLUME, SfxAt } from "./sfx";
+import { AMBIENT_FADE, AMBIENT_VOLUME, AmbientLoop, resolveAmbient, resolveSfx, SFX_VOLUME, SfxAt } from "./sfx";
 
 /**
  * TimelineComposition —— 讀時間軸 JSON 渲染整支片。
@@ -452,8 +452,20 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
       if (q.error) errs.push(q.error);
       sfx = q.url;
     }
+    if (ev.ambientSound !== undefined) {
+      const q = resolveAmbient(ev.ambientSound);
+      if (q.error) errs.push(q.error);
+      if (ev.until !== undefined && ev.duration !== undefined) errs.push("環境音的 duration 和 until 只能寫一個");
+      if (ev.until !== undefined && ev.until !== "end") {
+        const here = timeline.scenes.findIndex((x) => x.id === scene.id);
+        const at = timeline.scenes.findIndex((x) => x.id === ev.until);
+        if (at < 0) errs.push(`until「${ev.until}」不是 scene id（或寫 "end" = 播到整支片結束）`);
+        else if (at < here) errs.push(`until「${ev.until}」在這個 scene 之前`);
+      }
+      for (const k of ["fadeIn", "fadeOut"] as const) if (ev[k] !== undefined && !(typeof ev[k] === "number" && ev[k]! >= 0)) errs.push(`${k} 要是 0 以上的幀數`);
+    }
     if (!ev.component) {
-      if (ev.sfx === undefined) errs.push("事件缺少 component（只播音效的事件要寫 sfx）");
+      if (ev.sfx === undefined && ev.ambientSound === undefined) errs.push("事件缺少 component（只播音效的事件要寫 sfx，環境音寫 ambientSound）");
       return { ev, i, start, errors: errs, props: {}, sfx };
     }
     // props 裡的 "@詞"（at / …At 欄位）→ 相對事件開始的幀；{ target: "名稱" } → { x, y }
@@ -763,6 +775,46 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
 };
 
 /**
+ * 環境音（事件的 ambientSound）→ 時間軸絕對幀的循環段落。畫在所有 scene 外面，所以可以跨 scene。
+ * - 沒寫 duration / until：播到這個 scene 結束；後面還有 scene 時尾巴往後延 fadeOut 幀，和下一個 scene 開頭淡入的環境音交叉淡化。
+ * - 下一個 scene 開頭（第 0 幀）寫同一個環境音、沒寫 fadeIn、音量相同 → 接成同一段（不重新開始、不淡出淡入）。
+ * - 名稱 / start 寫錯的事件在 SceneView 出紅框，這裡直接略過。
+ */
+type AmbientSeg = { url: string; file: string; from: number; to: number; volume: number; fadeIn?: number; fadeOut: number; auto: boolean };
+const collectAmbient = (timeline: Timeline): AmbientSeg[] => {
+  const total = timeline.scenes.reduce((n, s) => n + s.duration, 0);
+  const ends = new Map<string, number>();
+  let t = 0;
+  for (const s of timeline.scenes) ends.set(s.id, (t += s.duration));
+  const segs: AmbientSeg[] = [];
+  t = 0;
+  for (const scene of timeline.scenes) {
+    for (const ev of scene.events ?? []) {
+      if (ev.ambientSound === undefined) continue;
+      const q = resolveAmbient(ev.ambientSound);
+      const s = resolveStart(ev.start, scene);
+      if (!q.url || s.frame === undefined || (ev.until !== undefined && ev.duration !== undefined)) continue;
+      const from = t + s.frame;
+      const auto = ev.duration === undefined && ev.until === undefined;
+      const to = ev.duration !== undefined ? from + ev.duration : ev.until === "end" ? total : ev.until !== undefined ? ends.get(ev.until) : t + scene.duration;
+      if (to === undefined || to <= from) continue;
+      segs.push({ url: q.url, file: q.file!, from, to, volume: ev.volume ?? timeline.ambientVolume ?? AMBIENT_VOLUME, fadeIn: ev.fadeIn, fadeOut: ev.fadeOut ?? AMBIENT_FADE, auto });
+    }
+    t += scene.duration;
+  }
+  segs.sort((a, b) => a.from - b.from);
+  // 同一個環境音在 scene 交界接續 → 合成一段
+  const merged: AmbientSeg[] = [];
+  for (const g of segs) {
+    const prev = merged.find((m) => m.auto && m.file === g.file && m.to === g.from && m.volume === g.volume && g.fadeIn === undefined);
+    if (prev) Object.assign(prev, { to: g.to, fadeOut: g.fadeOut, auto: g.auto });
+    else merged.push({ ...g });
+  }
+  for (const m of merged) if (m.auto && m.to < total) m.to = Math.min(total, m.to + m.fadeOut);
+  return merged;
+};
+
+/**
  * 2D 轉場的凍結畫面：wipe（A16）整張滑出、邊緣帶陰影；blur（A7）滑出時水平拖影（只橫向模糊）並變暗。
  * 畫面座標是 1920×1080（在 PixelStage 外面）。
  */
@@ -802,6 +854,9 @@ export const TimelineComposition: React.FC<TimelineProps> = ({ timeline }) => {
       {timeline.audio ? (
         <Audio src={staticFile(timeline.audio.src)} startFrom={Math.round((timeline.audio.startFrom ?? 0) * (timeline.fps ?? 30))} volume={timeline.audio.volume ?? 1} />
       ) : null}
+      {collectAmbient(timeline).map((g, k) => (
+        <AmbientLoop key={`amb${k}`} url={g.url} from={g.from} frames={g.to - g.from} volume={g.volume} fadeIn={g.fadeIn ?? AMBIENT_FADE} fadeOut={g.fadeOut} />
+      ))}
       {timeline.scenes.map((scene, i) => {
         const from = t;
         t += scene.duration;

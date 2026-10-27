@@ -1,5 +1,5 @@
 {
- "_comment": "node scripts/make-sfx.mjs 產生。時間軸事件寫 \"sfx\": \"<中文名或檔名>\"",
+ "_comment": "node scripts/make-sfx.mjs 產生。時間軸事件寫 \"sfx\": \"<中文名或檔名>\"（短音效，播一次）、\"ambientSound\": \"<中文名或檔名>\"（環境音，循環）",
  "sounds": [
   {
    "name": "點擊",
@@ -90,6 +90,141 @@
    "name": "MISS",
    "file": "miss.wav",
    "seconds": 0.66
+  },
+  {
+   "name": "大推近",
+   "file": "whoosh_big.wav",
+   "seconds": 0.9
+  },
+  {
+   "name": "穿雲",
+   "file": "cloud_pass.wav",
+   "seconds": 1.3
+  },
+  {
+   "name": "拉遠",
+   "file": "zoom_out.wav",
+   "seconds": 0.8
+  },
+  {
+   "name": "重物落下",
+   "file": "thud.wav",
+   "seconds": 0.4
+  },
+  {
+   "name": "石頭摩擦",
+   "file": "stone_grind.wav",
+   "seconds": 1
+  },
+  {
+   "name": "吱嘎",
+   "file": "creak.wav",
+   "seconds": 0.72
+  },
+  {
+   "name": "鎖上",
+   "file": "lock.wav",
+   "seconds": 0.36
+  },
+  {
+   "name": "關門",
+   "file": "door_close.wav",
+   "seconds": 0.44
+  },
+  {
+   "name": "光柱",
+   "file": "beam_up.wav",
+   "seconds": 0.85
+  },
+  {
+   "name": "蓄力",
+   "file": "charge.wav",
+   "seconds": 1.15
+  },
+  {
+   "name": "碎裂",
+   "file": "shatter.wav",
+   "seconds": 0.587
+  },
+  {
+   "name": "閃光",
+   "file": "flash.wav",
+   "seconds": 0.18
+  },
+  {
+   "name": "心跳",
+   "file": "heartbeat.wav",
+   "seconds": 0.4
+  },
+  {
+   "name": "警報",
+   "file": "alarm.wav",
+   "seconds": 1.44
+  },
+  {
+   "name": "緊張",
+   "file": "tension.wav",
+   "seconds": 2
+  },
+  {
+   "name": "驚嚇",
+   "file": "startle.wav",
+   "seconds": 0.28
+  },
+  {
+   "name": "譁然",
+   "file": "crowd_gasp.wav",
+   "seconds": 1
+  },
+  {
+   "name": "開機",
+   "file": "boot.wav",
+   "seconds": 0.98
+  },
+  {
+   "name": "機器啟動",
+   "file": "power_up.wav",
+   "seconds": 1.5
+  },
+  {
+   "name": "故障",
+   "file": "glitch.wav",
+   "seconds": 0.485
+  },
+  {
+   "name": "引擎發動",
+   "file": "engine_start.wav",
+   "seconds": 1.5
+  },
+  {
+   "name": "引擎熄火",
+   "file": "engine_stall.wav",
+   "seconds": 1.1
+  },
+  {
+   "name": "浪打",
+   "file": "wave_hit.wav",
+   "seconds": 0.8
+  },
+  {
+   "name": "巨浪",
+   "file": "wave_rise.wav",
+   "seconds": 1.6
+  },
+  {
+   "name": "風",
+   "file": "gust.wav",
+   "seconds": 1.2
+  },
+  {
+   "name": "沙",
+   "file": "sand.wav",
+   "seconds": 0.9
+  },
+  {
+   "name": "腳步",
+   "file": "step.wav",
+   "seconds": 0.1
   }
  ],
  "aliases": {
@@ -107,6 +242,109 @@
   "盖章": "蓋章",
   "解锁": "解鎖",
   "转场": "轉場",
-  "miss": "MISS"
+  "miss": "MISS",
+  "推近": "大推近",
+  "呼": "大推近",
+  "穿過雲": "穿雲",
+  "拉远": "拉遠",
+  "重物": "重物落下",
+  "落地": "重物落下",
+  "咚": "重物落下",
+  "机关": "石頭摩擦",
+  "機關": "石頭摩擦",
+  "石头摩擦": "石頭摩擦",
+  "天平": "吱嘎",
+  "锁上": "鎖上",
+  "上鎖": "鎖上",
+  "关门": "關門",
+  "光柱冲天": "光柱",
+  "光柱衝天": "光柱",
+  "碎掉": "碎裂",
+  "光殼碎裂": "碎裂",
+  "闪光": "閃光",
+  "心跳声": "心跳",
+  "警报": "警報",
+  "紧张": "緊張",
+  "惊吓": "驚嚇",
+  "哗然": "譁然",
+  "群眾譁然": "譁然",
+  "开机": "開機",
+  "電腦開機": "開機",
+  "伺服器啟動": "機器啟動",
+  "机器启动": "機器啟動",
+  "故障雜訊": "故障",
+  "引擎发动": "引擎發動",
+  "引擎熄火了": "引擎熄火",
+  "引擎熄灭": "引擎熄火",
+  "浪": "浪打",
+  "海浪拍打": "浪打",
+  "巨浪湧起": "巨浪",
+  "风": "風",
+  "風吹": "風",
+  "沙子": "沙",
+  "脚步": "腳步",
+  "腳步聲": "腳步"
+ },
+ "ambient": [
+  {
+   "name": "雲海風聲",
+   "file": "amb_clouds_wind.wav",
+   "seconds": 8,
+   "loop": true
+  },
+  {
+   "name": "夜晚海浪",
+   "file": "amb_sea_night.wav",
+   "seconds": 8,
+   "loop": true
+  },
+  {
+   "name": "荒原夜風",
+   "file": "amb_wasteland_night.wav",
+   "seconds": 8,
+   "loop": true
+  },
+  {
+   "name": "機房嗡鳴",
+   "file": "amb_server_room.wav",
+   "seconds": 8,
+   "loop": true
+  },
+  {
+   "name": "室內安靜",
+   "file": "amb_room_tone.wav",
+   "seconds": 8,
+   "loop": true
+  },
+  {
+   "name": "雨聲",
+   "file": "amb_rain.wav",
+   "seconds": 8,
+   "loop": true
+  }
+ ],
+ "ambientAliases": {
+  "雲海": "雲海風聲",
+  "云海风声": "雲海風聲",
+  "高空風": "雲海風聲",
+  "海浪": "夜晚海浪",
+  "海": "夜晚海浪",
+  "大海": "夜晚海浪",
+  "夜晚海浪聲": "夜晚海浪",
+  "荒原": "荒原夜風",
+  "夜風": "荒原夜風",
+  "荒原夜风": "荒原夜風",
+  "機房": "機房嗡鳴",
+  "伺服器": "機房嗡鳴",
+  "机房嗡鸣": "機房嗡鳴",
+  "嗡鳴": "機房嗡鳴",
+  "室內": "室內安靜",
+  "底噪": "室內安靜",
+  "安靜": "室內安靜",
+  "室内安静": "室內安靜",
+  "圖書館": "室內安靜",
+  "雨": "雨聲",
+  "下雨": "雨聲",
+  "雨声": "雨聲"
  }
 }

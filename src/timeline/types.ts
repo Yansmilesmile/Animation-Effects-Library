@@ -21,6 +21,8 @@ export type Timeline = {
   audio?: { src: string; startFrom?: number; volume?: number };
   /** 音效（事件的 "sfx"）預設音量，預設 0.5（配音是 1） */
   sfxVolume?: number;
+  /** 環境音（事件的 "ambientSound"）預設音量，預設 0.15 */
+  ambientVolume?: number;
   scenes: Scene[];
 };
 
@@ -138,8 +140,19 @@ export type TimelineEvent = {
   component: string;
   /** 在事件開始那一幀播放的 8-bit 音效：中文名（"金幣"）或檔名（"coin"），清單見 docs/timeline.md「音效」 */
   sfx?: string;
-  /** 音效音量 0..1，預設 timeline.sfxVolume（0.5） */
+  /** 音效音量 0..1，預設 timeline.sfxVolume（0.5）；寫了 ambientSound 時是環境音音量，預設 timeline.ambientVolume（0.15） */
   volume?: number;
+  /**
+   * 循環的環境音：中文名（"夜晚海浪"）或檔名（"sea_night"），清單見 docs/timeline.md「環境音」。
+   * 從 start 播到：duration 幀後 / until 指定的 scene 結束（"end" = 整支片結束）/ 都沒寫 = 這個 scene 結束（下一個 scene 開頭交叉淡化）。
+   * 可以跨 scene；下一個 scene 開頭（start 0）接著寫同一個環境音 = 不中斷地接下去。
+   */
+  ambientSound?: string;
+  /** 環境音播到哪個 scene 結束（scene id，或 "end"）；和 duration 二選一 */
+  until?: string;
+  /** 環境音淡入 / 淡出幀數，預設 15 */
+  fadeIn?: number;
+  fadeOut?: number;
   /** 觸發幀（相對 scene），或 "@高亮詞"、"@高亮詞+N" */
   start: number | string;
   /** 顯示多久（幀）；省略 = 到 scene 結束 */

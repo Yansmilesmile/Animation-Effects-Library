@@ -23,8 +23,8 @@ export type { Timeline, Scene, TimelineEvent, ActorDecl } from "../timeline/type
 export { REGISTRY, registerComponents, validateEvent } from "../timeline/registry";
 export { STAGES } from "../timeline/stages";
 // 8-bit 音效（事件的 "sfx"；檔案已打包在庫裡）
-export { SfxAt, resolveSfx, SFX_VOLUME } from "../timeline/sfx";
-export { SFX_LIST, SFX_NAMES, SFX_URLS } from "../generated/sfx";
+export { SfxAt, resolveSfx, SFX_VOLUME, AmbientLoop, resolveAmbient, AMBIENT_VOLUME, AMBIENT_FADE } from "../timeline/sfx";
+export { SFX_LIST, SFX_NAMES, SFX_URLS, AMBIENT_LIST, AMBIENT_NAMES, AMBIENT_URLS } from "../generated/sfx";
 
 // 基礎：舞台、鏡頭、素材圖、字幕
 export { PixelStage, Layer } from "../components/PixelStage";
