@@ -193,12 +193,20 @@
 - **誰會跟**：開了 follow 以後，`anchor` 是 `3d:<點>` 的角色（Act 的 from / to 用同一個座標系）、`target` 是 `3d:<點>` 的 world / back / 數字 layer 事件、`target` 指名跟隨中的角色或有 id 的跟隨事件（例如角色頭上的 Tag）。**hud 不跟**。
 - **覆寫**：事件 / 角色寫 `"follow": true | false`。用 x / y 擺的東西（前景遮罩、整張前景圖）沒有 3D 點，寫 `"follow": "3d:<點>"` 指定跟哪個點。
 - **參考幀**：事件 = 事件開始那一幀（x / y、target 都是那一幀的畫面位置）；角色 = `followAt`（數字或 `"@詞"`，預設 0），站位和 Act 的 from / to 都以這一幀換算。之後每幀平移「點現在的位置 − 參考位置」。
-- **只平移，不縮放**：像素格大小不變。推近時 3D 變大、2D 不變，所以推拉仍要輕微（機位差 0.5–1.5 公尺）；推太多角色會顯得變小。
+- **預設只平移，不縮放**：像素格大小不變。推近時 3D 變大、2D 不變；角色在遮擋物後面推拉，會被桌子越蓋越多（只剩頭）。
+- **`followScale: "shrink"`（只縮不放，預設關）**：寫在 `layer3d`（整個 scene）或單個角色 / 事件上（`false` 覆寫成關）。
+  - 1 倍基準 = 點**最近**（畫面上最大）的那一幀，自動掃整個 scene 的鏡頭軌；也可以用 `followScaleAt`（數字或 `"@詞"`）手動指定。
+  - 基準幀時角色就是時間軸寫的 `scale`；其他幀依深度等比縮小，上限 1 倍（放大會讓像素比 3D 背景粗）。比例取到最近的像素格。
+  - 所以**最近的機位要設計成角色該有的大小**（例如 close 機位時角色 scale 3，遠景自動縮小）。
+  - 軸心 = 跟隨的點（角色就是腳底），縮小後腳仍踩在原位；`clipBelow` 照舊每幀投影。
+  - 前景遮罩、道具也能開。target 是縮放中的角色、自己沒開（例如 `followScale: false` 的 Tag）時：Tag 不縮，位置跟著縮小後的頭走。hud 不受影響。
+  - 推拉有角色站在遮擋物後面時開它；沒開縮放時，遮擋物後的角色照舊 hold / 硬切（見 `docs/分鏡翻譯附錄.md`）。
 - **遮擋線 `clipBelow: "3d:<點>"`**（角色或事件）：這個點投影的高度以下不畫，線跟著鏡頭動。只適合正面是水平直線的遮擋物（桌子、講台、攤台）。
   鏡頭從上往下看桌子時，擋住人的是**桌面後緣**（靠人那一邊），點要放在後緣，不是前緣。要搭配 follow。
 - 點跑到鏡頭後面或出畫時，跟著它的 2D 會隱藏。
 - 做不到：環繞、換成正上方俯視（2D 是平面，只能平移）；cut 換機位時 2D 會跟著跳到新位置（點還在畫面內時）。
-- 報錯：`follow` 寫在沒有 layer3d 的 scene、點不存在、`follow: true` 但沒有 3D 點可跟、hud 寫 follow、`clipBelow` 沒搭配 follow、`followAt` 沒搭配 follow。
+- 報錯：`follow` 寫在沒有 layer3d 的 scene、點不存在、`follow: true` 但沒有 3D 點可跟、hud 寫 follow、`clipBelow` 沒搭配 follow、`followAt` 沒搭配 follow、`followScale` 不是 "shrink" / false、`followScale` / `followScaleAt` 沒搭配 follow、`followScaleAt` 沒搭配 followScale。
+- 示範（縮放）：`follow-demo-scale`（同一段鏡頭，開 `followScale: "shrink"`，角色 scale 3 = close 機位的大小）。
 - 示範：`D:/桌面/pixel_template` 的 `follow-demo`（角色站在書桌後＋前景名牌＋Tag，推 → 拉 → 搖）。
 
 ## 8. 決定性與貼圖

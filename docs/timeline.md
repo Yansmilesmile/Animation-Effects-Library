@@ -58,6 +58,7 @@
     事件 / 角色可以自己寫 `"follow": true | false | "3d:<點>"` 覆寫；`"3d:<點>"` 給用 x / y 擺的東西（前景遮罩）指定跟哪個點。
     角色另有 `"followAt"`（數字或 `"@詞"`，預設 0）：站位、Act 的 from / to 寫的是這一幀的畫面位置。
     `"clipBelow": "3d:<點>"`（角色或事件）：這個點以下不畫（站在桌子 / 講台後面），要搭配 follow。hud 不跟。詳見 `docs/layer3d.md` 第 7 節。
+    `"followScale": "shrink"`（`layer3d`、角色或事件；`false` = 關）：跟隨時依深度只縮不放，最近的那一幀 = 1 倍（`"followScaleAt"` 可手動指定基準幀）；角色軸心在腳底。推拉有角色在遮擋物後面時開。
 - **構圖**：人物和物品站在地面線上（腳底 / 底部 `y = 160`），字幕不擋人物。
 - **鏡頭**：`camera` 的 `type` 是 `push | pull | pan | tilt-push | cut`；zoom 建議 1、1.25、1.5、2、2.5（像素寬度才均勻）。
 - **素材**：`Sprite` / `BeamDrop` 的 `asset` 是相對素材庫根目錄（`D:/桌面/素材庫/PixelSRPG-Forge-main`）的 path，必須先列進 `assets.list.json` 並執行 `npm run assets`。

@@ -5,7 +5,8 @@ import { Camera, CAMERA_HOME, CAMERA_WIDE, CameraState, worldToScreen } from "..
 import { PIXEL } from "../theme";
 import { buildRuntime, Follow3D, Stage3DRuntime, Stage3DRuntimeContext, Stage3DView, STAGES_3D } from "../three/stage3d";
 import type { S3CameraEvent, S3FocusEvent, S3StateEvent } from "../three/stage3d";
-import { FollowLayer3D, Layer3D, pointIn, PreparedScene, prepareScene } from "../three/layer3d";
+import { FollowLayer3D, Layer3D, nearestFrame, pointIn, PreparedScene, prepareScene } from "../three/layer3d";
+import type { FollowShrink } from "../three/layer3d";
 import type { Animate, CameraMove } from "../three/layer3d";
 import { Host } from "../components/Host";
 import { PixelStage } from "../components/PixelStage";
@@ -34,7 +35,9 @@ import { resolveSfx, SFX_VOLUME, SfxAt } from "./sfx";
 /** 跟著 3D 錨點走：refFrame 時的畫面位置是座標基準 */
 type FollowSpec = { anchor: string; refFrame: number; depthScale: boolean; real?: { height: number; basePx: number }; clipBelow?: string };
 /** 跟著 Layer3D 的命名點走（只平移）：refFrame 時的畫面位置是座標基準 */
-type FollowL3 = { prep: PreparedScene; point: string; refFrame: number; clipBelow?: string };
+type FollowL3 = { prep: PreparedScene; point: string; refFrame: number; clipBelow?: string; shrink?: FollowShrink };
+/** 事件（不知道內容多高）縮放比例的格數 */
+const EVENT_SHRINK_PX = 64;
 type Focus = { at: number; dim?: number; blur?: number; frames?: number };
 type Resolved = { ev: TimelineEvent; i: number; start: number; errors: string[]; props: Record<string, unknown>; follow?: FollowSpec; followL3?: FollowL3; focus?: Focus[]; sfx?: string };
 
@@ -267,7 +270,7 @@ const EventView: React.FC<{ r: Resolved; scene: Scene; camera: CameraState }> = 
       <C {...props} />
     </Follow3D>
   ) : fl ? (
-    <FollowLayer3D prep={fl.prep} point={fl.point} refFrame={fl.refFrame} from={r.start} view={camera} clipBelow={fl.clipBelow}>
+    <FollowLayer3D prep={fl.prep} point={fl.point} refFrame={fl.refFrame} from={r.start} view={camera} clipBelow={fl.clipBelow} shrink={fl.shrink}>
       <C {...props} />
     </FollowLayer3D>
   ) : (
@@ -373,6 +376,33 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     return p.error ? undefined : v.slice(3);
   };
 
+  /**
+   * followScale（只縮不放）：回傳 1 倍基準幀（undefined = 不縮）。
+   * own / at = 角色或事件自己寫的 followScale / followScaleAt；point = 跟隨的點（undefined = 沒在跟）
+   */
+  const sl0 = scene.layer3d?.followScale as unknown;
+  if (sl0 !== undefined && sl0 !== "shrink" && sl0 !== false) errors.push(`[${scene.id}] layer3d.followScale 要寫 "shrink" 或 false，收到 ${JSON.stringify(sl0)}`);
+  const shrinkBase = (own: unknown, at: number | string | undefined, point: string | undefined, errs: string[]): number | undefined => {
+    if (own === undefined && at === undefined && !scene.layer3d?.followScale) return undefined;
+    if (own !== undefined && own !== "shrink" && own !== false) {
+      errs.push(`followScale 要寫 "shrink" 或 false，收到 ${JSON.stringify(own)}`);
+      return undefined;
+    }
+    const sl = scene.layer3d?.followScale;
+    if (!point) {
+      if (own === "shrink" || at !== undefined) errs.push("followScale / followScaleAt 要搭配 follow");
+      return undefined;
+    }
+    if ((own ?? sl) !== "shrink") {
+      if (at !== undefined) errs.push('followScaleAt 要搭配 followScale: "shrink"');
+      return undefined;
+    }
+    if (at === undefined) return nearestFrame(l3d!.prep, point, scene.duration);
+    const r = resolveStart(at, scene);
+    if (r.error) errs.push(`followScaleAt：${r.error}`);
+    return r.frame ?? 0;
+  };
+
   // 跟隨 Layer3D 的角色：站位（"3d:<點>"）改用參考幀 followAt 的畫面位置
   const actorL3 = new Map<string, FollowL3>();
   const decls = (scene.actors ?? []).map((d) => {
@@ -380,6 +410,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     const point = followPoint(d.follow, d.anchor, errs);
     const clip = clipPoint(d.clipBelow, !!point, errs);
     if (d.followAt !== undefined && !point) errs.push("followAt 要搭配 follow");
+    const base = shrinkBase(d.followScale, d.followScaleAt, point, errs);
     for (const e of errs) errors.push(`[${scene.id}] 角色 ${d.id}：${e}`);
     if (!point) return d;
     let ref = 0;
@@ -388,7 +419,10 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
       if (r.error) errors.push(`[${scene.id}] 角色 ${d.id}：followAt：${r.error}`);
       ref = r.frame ?? 0;
     }
-    actorL3.set(d.id, { prep: l3d!.prep, point, refFrame: ref, clipBelow: clip });
+    // 縮放取到最近的像素格：以角色的像素身高為一格
+    const rig = ACTORS[d.rig ?? (d.id in ACTORS ? d.id : "host")];
+    const px = Math.max(1, Math.round((rig?.views[d.view ?? "front"]?.h ?? 51) * (d.scale ?? 1)));
+    actorL3.set(d.id, { prep: l3d!.prep, point, refFrame: ref, clipBelow: clip, shrink: base === undefined ? undefined : { base, px } });
     if (!is3d(d.anchor)) return d;
     const w = point3d(d.anchor.slice(3), ref);
     return "error" in w ? d : { ...d, anchor: { x: w.x, y: w.y } };
@@ -497,7 +531,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
     }
     // Layer3D 跟隨：target 是 "3d:<點>"、跟隨中的角色 / 有 id 的事件，或 follow 指定的點；參考幀 = 擺位那一幀
     let followL3: FollowL3 | undefined;
-    if (ev.follow !== undefined || ev.clipBelow !== undefined || (l3d && scene.layer3d?.follow)) {
+    if (ev.follow !== undefined || ev.clipBelow !== undefined || ev.followScale !== undefined || ev.followScaleAt !== undefined || (l3d && scene.layer3d?.follow)) {
       const noFollow = ACTOR_EVENTS.has(ev.component) || ev.component === "PropFx" || S3_EVENTS.has(ev.component) || !REGISTRY[ev.component];
       const hud = !noFollow && (ev.layer ?? REGISTRY[ev.component].layer) === "hud";
       if (noFollow || hud) {
@@ -514,6 +548,16 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
       if (ev.clipBelow !== undefined && (!l3d || rt3d)) errs.push("clipBelow（事件）只用在有 layer3d 的 scene");
       const clip = clipPoint(ev.clipBelow, !!followL3, errs);
       if (followL3) followL3.clipBelow = clip;
+      // 只縮不放：跟著縮放中的角色走但自己沒開 → 內容不縮、錨點 (x, y) 跟著縮小後的角色走（頭上的 Tag）
+      const eff = ev.followScale ?? scene.layer3d?.followScale;
+      if (followL3?.shrink && eff !== "shrink") {
+        followL3.shrink = { ...followL3.shrink, positionOnly: { x: Number(props.x ?? 0), y: Number(props.y ?? 0) } };
+      } else if (followL3?.shrink && ev.followScaleAt === undefined) {
+        followL3.shrink = { base: followL3.shrink.base, px: EVENT_SHRINK_PX };
+      } else {
+        const base = shrinkBase(ev.followScale, ev.followScaleAt, followL3?.point, errs);
+        if (followL3 && base !== undefined) followL3.shrink = { base, px: EVENT_SHRINK_PX };
+      }
     }
     // props 裡指名的物件若貼在別的 3D 錨點上：換算到這個事件的座標系（以事件開始那一幀對齊），
     // 例如 CoinFlight 起點跟著角色、終點是跟著另一個錨點的塔
@@ -654,7 +698,7 @@ export const SceneView: React.FC<{ scene: Scene; timeline: Timeline; navEnterAt:
             {el}
           </Follow3D>
         ) : l3 ? (
-          <FollowLayer3D key={a.id} prep={l3.prep} point={l3.point} refFrame={l3.refFrame} view={camera} clipBelow={l3.clipBelow}>
+          <FollowLayer3D key={a.id} prep={l3.prep} point={l3.point} refFrame={l3.refFrame} view={camera} clipBelow={l3.clipBelow} shrink={l3.shrink}>
             {el}
           </FollowLayer3D>
         ) : (

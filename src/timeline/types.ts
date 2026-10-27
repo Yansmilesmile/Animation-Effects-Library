@@ -86,7 +86,12 @@ export type Layer3DSceneDecl = {
    * 單個角色 / 事件可用自己的 follow 覆寫。hud 不跟。見 docs/layer3d.md 第 7 節
    */
   follow?: boolean;
+  /** "shrink" = 跟隨時依深度只縮不放（最近的那一幀 = 1 倍）；預設關。單個角色 / 事件可覆寫 */
+  followScale?: FollowScaleDecl;
 };
+
+/** 跟隨時的深度縮放："shrink" = 只縮不放；false = 關（覆寫 scene 的設定） */
+export type FollowScaleDecl = "shrink" | false;
 
 /** 跟隨 Layer3D 鏡頭：true / false 覆寫 scene 的 layer3d.follow；"3d:<點>" = 跟著這個點走（位置用 x / y 或 anchor 照寫） */
 export type FollowDecl = boolean | string;
@@ -108,6 +113,10 @@ export type ActorDecl = {
   follow?: FollowDecl;
   /** 跟隨的參考幀（數字或 "@詞"，預設 0）：anchor、Act 的 from / to 寫的位置是這一幀的畫面位置 */
   followAt?: number | string;
+  /** 跟隨時依深度只縮不放（軸心 = 腳底）；覆寫 scene 的 layer3d.followScale */
+  followScale?: FollowScaleDecl;
+  /** 縮放的 1 倍基準幀（數字或 "@詞"）；省略 = 自動取站位點最近的那一幀 */
+  followScaleAt?: number | string;
   view?: "front" | "side";
   facing?: "left" | "right";
   costume?: string;
@@ -154,6 +163,13 @@ export type TimelineEvent = {
    * 沒有 target（例如用 x / y 擺的前景遮罩）寫 "3d:<點>" 指定跟哪個點。參考幀 = 事件開始那一幀。hud 不能跟
    */
   follow?: FollowDecl;
+  /**
+   * 跟隨時依深度只縮不放（軸心 = 跟隨的點）；覆寫 scene 的 layer3d.followScale。
+   * 跟著縮放中的角色走（target 是角色）但自己沒開時：內容不縮、位置跟著縮小後的角色走
+   */
+  followScale?: FollowScaleDecl;
+  /** 縮放的 1 倍基準幀（數字或 "@詞"）；省略 = 自動取點最近的那一幀 */
+  followScaleAt?: number | string;
   /** 跟隨時被 3D 物件擋住："3d:<點>" 投影位置以下不畫 */
   clipBelow?: string;
   /** 這個事件的名字：組件有可指名的部分（例如 PriceTower 的各層）時，其他事件可以用 target "<id>.<部分>" 指名；要寫在指名它的事件之前 */

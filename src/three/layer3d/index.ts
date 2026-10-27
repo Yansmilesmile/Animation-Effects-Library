@@ -1,7 +1,8 @@
 export * from "./types";
 export { Layer3D } from "./Layer3D";
 export type { Layer3DProps } from "./Layer3D";
-export { FollowLayer3D } from "./Follow";
+export { FollowLayer3D, nearestFrame, pointUnit } from "./Follow";
+export type { FollowShrink } from "./Follow";
 export { buildCameraTrack, applyCamera, projectPoint, EASES as LAYER3D_EASES, MOVES as LAYER3D_MOVES } from "./camera";
 export type { CameraTrack } from "./camera";
 export { prepareScene, pointIn, layer3dPoint, registerScene3D, SCENES_3D } from "./scene";
